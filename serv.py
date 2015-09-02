@@ -147,6 +147,8 @@ def addDevice(password,name,code):
   else:
     return "-1"
 
+#
+
 @app.route("/update/<password>/add/access/<userid>/<deviceid>/<level>")
 def addAccess(password,userid,deviceid,level):
   if password == C_password:
@@ -157,8 +159,15 @@ def addAccess(password,userid,deviceid,level):
 
 @app.route("/admin/interface/user")
 def adminInterface():
-  users = query_db("select * from user")
-  return render_template('admin_user.html', users=users)
+  users = query_db("select user.name, device.name  from user inner join userAccess on userAccess.user = user.id inner join device on userAccess.device = device.id order by user.name")
+  data = {}
+  for  user in users:
+    if user[0] in data:
+      data[user[0]].append(user[1])
+    else:
+      data[user[0]] = [ user[1] ]
+
+  return render_template('admin_user.html', users=data)
 
 app.run(host='127.0.0.1', debug=True)
 #if __name__ == "__main__":
