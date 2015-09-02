@@ -4,7 +4,7 @@
 # http://ryrobes.com/python/running-python-scripts-as-a-windows-service/
 # http://stackoverflow.com/questions/23550067/deploy-flask-app-as-windows-service
 
-from flask import Flask,g,request
+from flask import Flask,g,request,render_template
 import sqlite3
 import ConfigParser
 import sys
@@ -13,10 +13,11 @@ import os
 app = Flask("simpleServer")
 
 c = ConfigParser.SafeConfigParser()
-if os.path.isfile("c:/data/simpleAccess/simpleServer/run.cfg"):
-  c.read('c:/data/simpleAccess/simpleServer/run.cfg')
-  C_database = c.get('config', 'database')
-  C_password = c.get('config', 'password')
+if os.path.isfile("run.cfg"):
+  c.read('run.cfg')
+  #C_database = c.get('config', 'database')
+  #C_password = c.get('config', 'password')
+  C_database = "db.db"
 else:
   print("config run.cfg not found")
   sys.exit(1)
@@ -154,6 +155,11 @@ def addAccess(password,userid,deviceid,level):
   else:
     return "-1"
 
-#app.run(host='127.0.0.1', debug=True)
-if __name__ == "__main__":
-  app.run(host='0.0.0.0')
+@app.route("/admin/interface/user")
+def adminInterface():
+  users = query_db("select * from user")
+  return render_template('admin_user.html', users=users)
+
+app.run(host='127.0.0.1', debug=True)
+#if __name__ == "__main__":
+#  app.run(host='0.0.0.0')
