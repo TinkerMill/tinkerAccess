@@ -9,6 +9,7 @@ import sqlite3
 import ConfigParser
 import sys
 import os
+import os.path
 import json
 
 app = Flask("simpleServer")
@@ -25,10 +26,18 @@ else:
 
 def init_db():
   with app.app_context():
+    if os.path.isfile("db.db"):
+      os.remove("db.db")
+
     db = get_db()
     with app.open_resource('schema.sql', mode='r') as f:
       db.cursor().executescript(f.read())
     db.commit()
+
+def exec_db(query):
+  db = get_db()
+  db.cursor().execute(query)
+  db.commit()
 
 def query_db(query, args=(), one=False):
     cur = get_db().execute(query, args)
@@ -82,17 +91,28 @@ def deviceCode(deviceid,code):
     )
 
 
+@app.route("/admin/addUser/<userid>/name/<name>")
+def addUser(userid, name):
+  a = query_db("select code from newuser where id=%s" % userid)
+  badgeCode = a[0]
+  exec_db("insert into user (name,code) values ('%s','%s')" % (name, badgeCode[0] ))
+  delUser(userid)
+  return "0k"
+
+@app.route("/admin/delUser/<userid>")
+def delUser(userid):
+  exec_db("delete from newuser where id=%s" % userid)
+  return "0k"
+
+@app.route("/admin/interface/newuser")
+def newUserInterface():
+  users = query_db("select id,code,deviceID from newuser")
+  return render_template('admin_newuser.html', users=users)
+
 @app.route("/admin/interface/user")
 def adminInterface():
-  users = query_db("select user.name, device.name  from user inner join userAccess on userAccess.user = user.id inner join device on userAccess.device = device.id order by user.name")
-  data = {}
-  for  user in users:
-    if user[0] in data:
-      data[user[0]].append(user[1])
-    else:
-      data[user[0]] = [ user[1] ]
-
-  return render_template('admin_user.html', users=data)
+  users = query_db("select name,code from user")
+  return render_template('admin_user.html', users=users)
 
 
 if __name__ == "__main__":
