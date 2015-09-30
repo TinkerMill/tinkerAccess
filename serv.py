@@ -80,6 +80,7 @@ def deviceCode(deviceid,code):
 
   print output
   if len(output) == 0:
+    exec_db("insert into newuser (code,deviceID) values ('%s', %s)" % (code, deviceid) )
     return json.dumps( {'devicename': 'none', 'username': 'none', 'userid': -1, 'time': 0 } )
   else:
     return json.dumps(
