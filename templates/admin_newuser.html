@@ -24,7 +24,7 @@
 		}
 
 		function delUser(i) {
-			$.get("/admin/delUser/" + i );
+			$.get("/admin/delNewUser/" + i );
 		}
 
 		</script>
@@ -58,7 +58,7 @@
 					<td>
 						<div class="btn-group" role="group" aria-label="...">
 
-							<button type="button" class="btn btn-default" onclick=delUser({{item[0]}})>
+							<button type="button" class="btn btn-default" onclick="location.href='/admin/delNewUser/{{item[0]}}">
 								<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 							</button>
 

@@ -4,7 +4,7 @@
 # http://ryrobes.com/python/running-python-scripts-as-a-windows-service/
 # http://stackoverflow.com/questions/23550067/deploy-flask-app-as-windows-service
 
-from flask import Flask,g,request,render_template
+from flask import Flask,g,request,render_template,redirect
 import sqlite3
 import ConfigParser
 import sys
@@ -98,12 +98,28 @@ def addUser(userid, name):
   badgeCode = a[0]
   exec_db("insert into user (name,code) values ('%s','%s')" % (name, badgeCode[0] ))
   delUser(userid)
-  return "0k"
+  return redirect("/admin/interface/user")
+
+@app.route("/admin/addUserAccess/<userid>/<deviceid>")
+def addUserAccess(userid, deviceid):
+  exec_db("delete from deviceAccess where user=%s and device=%s" % (userid, deviceid))
+  exec_db("insert into deviceAccess (user,device,time) values (%s, %s, 100)" % (userid, deviceid))
+  return redirect("/admin/interface/userAccess/%s" % userid)
+
+@app.route("/admin/delUserAccess/<userid>/<deviceid>")
+def delUserAccess(userid, deviceid):
+  exec_db("delete from deviceAccess where user=%s and device=%s" % (userid, deviceid))
+  return redirect("/admin/interface/userAccess/%s" % userid)
+
+@app.route("/admin/delNewUser/<userid>")
+def delNewUser(userid):
+  exec_db("delete from newuser where id=%s" % userid)
+  return redirect("/admin/interface/user")
 
 @app.route("/admin/delUser/<userid>")
 def delUser(userid):
-  exec_db("delete from newuser where id=%s" % userid)
-  return "0k"
+  exec_db("delete from user where id=%s" % userid)
+  return redirect("/admin/interface/user")
 
 @app.route("/admin/interface/newuser")
 def newUserInterface():
@@ -112,9 +128,18 @@ def newUserInterface():
 
 @app.route("/admin/interface/user")
 def adminInterface():
-  users = query_db("select name,code from user")
+  users = query_db("select name,code,id from user")
   return render_template('admin_user.html', users=users)
 
+@app.route("/admin/interface/userAccess/<userid>")
+def userAccessInterface(userid):
+  # list of all the devices
+  allDevices = query_db("select id,name from device")
+
+  # list of devices user has access to
+  userAccess = query_db("select user.name, user.id, device.id, device.name, deviceAccess.time from deviceAccess join device on device.id=deviceAccess.device join user on user.id = deviceAccess.user where deviceAccess.user=%s" % userid)
+
+  return render_template('admin_userAccess.html', devices=allDevices, access=userAccess, userid=userid)
 
 if __name__ == "__main__":
   #app.run(host='0.0.0.0')
