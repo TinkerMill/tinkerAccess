@@ -4,7 +4,7 @@ Raspberry Pi Access control system
 ## Using the Server
 ### Device administration
 Due to the fact that incorrectly removing a device can cause big problems, and
-that it probally isn't done very much, the functionality to modify devices
+that it probably isn't done very much, the functionality to modify devices
 is located in the cli program devicemanager.py.  This program will allow
 you to add, delete, and rename a device.
 
@@ -29,7 +29,7 @@ devicemanager.py -r -i <id_for_device> -n "new name"
 #### Adding a new user
 To add a new user, scan their badge on the card reader.  Once scanned
 if the users badge code is not in the database already, the user
-will be added to an Invactive Users table.  On the web gui go to:
+will be added to an Inactive Users table.  On the web gui go to:
 http://serverip:5000/admin/interface/newuser  and grant access to
 the badge you just swiped.
 #### Editing a user
