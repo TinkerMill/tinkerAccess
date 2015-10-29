@@ -55,7 +55,7 @@ these are the steps for configuring the test database
 
 
 ### getting the environment configured
--  https://bootstrap.pypa.io/get-pip.py
+-  wget https://bootstrap.pypa.io/get-pip.py
 -  python get-pip.py
 -  pip install --upgrade pyserial
 -  pip install flask
