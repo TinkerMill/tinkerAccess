@@ -30,11 +30,11 @@ devicemanager.py -r -i <id_for_device> -n "new name"
 To add a new user, scan their badge on the card reader.  Once scanned
 if the users badge code is not in the database already, the user
 will be added to an Invactive Users table.  On the web gui go to:
-http://<serverip>:5000/admin/interface/newuser  and grant access to
+http://serverip:5000/admin/interface/newuser  and grant access to
 the badge you just swiped.
 #### Editing a user
 once a user exists in the system, you can use the Users tab to modify
-what they have access to.  go to http://<serverip>:5000/admin/interface/user,
+what they have access to.  go to http://serverip:5000/admin/interface/user,
 select the pencil next to the user you want to edit, and then from there
 you can remove or grant access to all the devices currently registered
 in the database
