@@ -6,7 +6,7 @@ Raspberry Pi Access control system
     these are the steps for configuring the test database
    - delete db.db from the main directory if it is there
    - run python
-   - from the python prompt type:  from server import init_db
+   - from the python prompt type:  from serv import init_db
    - then type:  init_db()
 ### to test the serv.py
 	 - as root run python serv.py
