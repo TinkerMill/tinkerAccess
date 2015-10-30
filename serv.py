@@ -19,7 +19,7 @@ if os.path.isfile("/opt/tinkeraccess/run.cfg"):
   c.read('/opt/tinkeraccess/run.cfg')
   #C_database = c.get('config', 'database')
   #C_password = c.get('config', 'password')
-  C_database = "db.db"
+  C_database = "/opt/tinkeraccess/db.db"
 else:
   print("config run.cfg not found")
   sys.exit(1)
