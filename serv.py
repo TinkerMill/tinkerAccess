@@ -15,8 +15,8 @@ import json
 app = Flask("simpleServer")
 
 c = ConfigParser.SafeConfigParser()
-if os.path.isfile("run.cfg"):
-  c.read('run.cfg')
+if os.path.isfile("/opt/tinkeraccess/run.cfg"):
+  c.read('/opt/tinkeraccess/run.cfg')
   #C_database = c.get('config', 'database')
   #C_password = c.get('config', 'password')
   C_database = "db.db"
@@ -26,8 +26,8 @@ else:
 
 def init_db():
   with app.app_context():
-    if os.path.isfile("db.db"):
-      os.remove("db.db")
+    if os.path.isfile("/opt/tinkeraccess/db.db"):
+      os.remove("/opt/tinkeraccess/db.db")
 
     db = get_db()
     with app.open_resource('schema.sql', mode='r') as f:
