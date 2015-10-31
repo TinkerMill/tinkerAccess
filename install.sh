@@ -3,6 +3,15 @@
 
 dir="/opt/tinkeraccess"
 
+if [ ! -f /usr/local/bin/pip ] ; then
+wget https://bootstrap.pypa.io/get-pip.py
+python get-pip.py
+fi
+
+pip install --upgrade pip
+pip install --upgrade pyserial
+pip install flask
+
 if [ ! -f /usr/bin/sqlite3 ] ; then
 apt-get update
 apt-get install sqlite3
