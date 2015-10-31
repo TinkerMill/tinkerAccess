@@ -20,13 +20,20 @@
 		<script>
 		function addUser(i) {
 			var userName = $("#text_" + i).val() ;
-			$.get("/admin/addUser/" + i + "/name/" + userName);
+			$.get("/admin/addUser/" + i + "/name/" + userName,
+                        function(data) { 
+			$.get("/admin/delNewUser/" + i, 
+			function(data) { location.href = "/admin/interface/newuser";
+}  );
+                          });
 		}
 
+/*
 		function delUser(i) {
 			$.get("/admin/delNewUser/" + i );
+		location.href= "/admin/interface/newuser";
 		}
-
+*/
 		</script>
   </head>
   <body>
@@ -58,7 +65,7 @@
 					<td>
 						<div class="btn-group" role="group" aria-label="...">
 
-							<button type="button" class="btn btn-default" onclick="location.href='/admin/delNewUser/{{item[0]}}">
+							<button type="button" class="btn btn-default" onclick="location.href='/admin/delNewUser/{{item[0]}}'">
 								<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 							</button>
 
