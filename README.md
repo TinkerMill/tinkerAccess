@@ -2,6 +2,18 @@
 Raspberry Pi Access control system
 
 ## Using the Server
+### Install the Server
+The server has been tested on a Rasberry Pi 2 Model B. Installation is very simple. 
+
+From the Rasbian terminal:
+
+```
+git clone https://github.com/TinkerMill/tinkerAccess.git
+cd tinkerAccess
+sudo bash
+./install.sh
+```
+
 ### Device administration
 Due to the fact that incorrectly removing a device can cause big problems, and
 that it probably isn't done very much, the functionality to modify devices
