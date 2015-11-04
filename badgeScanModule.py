@@ -16,7 +16,7 @@ import requests
 
 C_portName = "/dev/ttyUSB0"
 C_portSpeed = "9600"
-C_server    = "http://localhost"
+C_server    = "http://10.2.107.169:5000"
 C_deviceid  = "0"
 C_unlockbin = "sudo python",os.getcwd(),"/unlock.py"
 C_lockbin = "sudo python",os.getcwd(),"/lock.py"
@@ -61,7 +61,7 @@ def scanInit():
           print ("Found a serial port that matches portName %s as defined in scan.cfg" % str(cfgPortName) )
 
     if not serialPort:
-      FAILCODE = FAILCODE+": Unable to find a serial port that matches description %s as defined in scan.cfg" % C_portName
+      FAILCODE = ": Unable to find a serial port that matches description %s as defined in scan.cfg" % C_portName
       return FAILCODE
 
     serialConnection = serial.Serial(serialPort, C_portSpeed)
