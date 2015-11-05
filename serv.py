@@ -24,6 +24,7 @@ else:
   print("config run.cfg not found")
   sys.exit(1)
 
+
 def init_db():
   with app.app_context():
     if os.path.isfile("/opt/tinkeraccess/db.db"):
@@ -65,22 +66,26 @@ def insert(table, fields=(), values=()):
   cur.close()
   return id
 
+def addNewUser(code, deviceid):
+  o = query_db("select code from newuser where code='%s'" % code)
+  if len(o) == 0:
+    o = query_db("select code from user where code='%s'" % code)
+    if len(o) == 0:
+      exec_db("insert into newuser (code,deviceID) values ('%s', %s)" % (code, deviceid) )
+
 @app.teardown_appcontext
 def close_connection(exception):
     db = getattr(g, '_database', None)
     if db is not None:
         db.close()
 
-
-
 # given a device and a rfid code return if there is access to that device
 @app.route("/device/<deviceid>/code/<code>")
 def deviceCode(deviceid,code):
   output = query_db("select user.name, user.id, device.name, deviceAccess.time from deviceAccess join device on device.id=deviceAccess.device join user on user.id = deviceAccess.user where user.code='%s' and device.id=%s" % (code,deviceid))
-
   print output
   if len(output) == 0:
-    exec_db("insert into newuser (code,deviceID) values ('%s', %s)" % (code, deviceid) )
+    addNewUser(code, deviceid)
     return json.dumps( {'devicename': 'none', 'username': 'none', 'userid': -1, 'time': 0 } )
   else:
     return json.dumps(
@@ -91,6 +96,10 @@ def deviceCode(deviceid,code):
       }
     )
 
+
+@app.route("/")
+def defaultRoute():
+  return redirect("/admin/interface/newuser")
 
 @app.route("/admin/addUser/<userid>/name/<name>")
 def addUser(userid, name):
