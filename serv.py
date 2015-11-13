@@ -3,6 +3,7 @@
 # http://flask.pocoo.org/docs/0.10/patterns/sqlite3/
 # http://ryrobes.com/python/running-python-scripts-as-a-windows-service/
 # http://stackoverflow.com/questions/23550067/deploy-flask-app-as-windows-service
+# http://gouthamanbalaraman.com/blog/minimal-flask-login-example.html
 
 from flask import Flask,g,request,render_template,redirect
 import sqlite3
@@ -14,16 +15,19 @@ import json
 
 app = Flask("simpleServer")
 
+"""
 c = ConfigParser.SafeConfigParser()
 if os.path.isfile("/opt/tinkeraccess/run.cfg"):
   c.read('/opt/tinkeraccess/run.cfg')
   #C_database = c.get('config', 'database')
-  #C_password = c.get('config', 'password')
+  C_password = c.get('config', 'password')
   C_database = "/opt/tinkeraccess/db.db"
 else:
   print("config run.cfg not found")
   sys.exit(1)
+"""
 
+C_password = "hello"
 
 def init_db():
   with app.app_context():
@@ -73,6 +77,7 @@ def addNewUser(code, deviceid):
     if len(o) == 0:
       exec_db("insert into newuser (code,deviceID) values ('%s', %s)" % (code, deviceid) )
 
+
 @app.teardown_appcontext
 def close_connection(exception):
     db = getattr(g, '_database', None)
@@ -99,10 +104,21 @@ def deviceCode(deviceid,code):
 
 @app.route("/")
 def defaultRoute():
-  return redirect("/admin/interface/newuser")
+  #return redirect("/admin/interface/newuser")
+  return render_template('admin_login.html')
+
+@app.route("/checkLogin/<user>/<password>" )
+def checkLogin(user,password):
+  if password == C_password:
+    return "true"
+  else:
+    return "false"
 
 @app.route("/admin/addUser/<userid>/name/<name>")
 def addUser(userid, name):
+  if request.cookies.get('password') != C_password:
+    return False
+
   a = query_db("select code from newuser where id=%s" % userid)
   badgeCode = a[0]
   exec_db("insert into user (name,code) values ('%s','%s')" % (name, badgeCode[0] ))
@@ -111,22 +127,34 @@ def addUser(userid, name):
 
 @app.route("/admin/addUserAccess/<userid>/<deviceid>")
 def addUserAccess(userid, deviceid):
+  if request.cookies.get('password') != C_password:
+    return False
+
   exec_db("delete from deviceAccess where user=%s and device=%s" % (userid, deviceid))
   exec_db("insert into deviceAccess (user,device,time) values (%s, %s, 100)" % (userid, deviceid))
   return redirect("/admin/interface/userAccess/%s" % userid)
 
 @app.route("/admin/delUserAccess/<userid>/<deviceid>")
 def delUserAccess(userid, deviceid):
+  if request.cookies.get('password') != C_password:
+    return False
+
   exec_db("delete from deviceAccess where user=%s and device=%s" % (userid, deviceid))
   return redirect("/admin/interface/userAccess/%s" % userid)
 
 @app.route("/admin/delNewUser/<userid>")
 def delNewUser(userid):
+  if request.cookies.get('password') != C_password:
+    return False
+
   exec_db("delete from newuser where id=%s" % userid)
   return redirect("/admin/interface/user")
 
 @app.route("/admin/delUser/<userid>")
 def delUser(userid):
+  if request.cookies.get('password') != C_password:
+    return False
+
   exec_db("delete from user where id=%s" % userid)
   return redirect("/admin/interface/user")
 
