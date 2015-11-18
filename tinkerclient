@@ -31,12 +31,15 @@ PIDFILE=/var/run/$DAEMON_NAME.pid
 
 do_start () {
     log_daemon_msg "Starting system $DAEMON_NAME daemon"
-    start-stop-daemon --start -d $DIR --background --pidfile $PIDFILE --make-pidfile --user $DAEMON_USER --chuid $DAEMON_USER --startas $DAEMON -- $DAEMON_OPTS
+    cd $DIR
+		/usr/bin/nohup $DAEMON &
+		echo $! > $PIDFILE
     log_end_msg $?
 }
 do_stop () {
     log_daemon_msg "Stopping system $DAEMON_NAME daemon"
-    start-stop-daemon --stop --pidfile $PIDFILE --retry 10
+		kill -9 `/bin/cat $PIDFILE`
+		$PIDFILE
     log_end_msg $?
 }
 
