@@ -272,7 +272,7 @@ def state_XXXX_(eventMsg):
 ####   using    geany ~/../../etc/rc.local 
 #### to autolauncn
 def main():
-    timeout = 1
+    timeout = 3
     print "Hit Enter within ",timeout," sec to skip BADGE access and get command prompt:"
     rlist, _, _ = select([sys.stdin], [], [], timeout)
     if rlist:
