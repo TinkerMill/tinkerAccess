@@ -98,17 +98,21 @@ STATE_VALIDATE_BADGE        = 2
 STATE_USER_LOGGED_IN        = 3   
 STATE_IN_USE                = 4   
 STATE_LOGGING_OFF           = 5   
-STATE_TIMER_EXPIRE          = 6 
+STATE_TIMER_EXPIRE          = 6
+STATE_INVALID_USER          = 7   
 STATE_FAILURE               = 0xf
 def stateMachine():
     print "Main State Machine"
     curState = STATE_INIT
     eventMsg = (EVENT_MSG_NULL,"","")
+    prevEventMsg = eventMsg
     while(1):
         time.sleep(0.5)
        
         if not eventQ.empty():
+            prevEventMsg = eventMsg
             eventMsg = eventQ.get()
+            
        
         if curState == STATE_INIT:
             curState = state_init(eventMsg)
@@ -121,7 +125,12 @@ def stateMachine():
            
         elif curState == STATE_USER_LOGGED_IN:
             curState = state_user_logged_in(eventMsg)
-           
+       
+        elif curState == STATE_INVALID_USER:
+            eventMsg = prevEventMsg
+            curState = state_user_logged_in(eventMsg)
+            eventQ.put( eventMsg)
+                
         elif curState == STATE_LOGGING_OFF:
             curState = state_logoff_user(eventMsg)
            
@@ -184,7 +193,11 @@ def state_user_logged_in(eventMsg):
         logged_in_user_name = eventMsg[1]
         tempname = logged_in_user_name
         time_end = eventMsg[2]
-        time_remaining = time_end-time.time()
+        if time_end < time.time():
+          time_remaining = 0;
+        else:
+          time_remaining = time_end-time.time()
+
         print " time remaining",(time.ctime( time_remaining ) )[14:19]
         if (time.ctime( time_remaining ) )[14:19] == EXPIRED:  
           LcdQ.put( (logged_in_user_name, (time.ctime( time_remaining ) )[14:19]) )
@@ -194,13 +207,17 @@ def state_user_logged_in(eventMsg):
           LcdQ.put( (logged_in_user_name, (time.ctime( time_remaining ) )[14:19]) )
           deviceAccessQ.put( (logged_in_user_name, (time.ctime( time_remaining ) )[14:19]) )
           nextState = STATE_USER_LOGGED_IN
+          
     elif eventMsg[0] == EVENT_MSG_BADGE_SCAN:
         dbUserValues = {}
         dbUserValues = DB.queryUserNameFromBadgeId(eventMsg[1])
         if (float(dbUserValues['time']) > 0 ):
           nextState = STATE_VALIDATE_BADGE
         else:
-          nextState = STATE_USER_LOGGED_IN
+          LcdQ.put( (dbUserValues['username'], "NOT AUTH TO USE" ) )         
+          time.sleep(5)
+          nextState = STATE_INVALID_USER
+          
     elif eventMsg[0] == EVENT_MSG_TIMER_EXPIRE: 
         nextState = STATE_LOGGING_OFF  
     else: 
@@ -255,7 +272,7 @@ def state_XXXX_(eventMsg):
 ####   using    geany ~/../../etc/rc.local 
 #### to autolauncn
 def main():
-    timeout = 10
+    timeout = 1
     print "Hit Enter within ",timeout," sec to skip BADGE access and get command prompt:"
     rlist, _, _ = select([sys.stdin], [], [], timeout)
     if rlist:
