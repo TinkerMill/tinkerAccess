@@ -16,9 +16,9 @@ sudo bash
 
 #### manage the services
 
-To start stop the server you run: service tinkeraccess <stop/start/restart>
+To start stop the server you run: service tinkeraccess [stop/start/restart]
 
-to start stop the client you run: service tinkerclient <stop/start/restart>
+to start stop the client you run: service tinkerclient [stop/start/restart]
 
 ### Device administration
 Due to the fact that incorrectly removing a device can cause big problems, and
