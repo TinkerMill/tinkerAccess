@@ -36,9 +36,19 @@ cp devicemanager.py $dir
 cp run.cfg $dir
 cp scan.py $dir
 cp scan.cfg $dir
+cp BADGE_SCAN_APP.py $dir
+cp badgeScanModule.py  $dir
+cp dataBaseAccess.py   $dir
+cp devicemanager.py    $dir
 
-# install the startup service
+# install the Server startup service
 cp tinkeraccess /etc/init.d
 chmod 755 /etc/init.d/tinkeraccess
 update-rc.d  tinkeraccess defaults 91
 service tinkeraccess restart
+
+# install the Client startup service
+cp tinkerclient /etc/init.d
+chmod 755 /etc/init.d/tinkerclient
+update-rc.d  tinkerclient defaults 91
+service tinkerclient restart
