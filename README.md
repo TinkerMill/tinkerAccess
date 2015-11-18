@@ -3,7 +3,7 @@ Raspberry Pi Access control system
 
 ## Using the Server
 ### Install the Server
-The server has been tested on a Rasberry Pi 2 Model B. Installation is very simple. 
+The server has been tested on a Rasberry Pi 2 Model B. Installation is very simple.
 
 From the Rasbian terminal:
 
@@ -13,6 +13,12 @@ cd tinkerAccess
 sudo bash
 ./install.sh
 ```
+
+#### manage the services
+
+To start stop the server you run: service tinkeraccess <stop/start/restart>
+
+to start stop the client you run: service tinkerclient <stop/start/restart>
 
 ### Device administration
 Due to the fact that incorrectly removing a device can cause big problems, and
