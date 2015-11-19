@@ -21,8 +21,8 @@
 		function addUser(i) {
 			var userName = $("#text_" + i).val() ;
 			$.get("/admin/addUser/" + i + "/name/" + userName,
-                        function(data) { 
-			$.get("/admin/delNewUser/" + i, 
+                        function(data) {
+			$.get("/admin/delNewUser/" + i,
 			function(data) { location.href = "/admin/interface/newuser";
 }  );
                           });
@@ -65,7 +65,9 @@
 					<td>
 						<div class="btn-group" role="group" aria-label="...">
 
-							<button type="button" class="btn btn-default" onclick="location.href='/admin/delNewUser/{{item[0]}}'">
+							<button type="button" class="btn btn-default"
+								data-anijs="if: click, do: bounceOutRight animated"
+								onclick="location.href='/admin/delNewUser/{{item[0]}}'">
 								<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 							</button>
 
@@ -88,5 +90,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="/static/js/bootstrap.min.js"></script>
+		<script src="/static/js/anijs-min.js" ></script>
   </body>
 </html>
