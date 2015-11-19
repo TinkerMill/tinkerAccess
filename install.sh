@@ -41,6 +41,7 @@ cp badgeScanModule.py  $dir
 cp dataBaseAccess.py   $dir
 cp devicemanager.py    $dir
 cp lcdModule.py $dir
+chmod 755 $dir/BADGE_SCAN_APP.py
 
 # install the Server startup service
 cp tinkeraccess /etc/init.d
