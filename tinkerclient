@@ -1,13 +1,13 @@
 #!/bin/sh
 
 ### BEGIN INIT INFO
-# Provides:          tinkerclient
+# Provides:          tinkeraccess
 # Required-Start:    $remote_fs $syslog
 # Required-Stop:     $remote_fs $syslog
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: tinkerAccess client
-# Description:       client for tinkeraccess
+# Short-Description: tinkerAccess server
+# Description:       server for tinkeraccess
 ### END INIT INFO
 
 # http://blog.scphillips.com/posts/2013/07/getting-a-python-script-to-run-in-the-background-as-a-service-on-boot/
@@ -31,15 +31,12 @@ PIDFILE=/var/run/$DAEMON_NAME.pid
 
 do_start () {
     log_daemon_msg "Starting system $DAEMON_NAME daemon"
-    cd $DIR
-		/usr/bin/nohup $DAEMON &
-		echo $! > $PIDFILE
+    start-stop-daemon --start -d $DIR --background --pidfile $PIDFILE --make-pidfile --user $DAEMON_USER --chuid $DAEMON_USER --startas $DAEMON -- $DAEMON_OPTS
     log_end_msg $?
 }
 do_stop () {
     log_daemon_msg "Stopping system $DAEMON_NAME daemon"
-		kill -9 `/bin/cat $PIDFILE`
-		$PIDFILE
+    start-stop-daemon --stop --pidfile $PIDFILE --retry 10
     log_end_msg $?
 }
 
