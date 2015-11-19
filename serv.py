@@ -117,7 +117,7 @@ def addUser(userid, name):
   a = query_db("select code from newuser where id=%s" % userid)
   badgeCode = a[0]
   exec_db("insert into user (name,code) values ('%s','%s')" % (name, badgeCode[0] ))
-  delNewUser(userid)
+  exec_db("delete from newuser where id=%s" % userid)
   return redirect("/admin/interface/user")
 
 @app.route("/admin/addUserAccess/<userid>/<deviceid>")
