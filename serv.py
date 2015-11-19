@@ -155,16 +155,25 @@ def delUser(userid):
 
 @app.route("/admin/interface/newuser")
 def newUserInterface():
+  if request.cookies.get('password') != C_password:
+    return redirect("/")
+
   users = query_db("select id,code,deviceID from newuser")
   return render_template('admin_newuser.html', users=users)
 
 @app.route("/admin/interface/user")
 def adminInterface():
+  if request.cookies.get('password') != C_password:
+    return redirect("/")
+
   users = query_db("select name,code,id from user")
   return render_template('admin_user.html', users=users)
 
 @app.route("/admin/interface/userAccess/<userid>")
 def userAccessInterface(userid):
+  if request.cookies.get('password') != C_password:
+    return redirect("/")
+
   # list of all the devices
   allDevices = query_db("select id,name from device")
 
