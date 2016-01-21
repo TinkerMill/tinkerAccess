@@ -5,6 +5,7 @@ Raspberry Pi Access control system
 ### Install the Server
 The server has been tested on a Rasberry Pi 2 Model B. Installation is very simple.
 
+
 From the Rasbian terminal:
 
 ```
