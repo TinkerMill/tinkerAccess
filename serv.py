@@ -92,7 +92,7 @@ def deviceCode(deviceid,code):
   else:
 
     # send the data to slack
-    d = json.dumps({'text': "device: %s is in use" % output[0][2] })
+    d = json.dumps({'text': "device: %s is in use by %s" % (output[0][2], output[0][1]) })
     requests.post(C_slackPostUrl, data=d )
 
     return json.dumps(
