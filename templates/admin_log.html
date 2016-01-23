@@ -30,9 +30,9 @@
     <div class="container" data-anijs="if: DOMContentLoaded, on: document, do: flipInY animated">
 
 			<ol>
-			{% for log in logs %}
-			<li> {{ log[0] log[1] }} </li>
-			{% endfor %}
+				{% for log in logs %}
+				<li> {{ log[1] }} {{ log[2] }} </li>
+				{% endfor %}
 			</ol>
 
     </div> <!-- /container -->
