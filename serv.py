@@ -192,7 +192,7 @@ def userAccessInterface(userid):
 
   return render_template('admin_userAccess.html', devices=allDevices, access=userAccess, userid=userid)
 
-@app.route("/admin/inteface/log")
+@app.route("/admin/interface/log")
 def viewLog():
   if request.cookies.get('password') != C_password:
     return redirect("/")
