@@ -192,6 +192,14 @@ def userAccessInterface(userid):
 
   return render_template('admin_userAccess.html', devices=allDevices, access=userAccess, userid=userid)
 
+@app.route("/admin/inteface/log")
+def viewLog():
+  if request.cookies.get('password') != C_password:
+    return redirect("/")
+
+  logs = query_db("select * from log")
+  return render_template('admin_log.html', logs=logs)
+
 if __name__ == "__main__":
   app.run(host='0.0.0.0')
   #app.run(host='127.0.0.1', debug=True)
