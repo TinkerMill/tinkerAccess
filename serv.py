@@ -95,6 +95,9 @@ def deviceCode(deviceid,code):
     d = json.dumps({'text': "device: %s is in use by %s" % (output[0][2], output[0][0]) })
     requests.post(C_slackPostUrl, data=d )
 
+    # log it to the database
+    exec_db("insert into log (message) values ('%s %s,%s')" % (output[0][2], output[0][0], output[0][1] ) )
+
     return json.dumps(
       {'devicename': output[0][2],
        'username': output[0][0],
