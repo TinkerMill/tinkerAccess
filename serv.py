@@ -91,7 +91,9 @@ def deviceCode(deviceid,code):
     return json.dumps( {'devicename': 'none', 'username': 'none', 'userid': -1, 'time': 0 } )
   else:
 
-    requests.post(C_slackPostUrl, data = {"text": "device: %s is in use" % output[0][2] })
+    # send the data to slack
+    d = json.dumps({'text': "device: %s is in use" % output[0][2] })
+    requests.post(C_slackPostUrl, data=d )
 
     return json.dumps(
       {'devicename': output[0][2],
