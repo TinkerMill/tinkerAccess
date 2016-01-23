@@ -12,6 +12,7 @@ import sys
 import os
 import os.path
 import json
+import requests
 
 app = Flask("simpleServer")
 
@@ -20,6 +21,7 @@ if os.path.isfile("/opt/tinkeraccess/run.cfg"):
   c.read('/opt/tinkeraccess/run.cfg')
   C_password = c.get('config', 'password')
   C_database = "/opt/tinkeraccess/db.db"
+  C_slackPostUrl = c.get('config', 'slackurl')
 else:
   print("config run.cfg not found")
   sys.exit(1)
@@ -88,6 +90,9 @@ def deviceCode(deviceid,code):
     addNewUser(code, deviceid)
     return json.dumps( {'devicename': 'none', 'username': 'none', 'userid': -1, 'time': 0 } )
   else:
+
+    requests.post(C_slackPostUrl, data = {"text": "device: %s is in use" % output[0][2] })
+
     return json.dumps(
       {'devicename': output[0][2],
        'username': output[0][0],

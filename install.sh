@@ -11,6 +11,7 @@ fi
 /usr/local/bin/pip install --upgrade pip
 /usr/local/bin/pip install --upgrade pyserial
 /usr/local/bin/pip install flask
+/usr/local/bin/pip install requests
 
 if [ ! -f /usr/bin/sqlite3 ] ; then
 apt-get update
