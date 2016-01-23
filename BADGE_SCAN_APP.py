@@ -30,9 +30,18 @@ EVENT_MSG_TIMER_EXPIRE        = 4
 KILL_APP_PIN = 13
 RESET_PIN = 16
 LOCK_PIN = 17
+inUsePin = 19
+waitingPin = 20
+deniedPin = 21
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(inUsePin, GPIO.OUT)
+GPIO.setup(waitingPin, GPIO.OUT)
+GPIO.setup(deniedPin, GPIO.OUT)
+
 ############################################################
 def taskResetButton():
-    GPIO.setup(RESET_PIN, GPIO.IN)
+    GPIO.setup(RESET_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
     GPIO.setup(KILL_APP_PIN, GPIO.IN)
     resetPinVal = GPIO.LOW
     killAppPinVal = GPIO.LOW
@@ -139,6 +148,9 @@ def stateMachine():
 #####################################
 def state_init(eventMsg):
     print "state_init = ", eventMsg
+    GPIO.output(waitingPin, GPIO.HIGH)
+    GPIO.output(inUsePin, GPIO.LOW)
+    GPIO.output(deniedPin, GPIO.LOW)
     LcdQ.put( ("WELCOME",time.ctime(time.time())) )
     time.sleep(1)
     if eventMsg[0] == EVENT_MSG_BADGE_SCAN:
@@ -174,6 +186,8 @@ def state_validate_user_badge(eventMsg):
           eventQ.put( (EVENT_MSG_USER_GRANTED_ACCESS, dbUserValues['username'], timeend ) )
           nextState = STATE_USER_LOGGED_IN
         else:
+          GPIO.output(waitingPin, GPIO.LOW)
+          GPIO.output(deniedPin, GPIO.HIGH)
           LcdQ.put( (dbUserValues['username'], ("NOT PERMITTED") ) )
           time.sleep(5)
           nextState = STATE_IDLE
@@ -186,6 +200,9 @@ def state_validate_user_badge(eventMsg):
 
 def state_user_logged_in(eventMsg):
     print "state_user_logged_in = ", eventMsg
+    GPIO.output(inUsePin, GPIO.HIGH)
+    GPIO.output(waitingPin, GPIO.LOW)
+    GPIO.output(deniedPin, GPIO.LOW)
     if eventMsg[0] == EVENT_MSG_RESET:
         deviceAccessQ.put( ("LOGGING OFF", ("00:00") ) )
         nextState = STATE_LOGGING_OFF
@@ -225,6 +242,8 @@ def state_user_logged_in(eventMsg):
     return nextState
 
 def state_logoff_user(eventMsg):
+    GPIO.output(inUsePin, GPIO.LOW)
+    GPIO.output(waitingPin, GPIO.HIGH)
     print "state_loggoff_user = ", eventMsg
     LcdQ.put( ("LOGOFF USER", time.ctime(time.time())) )
     time.sleep(1)
