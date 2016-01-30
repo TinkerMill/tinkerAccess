@@ -47,6 +47,9 @@ if os.path.isfile(opts.configFileLocation):
   configOptions['serialPortSpeed'] = c.get('config', 'serialPortSpeed')
   configOptions['pin_logout']      = c.getint('config', 'pin_logout')
   configOptions['pin_relay']      = c.getint('config', 'pin_relay')
+  configOptions['pin_led_r']      = c.getint('config', 'pin_led_r')
+  configOptions['pin_led_g']      = c.getint('config', 'pin_led_g')
+  configOptions['pin_led_b']      = c.getint('config', 'pin_led_b')
 
 # setup logging
 #logging.basicConfig(filename=configOptions['logFile'] , level= configOptions['logLevel'] )
@@ -59,7 +62,13 @@ GPIO.setwarnings(False)
 
 GPIO.setup( configOptions['pin_logout'], GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup( configOptions['pin_relay'], GPIO.OUT)
+GPIO.setup( configOptions['pin_led_r'], GPIO.OUT)
+GPIO.setup( configOptions['pin_led_g'], GPIO.OUT)
+GPIO.setup( configOptions['pin_led_b'], GPIO.OUT)
 GPIO.output( configOptions['pin_relay'], GPIO.LOW )
+GPIO.output(configOptions['pin_led_r'], False)
+GPIO.output(configOptions['pin_led_g'], False)
+GPIO.output(configOptions['pin_led_b'], False)
 
 # configure the serial port
 if not os.path.exists(configOptions['serialPortName']):
@@ -75,6 +84,12 @@ LCD.lcd_string("Scan Badge" ,LCD.LCD_LINE_1)
 LCD.lcd_string("To Login" ,LCD.LCD_LINE_2)
 
 # End Initialize ##
+
+def led(r,g,b):
+  global configOptions
+  GPIO.output(configOptions['pin_led_r'], r)
+  GPIO.output(configOptions['pin_led_g'], g)
+  GPIO.output(configOptions['pin_led_b'], b)
 
 def requestAccess(badgeCode):
   global configOptions
@@ -107,6 +122,9 @@ def event_logout():
 
   LCD.lcd_string("Scan Badge" ,LCD.LCD_LINE_1)
   LCD.lcd_string("To Login" ,LCD.LCD_LINE_2)
+
+  led(False,False,False)
+
   # contact the server and let it know
   # clean up
   # update lcd message
@@ -121,12 +139,17 @@ def event_login(badgeCode):
     GPIO.output( configOptions['pin_relay'], GPIO.HIGH)
     currentUser = v[0]
     currentUserTime = time.time() + ( v[2] * 60 )
+    #currentUserTime = time.time() + ( 5 * 60 )
     globalDeviceName = v[1]
+    led(True,True,False)
   else:
     if currentUser:
       logging.info("Access denied for %s but %s already logged in" % (badgeCode, currentUser))
       return
     logging.info("Access denied for %s " % badgeCode )
+    led(True,False,False)
+    time.sleep(1)
+    led(False,False,False)
     GPIO.output( configOptions['pin_relay'], GPIO.LOW )
 
 
@@ -139,6 +162,7 @@ def loop():
     if currentUser:
       LCD.lcd_string(currentUser,LCD.LCD_LINE_1)
       if currentUserTime - time.time() < 300:
+        led(True,False,True)
         LCD.lcd_string( str( int(round( (currentUserTime - time.time())))) + " Seconds" ,LCD.LCD_LINE_2)
       else:
         LCD.lcd_string( str( int(round( (currentUserTime - time.time())/60 ))) + " Minutes" ,LCD.LCD_LINE_2)
