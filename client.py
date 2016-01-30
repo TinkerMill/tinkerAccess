@@ -138,7 +138,10 @@ def loop():
 
     if currentUser:
       LCD.lcd_string(currentUser,LCD.LCD_LINE_1)
-      LCD.lcd_string( str( int(round( (currentUserTime - time.time())/60 ))) + " Minutes" ,LCD.LCD_LINE_2)
+      if currentUserTime - time.time() < 300:
+        LCD.lcd_string( str( int(round( (currentUserTime - time.time())))) + " Seconds" ,LCD.LCD_LINE_2)
+      else:
+        LCD.lcd_string( str( int(round( (currentUserTime - time.time())/60 ))) + " Minutes" ,LCD.LCD_LINE_2)
 
     # if the user runs out of time, log them out
     if currentUser != False and currentUserTime < time.time():
