@@ -12,11 +12,15 @@ import logging
 import sys
 import RPi.GPIO as GPIO
 import time
+import requests
+import signal
+import lcdModule as LCD
 
 # hold all the options loaded from the config file
-configOptions = []
+configOptions = {}
 currentUser = False
 currentUserTime = 0
+globalDeviceName = False
 
 parser = optparse.OptionParser()
 parser.add_option("-f", "--config",
@@ -25,6 +29,10 @@ parser.add_option("-f", "--config",
 
 (opts, args) = parser.parse_args()
 
+def exitme():
+  sys.exit()
+signal.signal(signal.SIGINT, exitme)
+
 # Begin Initalize ##
 
 # Parse configuration
@@ -32,79 +40,122 @@ c = ConfigParser.SafeConfigParser()
 if os.path.isfile(opts.configFileLocation):
   c.read(opts.configFileLocation)
   configOptions['logFile']         = c.get('config', 'logFile')
-  configOptions['logLevel']        = c.get('config', 'logLevel')
+  configOptions['logLevel']        = c.getint('config', 'logLevel')
   configOptions['server']          = c.get('config', 'server')
   configOptions['deviceID']        = c.get('config', 'deviceID')
   configOptions['serialPortName']  = c.get('config', 'serialPortName')
   configOptions['serialPortSpeed'] = c.get('config', 'serialPortSpeed')
-  configOptions['pin_logout']      = c.get('config', 'pin_logout')
+  configOptions['pin_logout']      = c.getint('config', 'pin_logout')
+  configOptions['pin_relay']      = c.getint('config', 'pin_relay')
 
 # setup logging
-logging.basicConfig(filename=configOptions['logFile'] , level= configOptions['logLevel'] )
+#logging.basicConfig(filename=configOptions['logFile'] , level= configOptions['logLevel'] )
+logging.basicConfig(level= configOptions['logLevel'] )
 
 # configure GPIO
 GPIO.setmode( GPIO.BCM )
-GPIO.setmode( configOptions['pin_logout'], GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.cleanup()
+GPIO.setwarnings(False)
+
+GPIO.setup( configOptions['pin_logout'], GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup( configOptions['pin_relay'], GPIO.OUT)
+GPIO.output( configOptions['pin_relay'], GPIO.LOW )
 
 # configure the serial port
-if not os.path.isfile(configOptions['serialPortName']):
-  logging.fatal("Unable to find serial port %s" % name)
+if not os.path.exists(configOptions['serialPortName']):
+  logging.fatal("Unable to find serial port %s" % configOptions['serialPortName'] )
   sys.exit(1)
 
 serialConnection = serial.Serial( configOptions['serialPortName'], configOptions['serialPortSpeed'] )
 serialConnection.flushInput()
 serialConnection.flushOutput()
 
+LCD.lcd_init()
+LCD.lcd_string("Scan Badge" ,LCD.LCD_LINE_1)
+LCD.lcd_string("To Login" ,LCD.LCD_LINE_2)
+
 # End Initialize ##
 
 def requestAccess(badgeCode):
+  global configOptions
   url = "%s/device/%s/code/%s" % (configOptions['server'], configOptions['deviceID'], badgeCode)
   logging.debug("calling server:" + url)
-  serverResponse = request.get(url)
-  logging.debug("server response")
-  logging.debug(serverResponse)
-  return serverResponse
+
+  serverResponse = requests.get(url)
+  data       = serverResponse.json()
+  username   = data['username']
+  devicename = data['devicename']
+  userid     = data['userid']
+  timelimit  = data['time']
+
+  logging.debug("server response %s,%s,%s,%s" % (username, devicename, userid, timelimit))
+  return (username, devicename, timelimit)
+
 
 
 # what to do when the logout button is pressed
 def event_logout():
-  logging.info("%s logged out" % currentUser )
+  global configOptions, currentUser
+
+  if currentUser:
+    logging.info("%s logged out" % currentUser )
+    GPIO.output( configOptions['pin_relay'], GPIO.LOW )
+    currentUser = False
+    currentUserTime = 0
+  else:
+    currentUserTime = 0
+
+  LCD.lcd_string("Scan Badge" ,LCD.LCD_LINE_1)
+  LCD.lcd_string("To Login" ,LCD.LCD_LINE_2)
   # contact the server and let it know
   # clean up
   # update lcd message
-  pass
 
 def event_login(badgeCode):
+  global currentUser,currentUserTime,globalDeviceName,configOptions
+
   v = requestAccess(badgeCode)
-  if v > 0:
+
+  if v[2] > 0:
     logging.info("Access granted for %s granted with time %s" % (badgeCode, v) )
-    currentUser = "bob"
-    currentUserTime = v
+    GPIO.output( configOptions['pin_relay'], GPIO.HIGH)
+    currentUser = v[0]
+    currentUserTime = time.time() + ( v[2] * 60 )
+    globalDeviceName = v[1]
   else:
-    logging.info("Access denied for %s " % (badgeCode, v) )
+    if currentUser:
+      logging.info("Access denied for %s but %s already logged in" % (badgeCode, currentUser))
+      return
+    logging.info("Access denied for %s " % badgeCode )
+    GPIO.output( configOptions['pin_relay'], GPIO.LOW )
 
 
 def loop():
-  while True:
+  global currentUserTime, currentUser, configOptions
 
+  while True:
     time.sleep(.01)
 
-    # if the user is logged in the tick the clock down
-    if currentUser != False and currentUserTime > 0:
-      currentUserTime = currentUserTime - 1
-      # update lcd with new time
+    if currentUser:
+      LCD.lcd_string(currentUser,LCD.LCD_LINE_1)
+      LCD.lcd_string( str( int(round( (currentUserTime - time.time())/60 ))) + " Minutes" ,LCD.LCD_LINE_2)
 
     # if the user runs out of time, log them out
-    if currentUser != False and currentUserTime < 0:
+    if currentUser != False and currentUserTime < time.time():
       event_logout()
       continue
 
     # if the user logs out with the logout button log them out
     if GPIO.input( configOptions['pin_logout'] ) == GPIO.HIGH:
       event_logout()
+      time.sleep(.2)
       continue
 
     # if the serial port has data read it.
-    if serialConnection.in_waiting > 0:
-      badgeCode = SerialConnection.readline().strip()[-11:-1]
-      event_login(badgeCode)
+    if serialConnection.inWaiting() > 1:
+      badgeCode = serialConnection.readline().strip()[-11:-1]
+      data = event_login(badgeCode)
+      continue
+
+
+loop()
