@@ -17,8 +17,8 @@ import requests
 app = Flask("simpleServer")
 
 c = ConfigParser.SafeConfigParser()
-if os.path.isfile("/opt/tinkeraccess/run.cfg"):
-  c.read('/opt/tinkeraccess/run.cfg')
+if os.path.isfile("/opt/tinkeraccess/server.cfg"):
+  c.read('/opt/tinkeraccess/server.cfg')
   C_password = c.get('config', 'password')
   C_database = "/opt/tinkeraccess/db.db"
   C_slackPostUrl = c.get('config', 'slackurl')
