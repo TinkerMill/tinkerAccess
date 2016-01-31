@@ -24,7 +24,7 @@ globalDeviceName = False
 
 parser = optparse.OptionParser()
 parser.add_option("-f", "--config",
-                  default="/opt/tinkerAccess/client.cfg",
+                  default="/opt/tinkeraccess/client.cfg",
                   help='config file to use', dest="configFileLocation", action="store")
 
 (opts, args) = parser.parse_args()
