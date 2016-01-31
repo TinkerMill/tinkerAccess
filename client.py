@@ -19,6 +19,7 @@ import lcdModule as LCD
 # hold all the options loaded from the config file
 configOptions = {}
 currentUser = False
+currentUserID = False
 currentUserTime = 0
 globalDeviceName = False
 
@@ -52,7 +53,7 @@ if os.path.isfile(opts.configFileLocation):
   configOptions['pin_led_b']      = c.getint('config', 'pin_led_b')
 
 # setup logging
-logging.basicConfig(filename=configOptions['logFile'] , level= configOptions['logLevel'] )
+logging.basicConfig(filename=configOptions['logFile'] , level=configOptions['logLevel'] )
 #logging.basicConfig(level=configOptions['logLevel'] )
 
 # configure GPIO
@@ -104,33 +105,36 @@ def requestAccess(badgeCode):
   timelimit  = data['time']
 
   logging.debug("server response %s,%s,%s,%s" % (username, devicename, userid, timelimit))
-  return (username, devicename, timelimit)
+  return (username, devicename, timelimit, userid)
 
 
 
 # what to do when the logout button is pressed
 def event_logout():
-  global configOptions, currentUser
+  global configOptions, currentUser,currentUserID
 
   if currentUser:
+
+    # tell the server we have logged out
+    url = "%s/device/%s/logout/%s" % (configOptions['server'], configOptions['deviceID'], currentUserID)
+    logging.debug("calling server:" + url)
+    re = requests.get(url)
+    logging.debug("server response:" + re.text)
+
     logging.info("%s logged out" % currentUser )
     GPIO.output( configOptions['pin_relay'], GPIO.LOW )
     currentUser = False
     currentUserTime = 0
+    currentUserID = False
   else:
     currentUserTime = 0
 
   LCD.lcd_string("Scan Badge" ,LCD.LCD_LINE_1)
   LCD.lcd_string("To Login" ,LCD.LCD_LINE_2)
-
   led(False,False,False)
 
-  # contact the server and let it know
-  # clean up
-  # update lcd message
-
 def event_login(badgeCode):
-  global currentUser,currentUserTime,globalDeviceName,configOptions
+  global currentUser,currentUserID, currentUserTime,globalDeviceName,configOptions
 
   v = requestAccess(badgeCode)
 
@@ -138,8 +142,8 @@ def event_login(badgeCode):
     logging.info("Access granted for %s granted with time %s" % (badgeCode, v) )
     GPIO.output( configOptions['pin_relay'], GPIO.HIGH)
     currentUser = v[0]
+    currentUserID = v[3]
     currentUserTime = time.time() + ( v[2] * 60 )
-    #currentUserTime = time.time() + ( 5 * 60 )
     globalDeviceName = v[1]
     led(True,True,False)
   else:
