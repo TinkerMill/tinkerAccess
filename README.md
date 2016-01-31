@@ -1,3 +1,5 @@
+![taicon](/taicon.png)
+
 # tinkerAccess
 Raspberry Pi Access control system
 
