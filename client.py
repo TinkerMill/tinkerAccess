@@ -52,8 +52,8 @@ if os.path.isfile(opts.configFileLocation):
   configOptions['pin_led_b']      = c.getint('config', 'pin_led_b')
 
 # setup logging
-#logging.basicConfig(filename=configOptions['logFile'] , level= configOptions['logLevel'] )
-logging.basicConfig(level= configOptions['logLevel'] )
+logging.basicConfig(filename=configOptions['logFile'] , level= configOptions['logLevel'] )
+#logging.basicConfig(level=configOptions['logLevel'] )
 
 # configure GPIO
 GPIO.setmode( GPIO.BCM )
