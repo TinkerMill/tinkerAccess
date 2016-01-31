@@ -17,8 +17,8 @@ import requests
 app = Flask("simpleServer")
 
 c = ConfigParser.SafeConfigParser()
-if os.path.isfile("/opt/tinkeraccess/run.cfg"):
-  c.read('/opt/tinkeraccess/run.cfg')
+if os.path.isfile("/opt/tinkeraccess/server.cfg"):
+  c.read('/opt/tinkeraccess/server.cfg')
   C_password = c.get('config', 'password')
   C_database = "/opt/tinkeraccess/db.db"
   C_slackPostUrl = c.get('config', 'slackurl')
@@ -81,22 +81,34 @@ def close_connection(exception):
     if db is not None:
         db.close()
 
+# logout
+@app.route("/device/<deviceid>/logout/<uid>")
+def deviceLogout(deviceid, uid):
+  output = query_db("select device.name from device where id=%s" % deviceid)
+  exec_db("insert into log (message) values ('logout:%s:%s')" % (deviceid,uid) )
+
+  d = json.dumps({'text': "%s is now available" % output[0][0]  })
+  requests.post(C_slackPostUrl, data=d )
+
+  return ""
+
 # given a device and a rfid code return if there is access to that device
+# this is the login
 @app.route("/device/<deviceid>/code/<code>")
 def deviceCode(deviceid,code):
   output = query_db("select user.name, user.id, device.name, deviceAccess.time from deviceAccess join device on device.id=deviceAccess.device join user on user.id = deviceAccess.user where user.code='%s' and device.id=%s" % (code,deviceid))
-  print output
+  #print output
   if len(output) == 0:
     addNewUser(code, deviceid)
     return json.dumps( {'devicename': 'none', 'username': 'none', 'userid': -1, 'time': 0 } )
   else:
 
     # send the data to slack
-    d = json.dumps({'text': "device: %s is in use by %s" % (output[0][2], output[0][0]) })
+    d = json.dumps({'text': "%s is now in use by %s" % (output[0][2], output[0][0]) })
     requests.post(C_slackPostUrl, data=d )
 
     # log it to the database
-    exec_db("insert into log (message) values ('%s %s,%s')" % (output[0][2], output[0][0], output[0][1] ) )
+    exec_db("insert into log (message) values ('login:%s:%s')" % (deviceid, output[0][1]) )
 
     return json.dumps(
       {'devicename': output[0][2],

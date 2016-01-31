@@ -29,29 +29,23 @@ if [ ! -f $dir/db.db ] ; then
 fi
 
 # copy over the file we need
-cp serv.py $dir
-chmod 755 $dir/serv.py
+cp server.py $dir
+cp server.cfg $dir
+chmod 755 $dir/server.py
 cp -r static $dir
 cp -r templates $dir
-cp devicemanager.py $dir
-cp run.cfg $dir
-cp scan.py $dir
-cp scan.cfg $dir
-cp BADGE_SCAN_APP.py $dir
-cp badgeScanModule.py  $dir
-cp dataBaseAccess.py   $dir
-cp devicemanager.py    $dir
+cp client.py $dir
+cp client.cfg $dir
 cp lcdModule.py $dir
-chmod 755 $dir/BADGE_SCAN_APP.py
 
 # install the Server startup service
-cp tinkeraccess /etc/init.d
-chmod 755 /etc/init.d/tinkeraccess
-update-rc.d  tinkeraccess defaults 91
-service tinkeraccess restart
+cp scripts/tinkerserver /etc/init.d
+chmod 755 /etc/init.d/tinkerserver
+update-rc.d tinkerserver defaults 91
+service tinkerserver restart
 
 # install the Client startup service
-cp tinkerclient /etc/init.d
+cp scripts/tinkerclient /etc/init.d
 chmod 755 /etc/init.d/tinkerclient
 update-rc.d  tinkerclient defaults 91
 service tinkerclient restart
