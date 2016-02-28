@@ -115,12 +115,12 @@ def requestAccess(badgeCode):
 # what to do when the logout button is pressed
 def event_logout():
   global configOptions, currentUser,currentUserID
-  #check if machine is running, if so, prevent shutdown
-  while currentSense:
-    time.sleep(1)
-  
-  if currentUser:
 
+  #check if machine is running, if so, prevent shutdown
+  while GPIO.input( configOptions['pin_current_sense']  ) == GPIO.HIGH:
+      time.sleep(1)
+
+  if currentUser:
     # tell the server we have logged out
     url = "%s/device/%s/logout/%s" % (configOptions['server'], configOptions['deviceID'], currentUserID)
     logging.debug("calling server:" + url)
