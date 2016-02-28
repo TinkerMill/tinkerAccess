@@ -30,6 +30,7 @@ parser.add_option("-f", "--config",
 
 (opts, args) = parser.parse_args()
 
+
 def exitme():
   sys.exit()
 signal.signal(signal.SIGINT, exitme)
@@ -57,6 +58,12 @@ if os.path.isfile(opts.configFileLocation):
 logging.basicConfig(filename=configOptions['logFile'] , level=configOptions['logLevel'] )
 #logging.basicConfig(level=configOptions['logLevel'] )
 
+def led(r,g,b):
+  global configOptions
+  GPIO.output(configOptions['pin_led_r'], r)
+  GPIO.output(configOptions['pin_led_g'], g)
+  GPIO.output(configOptions['pin_led_b'], b)
+  
 # configure GPIO
 GPIO.setmode( GPIO.BCM )
 GPIO.cleanup()
@@ -89,11 +96,7 @@ led(False,False,True)
 
 # End Initialize ##
 
-def led(r,g,b):
-  global configOptions
-  GPIO.output(configOptions['pin_led_r'], r)
-  GPIO.output(configOptions['pin_led_g'], g)
-  GPIO.output(configOptions['pin_led_b'], b)
+
 
 def requestAccess(badgeCode):
   global configOptions
