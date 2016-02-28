@@ -51,6 +51,7 @@ if os.path.isfile(opts.configFileLocation):
   configOptions['pin_led_r']      = c.getint('config', 'pin_led_r')
   configOptions['pin_led_g']      = c.getint('config', 'pin_led_g')
   configOptions['pin_led_b']      = c.getint('config', 'pin_led_b')
+  configOptions['pin_current_sense']      = c.getint('config', 'pin_current_sense')
 
 # setup logging
 logging.basicConfig(filename=configOptions['logFile'] , level=configOptions['logLevel'] )
@@ -62,6 +63,7 @@ GPIO.cleanup()
 GPIO.setwarnings(False)
 
 GPIO.setup( configOptions['pin_logout'], GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup( configOptions['pin_current_sense'], GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup( configOptions['pin_relay'], GPIO.OUT)
 GPIO.setup( configOptions['pin_led_r'], GPIO.OUT)
 GPIO.setup( configOptions['pin_led_g'], GPIO.OUT)
@@ -83,6 +85,7 @@ serialConnection.flushOutput()
 LCD.lcd_init()
 LCD.lcd_string("Scan Badge" ,LCD.LCD_LINE_1)
 LCD.lcd_string("To Login" ,LCD.LCD_LINE_2)
+led(False,False,True)
 
 # End Initialize ##
 
@@ -112,7 +115,10 @@ def requestAccess(badgeCode):
 # what to do when the logout button is pressed
 def event_logout():
   global configOptions, currentUser,currentUserID
-
+  #check if machine is running, if so, prevent shutdown
+  while currentSense:
+    time.sleep(1)
+  
   if currentUser:
 
     # tell the server we have logged out
@@ -131,7 +137,7 @@ def event_logout():
 
   LCD.lcd_string("Scan Badge" ,LCD.LCD_LINE_1)
   LCD.lcd_string("To Login" ,LCD.LCD_LINE_2)
-  led(False,False,False)
+  led(False,False,True)
 
 def event_login(badgeCode):
   global currentUser,currentUserID, currentUserTime,globalDeviceName,configOptions
@@ -145,7 +151,7 @@ def event_login(badgeCode):
     currentUserID = v[3]
     currentUserTime = time.time() + ( v[2] * 60 )
     globalDeviceName = v[1]
-    led(True,True,False)
+    led(False,True,False)
   else:
     if currentUser:
       logging.info("Access denied for %s but %s already logged in" % (badgeCode, currentUser))
