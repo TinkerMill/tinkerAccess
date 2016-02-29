@@ -163,7 +163,7 @@ def event_login(badgeCode):
     led(True,False,False)
     LCD.lcd_string("Access Denied" ,LCD.LCD_LINE_1)
     LCD.lcd_string("go talk to Ron" ,LCD.LCD_LINE_2)
-    time.sleep(1)
+    time.sleep(2)
     led(False,False,True)
     LCD.lcd_string("Scan Badge" ,LCD.LCD_LINE_1)
     LCD.lcd_string("To Login" ,LCD.LCD_LINE_2)
