@@ -162,7 +162,7 @@ def event_login(badgeCode):
     logging.info("Access denied for %s " % badgeCode )
     led(True,False,False)
     LCD.lcd_string("Access Denied" ,LCD.LCD_LINE_1)
-    LCD.lcd_string("go talk to Ron" ,LCD.LCD_LINE_2)
+    LCD.lcd_string("Take the class" ,LCD.LCD_LINE_2)
     time.sleep(2)
     led(False,False,True)
     LCD.lcd_string("Scan Badge" ,LCD.LCD_LINE_1)
