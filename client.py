@@ -63,7 +63,7 @@ def led(r,g,b):
   GPIO.output(configOptions['pin_led_r'], r)
   GPIO.output(configOptions['pin_led_g'], g)
   GPIO.output(configOptions['pin_led_b'], b)
-  
+
 # configure GPIO
 GPIO.setmode( GPIO.BCM )
 GPIO.cleanup()
@@ -161,8 +161,12 @@ def event_login(badgeCode):
       return
     logging.info("Access denied for %s " % badgeCode )
     led(True,False,False)
+    LCD.lcd_string("Access Denied" ,LCD.LCD_LINE_1)
+    LCD.lcd_string("go talk to Ron" ,LCD.LCD_LINE_2)
     time.sleep(1)
-    led(False,False,False)
+    led(False,False,True)
+    LCD.lcd_string("Scan Badge" ,LCD.LCD_LINE_1)
+    LCD.lcd_string("To Login" ,LCD.LCD_LINE_2)
     GPIO.output( configOptions['pin_relay'], GPIO.LOW )
 
 
