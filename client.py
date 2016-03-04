@@ -53,6 +53,7 @@ if os.path.isfile(opts.configFileLocation):
   configOptions['pin_led_g']      = c.getint('config', 'pin_led_g')
   configOptions['pin_led_b']      = c.getint('config', 'pin_led_b')
   configOptions['pin_current_sense']      = c.getint('config', 'pin_current_sense')
+  configOptions['logout_coast_time']      = c.getint('config', 'logout_coast_time')
 
 # setup logging
 logging.basicConfig(filename=configOptions['logFile'] , level=configOptions['logLevel'] )
@@ -118,10 +119,18 @@ def requestAccess(badgeCode):
 # what to do when the logout button is pressed
 def event_logout():
   global configOptions, currentUser,currentUserID
+  isMachineRunning = FALSE
 
-  #check if machine is running, if so, prevent shutdown
+  #check if machine is running, if so, flag machine running status and prevent shutdown
   while GPIO.input( configOptions['pin_current_sense']  ) == GPIO.HIGH:
+      isMachineRunning = TRUE
       time.sleep(1)
+
+  # If logout was attempted while machine is running, delay for coast time (seconds) defined in config file
+  if isMachineRunning == TRUE
+    time.sleep(logout_coast_time)
+    isMachineRunning = FALSE
+    
 
   if currentUser:
     # tell the server we have logged out
