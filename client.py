@@ -206,7 +206,7 @@ def loop():
 
     # if the serial port has data read it.
     if serialConnection.inWaiting() > 1:
-      badgeCode = serialConnection.readline().strip()[-11:-1]
+      badgeCode = serialConnection.readline().strip()[-12:0]
       data = event_login(badgeCode)
       continue
 
