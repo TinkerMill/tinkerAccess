@@ -124,13 +124,13 @@ def event_logout():
 
   #check if machine is running, if so, flag machine running status and prevent shutdown
   while GPIO.input( configOptions['pin_current_sense']  ) == GPIO.HIGH:
-      isMachineRunning = TRUE
+      isMachineRunning = True
       time.sleep(1)
 
   # If logout was attempted while machine is running, delay for coast time (seconds) defined in config file
-  if isMachineRunning == TRUE
+  if isMachineRunning == True:
     time.sleep(logout_coast_time)
-    isMachineRunning = FALSE
+    isMachineRunning = False
     
 
   if currentUser:
@@ -215,7 +215,7 @@ def loop():
 
     # if the serial port has data read it.
     if serialConnection.inWaiting() > 1:
-      badgeCode = serialConnection.readline().strip()[-12:0]
+      badgeCode = serialConnection.readline().strip()[-12:-1]
       data = event_login(badgeCode)
       continue
 
