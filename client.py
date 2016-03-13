@@ -156,6 +156,7 @@ def event_logout():
 def event_login(badgeCode):
   global currentUser,currentBadge, currentUserID, currentUserTime,globalDeviceName,configOptions
 
+
   if currentBadge == badgeCode:
     currentUserTime = 100
     return
