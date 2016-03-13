@@ -120,7 +120,7 @@ def requestAccess(badgeCode):
 # what to do when the logout button is pressed
 def event_logout():
   global configOptions, currentUser,currentUserID
-  isMachineRunning = FALSE
+  isMachineRunning = False
 
   #check if machine is running, if so, flag machine running status and prevent shutdown
   while GPIO.input( configOptions['pin_current_sense']  ) == GPIO.HIGH:
