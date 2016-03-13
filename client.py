@@ -121,6 +121,7 @@ def requestAccess(badgeCode):
 def event_logout():
   global configOptions, currentBadge, currentUser,currentUserID
   isMachineRunning = False
+  currentBadge = False
 
   #check if machine is running, if so, flag machine running status and prevent shutdown
   while GPIO.input( configOptions['pin_current_sense']  ) == GPIO.HIGH:
@@ -151,7 +152,6 @@ def event_logout():
   else:
     currentUserTime = 0
 
-  currentBadge = False
   LCD.lcd_string("Scan Badge" ,LCD.LCD_LINE_1)
   LCD.lcd_string("To Login" ,LCD.LCD_LINE_2)
   led(False,False,True)
