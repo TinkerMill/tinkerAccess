@@ -45,6 +45,7 @@ do_update() {
         rm -rf /tmp/updateTA
     fi
 
+    {
     mkdir /tmp/updateTA
     cd /tmp/updateTA
 
@@ -58,15 +59,20 @@ do_update() {
         cp lcdModule.py $DIR
     fi
 
-    #rm -rf /tmp/updateTA
+    rm -rf /tmp/updateTA
+    } >> /dev/null
 
 }
 
 case "$1" in
 
+    stop)
+        do_stop
+        ;;
 
-    start|stop|update)
-        do_${1}
+    start)
+        do_update
+        do_start
         ;;
 
     restart|reload|force-reload)
