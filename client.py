@@ -145,17 +145,16 @@ def event_logout():
     currentUser = False
     currentUserTime = 0
     currentUserID = False
-    currentBadge = False
   else:
     currentUserTime = 0
 
+  currentBadge = False
   LCD.lcd_string("Scan Badge" ,LCD.LCD_LINE_1)
   LCD.lcd_string("To Login" ,LCD.LCD_LINE_2)
   led(False,False,True)
 
 def event_login(badgeCode):
   global currentUser,currentBadge, currentUserID, currentUserTime,globalDeviceName,configOptions
-
 
   if currentBadge == badgeCode:
     currentUserTime = 100
