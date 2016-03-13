@@ -171,7 +171,7 @@ def event_login(badgeCode):
     currentUserID = v[3]
     currentUserTime = time.time() + ( v[2] * 60 )
     globalDeviceName = v[1]
-    currentBadgeCode = badgeCode
+    currentBadge = badgeCode
     led(False,True,False)
   else:
     if currentUser:
