@@ -40,9 +40,32 @@ do_stop () {
     log_end_msg $?
 }
 
+do_update() {
+    if [ -d /tmp/updateTA ] ; then
+        rm -rf /tmp/updateTA
+    fi
+
+    mkdir /tmp/updateTA
+    cd /tmp/updateTA
+
+    # download the files we want to update
+    wget https://raw.githubusercontent.com/TinkerMill/tinkerAccess/master/client.py
+    wget https://raw.githubusercontent.com/TinkerMill/tinkerAccess/master/lcdModule.py
+
+    # if both files are not empty, then install them
+    if [ -s client.py -a -s lcdModule.py ] ; then
+        cp client.py $DIR
+        cp lcdModule.py $DIR
+    fi
+
+    #rm -rf /tmp/updateTA
+
+}
+
 case "$1" in
 
-    start|stop)
+
+    start|stop|update)
         do_${1}
         ;;
 

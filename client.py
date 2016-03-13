@@ -19,6 +19,7 @@ import lcdModule as LCD
 # hold all the options loaded from the config file
 configOptions = {}
 currentUser = False
+currentBadge = False
 currentUserID = False
 currentUserTime = 0
 globalDeviceName = False
@@ -144,6 +145,7 @@ def event_logout():
     currentUser = False
     currentUserTime = 0
     currentUserID = False
+    currentBadge = False
   else:
     currentUserTime = 0
 
@@ -152,10 +154,16 @@ def event_logout():
   led(False,False,True)
 
 def event_login(badgeCode):
-  global currentUser,currentUserID, currentUserTime,globalDeviceName,configOptions
+  global currentUser,currentBadge, currentUserID, currentUserTime,globalDeviceName,configOptions
+
+  if currentBadge == badgeCode:
+    currentUserTime = 100
+    return
 
   v = requestAccess(badgeCode)
 
+  # if the server returned that we have more than 0 min left on device
+  # then we have access.
   if v[2] > 0:
     logging.info("Access granted for %s granted with time %s" % (badgeCode, v) )
     GPIO.output( configOptions['pin_relay'], GPIO.HIGH)
@@ -163,6 +171,7 @@ def event_login(badgeCode):
     currentUserID = v[3]
     currentUserTime = time.time() + ( v[2] * 60 )
     globalDeviceName = v[1]
+    currentBadgeCode = badgeCode
     led(False,True,False)
   else:
     if currentUser:
