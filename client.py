@@ -157,7 +157,7 @@ def event_login(badgeCode):
   global currentUser,currentBadge, currentUserID, currentUserTime,globalDeviceName,configOptions
 
   if currentBadge == badgeCode:
-    currentUserTime = 100
+    currentUserTime = time.time() + ( 100 * 60 )
     return
 
   v = requestAccess(badgeCode)
