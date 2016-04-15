@@ -136,6 +136,7 @@ def event_logout():
     LCD.lcd_string("Coasting Down" ,LCD.LCD_LINE_2)
     time.sleep(logout_coast_time)
     isMachineRunning = False
+    continue
     
   if currentUser:
     # tell the server we have logged out
