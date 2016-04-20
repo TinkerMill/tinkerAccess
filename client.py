@@ -134,7 +134,7 @@ def event_logout():
   if isMachineRunning == True:
     LCD.lcd_string("Machine" ,LCD.LCD_LINE_1)
     LCD.lcd_string("Coasting Down" ,LCD.LCD_LINE_2)
-    time.sleep(logout_coast_time)
+    time.sleep(configOptions['logout_coast_time'] )
     isMachineRunning = False
     
   if currentUser:
