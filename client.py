@@ -123,19 +123,27 @@ def event_logout():
   isMachineRunning = False
   currentBadge = False
 
-  #check if machine is running, if so, flag machine running status and prevent shutdown
-  while GPIO.input( configOptions['pin_current_sense']  ) == GPIO.HIGH:
-      isMachineRunning = True
-      LCD.lcd_string("Waiting for" ,LCD.LCD_LINE_1)
-      LCD.lcd_string("Machine to Stop" ,LCD.LCD_LINE_2)
-      time.sleep(1)
+  # the loop makes sure the machine is powered down all the way 
+  # before logging the user off
+  while True:
+    
+    # if the current pin is not high, break out of the loop
+    if not GPIO.input( configOptions['pin_current_sense']  ) == GPIO.HIGH:
+      break
 
-  # If logout was attempted while machine is running, delay for coast time (seconds) defined in config file
-  if isMachineRunning == True:
-    LCD.lcd_string("Machine" ,LCD.LCD_LINE_1)
-    LCD.lcd_string("Coasting Down" ,LCD.LCD_LINE_2)
-    time.sleep(configOptions['logout_coast_time'] )
-    isMachineRunning = False
+    #check if machine is running, if so, flag machine running status and prevent shutdown
+    while GPIO.input( configOptions['pin_current_sense']  ) == GPIO.HIGH:
+        isMachineRunning = True
+        LCD.lcd_string("Waiting for" ,LCD.LCD_LINE_1)
+        LCD.lcd_string("Machine to Stop" ,LCD.LCD_LINE_2)
+        time.sleep(1)
+
+    # If logout was attempted while machine is running, delay for coast time (seconds) defined in config file
+    if isMachineRunning == True:
+      LCD.lcd_string("Machine" ,LCD.LCD_LINE_1)
+      LCD.lcd_string("Coasting Down" ,LCD.LCD_LINE_2)
+      time.sleep(configOptions['logout_coast_time'] )
+      isMachineRunning = False
     
   if currentUser:
     # tell the server we have logged out
