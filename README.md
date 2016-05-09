@@ -30,19 +30,22 @@ you to add, delete, and rename a device.
 
 #### Add a new device
 ```sh
-devicemanager.py -a -n "front door"
+cd /opt/tinkeraccess
+./devicemanager.py -a -n "front door"
 ```
 #### Delete a device
 This will delete the device from the database, and it will also delete
 all user access records from the database. (not user accounts, but
 the fact they have access to the device you just deleted.)
 ```sh
-devicemanager.py -l
-devicemanager.py -d -i <id_for_front_door>
+cd /opt/tinkeraccess
+./devicemanager.py -l
+./devicemanager.py -d -i <id_for_front_door>
 ```
 #### Rename a device
 ```sh
-devicemanager.py -r -i <id_for_device> -n "new name"
+/opt/tinkeraccess
+./devicemanager.py -r -i <id_for_device> -n "new name"
 ```
 
 ### User Administration

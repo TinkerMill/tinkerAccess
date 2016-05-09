@@ -37,6 +37,7 @@ cp -r templates $dir
 cp client.py $dir
 cp client.cfg $dir
 cp lcdModule.py $dir
+cp devicemanager.py $dir
 
 # install the Server startup service
 cp scripts/tinkerserver /etc/init.d
