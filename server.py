@@ -155,10 +155,17 @@ def addUser(userid, name):
 when a trainer logs in, he can register anyone on this device as a user
 http://localhost:5000/admin/marioStar/1/150060E726B4/0/2
 """
-@app.route("/admin/marioStar/<trainerid>/<trainerBadge>/<deviceid>/<userid>")
-def marioStarMode(trainerid,trainerBadge, deviceid, userid):  
+@app.route("/admin/marioStar/<trainerid>/<trainerBadge>/<deviceid>/<userBadge>")
+def marioStarMode(trainerid,trainerBadge, deviceid, userBadge):  
   trainer = query_db("select user.id from user join deviceAccess on deviceAccess.user=user.id  where user.id=%s and user.code='%s' and deviceAccess.trainer=1" % (trainerid, trainerBadge))
   
+  # the user must already exist in the system
+  userid = query_db("select id from user where code='%s'" % (userBadge) )
+  if len(userid) == 1:
+    userid = userid[0][0]
+  else:
+    return "false"
+
   if len(trainer) == 1:
     exec_db("delete from deviceAccess where user=%s and device=%s" % (userid, deviceid))
     exec_db("insert into deviceAccess (user,device,time) values (%s, %s, 100)" % (userid, deviceid))

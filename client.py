@@ -23,6 +23,7 @@ currentBadge = False
 currentUserID = False
 currentUserTime = 0
 globalDeviceName = False
+marioMode = False
 
 parser = optparse.OptionParser()
 parser.add_option("-f", "--config",
@@ -220,14 +221,53 @@ def loop():
 
     # if the user logs out with the logout button log them out
     if GPIO.input( configOptions['pin_logout'] ) == GPIO.HIGH:
-      event_logout()
-      time.sleep(.2)
+      
+      holdDownCount=0
+      marioMode = False
+
+      # if the logout button is held down for over 2 seconds
+      # you enter mario mode and any badge scanned after this
+      # will become authorized to use this device.
+      while GPIO.input( configOptions['pin_logout'] ) == GPIO.HIGH:
+        time.sleep(.1)
+        holdDownCount = holdDownCount + 1
+        if holdDownCount > 2000:
+          marioMode = True
+          cuurentTrainerId = currentUserID
+          currentTrainerCode = currentBadge
+          LCD.lcd_string("Mario Mode" ,LCD.LCD_LINE_1)
+          LCD.lcd_string("Activated" ,LCD.LCD_LINE_2)
+          break
+
+      if not marioMode:
+        event_logout()
+        time.sleep(.2)
+      
       continue
 
     # if the serial port has data read it.
     if serialConnection.inWaiting() > 1:
       badgeCode = serialConnection.readline().strip()[-12:-1]
-      data = event_login(badgeCode)
+
+      # if mario mode is active, then register this badge on the machine
+      if marioMode:
+
+        # don re-register the trainer if she scans her badge again
+        if badgeCode == currentTrainerCode:
+          continue
+
+        # contact the server and register this new badge on this equipment  
+        url = "%s/admin/marioStar/%s/%s/%s/%s" % (configOptions['server'], currentTrainerId, currentTrainerCode, configOptions['deviceID'], badgeCode)
+        logging.debug("calling server:" + url)
+        re = requests.get(url)
+        logging.debug("server response:" + re.text)
+
+        LCD.lcd_string("Register of" ,LCD.LCD_LINE_1)
+        LCD.lcd_string(badgeCode ,LCD.LCD_LINE_2)
+      
+      # otherwise just do a normal login
+      else:
+        data = event_login(badgeCode)
       continue
 
 
