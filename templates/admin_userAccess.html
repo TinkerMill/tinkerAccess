@@ -32,7 +32,7 @@
 
 			<div class="page-header">
 				<h1>Tinker Access Admin Interface</h1>
-				<p class="lead">Modify user access</p>
+				<p class="lead">Modify user access for <b>{{ username }}</b></p>
 			</div>
 
 			<br>
@@ -47,7 +47,14 @@
 					{% for item in access %}
 					<tr>
 						<td> {{ item[3] }} </td>
-						<td>  <button type="button" class="btn btn-default" onclick="location.href='/admin/delUserAccess/{{item[1]}}/{{item[2]}}'"><span class="glyphicon glyphicon-remove" aria-hidden="true" ></span></button> </td>
+						<td>  <button type="button" class="btn btn-default" onclick="location.href='/admin/delUserAccess/{{item[1]}}/{{item[2]}}'"><span class="glyphicon glyphicon-remove" aria-hidden="true" ></span> Remove Access</button> 
+						
+						{% if item[5] == 0 %}
+							<button type="button" class="btn btn-default" onclick="location.href='/admin/removeTrainer/{{item[1]}}/{{item[2]}}'"><span class="glyphicon glyphicon-remove" aria-hidden="true" ></span> Remove as Trainer</button> 
+						{% else %}
+							<button type="button" class="btn btn-default" onclick="location.href='/admin/addTrainer/{{item[1]}}/{{item[2]}}'"><span class="glyphicon glyphicon-plus" aria-hidden="true" ></span> Add as Trainer</button> 
+						{% endif %} 
+						</td>
 					</tr>
 					{% endfor %}
 				</tbody>
@@ -66,7 +73,7 @@
 					{% for item in devices %}
 					<tr>
 						<td> {{ item[1] }} </td>
-						<td> <button type="button" class="btn btn-default" onclick="location.href='/admin/addUserAccess/{{ userid}}/{{item[0]}}'"><span class="glyphicon glyphicon-plus" aria-hidden="true" ></span></button></td>
+						<td> <button type="button" class="btn btn-default" onclick="location.href='/admin/addUserAccess/{{ userid}}/{{item[0]}}'"><span class="glyphicon glyphicon-plus" aria-hidden="true" ></span> Add Access</button></td>
 					</tr>
 					{% endfor %}
 				</tbody>

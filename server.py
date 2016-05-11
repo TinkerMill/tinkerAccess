@@ -16,11 +16,19 @@ import requests
 
 app = Flask("simpleServer")
 
+
 c = ConfigParser.SafeConfigParser()
-if os.path.isfile("/opt/tinkeraccess/server.cfg"):
-  c.read('/opt/tinkeraccess/server.cfg')
+configPath=None
+
+for p in ["/opt/tinkeraccess/server.cfg", "server.cfg"]:
+  if os.path.isfile(p):
+    configPath=p
+    break
+
+if configPath:
+  c.read(configPath)
   C_password = c.get('config', 'password')
-  C_database = "/opt/tinkeraccess/db.db"
+  C_database = c.get('config', 'db') 
   C_slackPostUrl = c.get('config', 'slackurl')
 else:
   print("config server.cfg not found")
@@ -142,6 +150,22 @@ def addUser(userid, name):
   exec_db("delete from newuser where id=%s" % userid)
   return redirect("/admin/interface/user")
 
+
+"""
+when a trainer logs in, he can register anyone on this device as a user
+http://localhost:5000/admin/marioStar/1/150060E726B4/0/2
+"""
+@app.route("/admin/marioStar/<trainerid>/<trainerBadge>/<deviceid>/<userid>")
+def marioStarMode(trainerid,trainerBadge, deviceid, userid):  
+  trainer = query_db("select user.id from user join deviceAccess on deviceAccess.user=user.id  where user.id=%s and user.code='%s' and deviceAccess.trainer=0" % (trainerid, trainerBadge))
+  
+  if len(trainer) == 1:
+    exec_db("delete from deviceAccess where user=%s and device=%s" % (userid, deviceid))
+    exec_db("insert into deviceAccess (user,device,time) values (%s, %s, 100)" % (userid, deviceid))
+    return "true"
+  else:
+    return "false"
+
 @app.route("/admin/addUserAccess/<userid>/<deviceid>")
 def addUserAccess(userid, deviceid):
   if request.cookies.get('password') != C_password:
@@ -149,6 +173,23 @@ def addUserAccess(userid, deviceid):
 
   exec_db("delete from deviceAccess where user=%s and device=%s" % (userid, deviceid))
   exec_db("insert into deviceAccess (user,device,time) values (%s, %s, 100)" % (userid, deviceid))
+  return redirect("/admin/interface/userAccess/%s" % userid)
+
+
+@app.route("/admin/removeTrainer/<userid>/<deviceid>")
+def delUserTrainerAccess(userid, deviceid):
+  if request.cookies.get('password') != C_password:
+    return False
+
+  exec_db("update deviceAccess set trainer=1 where user=%s and device=%s" % (userid, deviceid))
+  return redirect("/admin/interface/userAccess/%s" % userid)
+
+@app.route("/admin/addTrainer/<userid>/<deviceid>")
+def addUserTrainerAccess(userid, deviceid):
+  if request.cookies.get('password') != C_password:
+    return False
+
+  exec_db("update deviceAccess set trainer=0 where user=%s and device=%s" % (userid, deviceid))
   return redirect("/admin/interface/userAccess/%s" % userid)
 
 @app.route("/admin/delUserAccess/<userid>/<deviceid>")
@@ -200,9 +241,9 @@ def userAccessInterface(userid):
   allDevices = query_db("select id,name from device")
 
   # list of devices user has access to
-  userAccess = query_db("select user.name, user.id, device.id, device.name, deviceAccess.time from deviceAccess join device on device.id=deviceAccess.device join user on user.id = deviceAccess.user where deviceAccess.user=%s" % userid)
-
-  return render_template('admin_userAccess.html', devices=allDevices, access=userAccess, userid=userid)
+  userAccess = query_db("select user.name, user.id, device.id, device.name, deviceAccess.time, deviceAccess.trainer from deviceAccess join device on device.id=deviceAccess.device join user on user.id = deviceAccess.user where deviceAccess.user=%s" % userid)
+  username   = query_db("select user.name from user where id=%s" % userid)[0][0]
+  return render_template('admin_userAccess.html', devices=allDevices, access=userAccess, userid=userid, username=username)
 
 @app.route("/admin/interface/log")
 def viewLog():
@@ -213,5 +254,5 @@ def viewLog():
   return render_template('admin_log.html', logs=logs)
 
 if __name__ == "__main__":
-  app.run(host='0.0.0.0')
-  #app.run(host='127.0.0.1', debug=True)
+  #app.run(host='0.0.0.0')
+  app.run(host='127.0.0.1', debug=True)

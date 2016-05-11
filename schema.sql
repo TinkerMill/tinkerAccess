@@ -3,7 +3,7 @@
 
 CREATE TABLE user(id INTEGER PRIMARY KEY, name TEXT, code TEXT);
 CREATE TABLE device(id INTEGER PRIMARY KEY, name TEXT);
-CREATE TABLE deviceAccess(id INTEGER PRIMARY KEY, user INTEGER, device INTEGER, time INTEGER);
+CREATE TABLE deviceAccess(id INTEGER PRIMARY KEY, user INTEGER, device INTEGER, time INTEGER, trainer BOOLEAN);
 create table newuser(id INTEGER PRIMARY KEY, code TEXT, deviceID INTEGER);
 create table log(id INTEGER PRIMARY KEY, message TEXT, Timestamp DATETIME DEFAULT CURRENT_TIMESTAMP);
 
