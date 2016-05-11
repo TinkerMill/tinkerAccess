@@ -23,7 +23,7 @@ if os.path.isfile("/opt/tinkeraccess/server.cfg"):
   C_database = "/opt/tinkeraccess/db.db"
   C_slackPostUrl = c.get('config', 'slackurl')
 else:
-  print("config run.cfg not found")
+  print("config server.cfg not found")
   sys.exit(1)
 
 def init_db():
