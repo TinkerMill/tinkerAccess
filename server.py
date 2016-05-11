@@ -157,7 +157,7 @@ http://localhost:5000/admin/marioStar/1/150060E726B4/0/2
 """
 @app.route("/admin/marioStar/<trainerid>/<trainerBadge>/<deviceid>/<userid>")
 def marioStarMode(trainerid,trainerBadge, deviceid, userid):  
-  trainer = query_db("select user.id from user join deviceAccess on deviceAccess.user=user.id  where user.id=%s and user.code='%s' and deviceAccess.trainer=0" % (trainerid, trainerBadge))
+  trainer = query_db("select user.id from user join deviceAccess on deviceAccess.user=user.id  where user.id=%s and user.code='%s' and deviceAccess.trainer=1" % (trainerid, trainerBadge))
   
   if len(trainer) == 1:
     exec_db("delete from deviceAccess where user=%s and device=%s" % (userid, deviceid))
@@ -181,7 +181,7 @@ def delUserTrainerAccess(userid, deviceid):
   if request.cookies.get('password') != C_password:
     return False
 
-  exec_db("update deviceAccess set trainer=1 where user=%s and device=%s" % (userid, deviceid))
+  exec_db("update deviceAccess set trainer=0 where user=%s and device=%s" % (userid, deviceid))
   return redirect("/admin/interface/userAccess/%s" % userid)
 
 @app.route("/admin/addTrainer/<userid>/<deviceid>")
@@ -189,7 +189,7 @@ def addUserTrainerAccess(userid, deviceid):
   if request.cookies.get('password') != C_password:
     return False
 
-  exec_db("update deviceAccess set trainer=0 where user=%s and device=%s" % (userid, deviceid))
+  exec_db("update deviceAccess set trainer=1 where user=%s and device=%s" % (userid, deviceid))
   return redirect("/admin/interface/userAccess/%s" % userid)
 
 @app.route("/admin/delUserAccess/<userid>/<deviceid>")

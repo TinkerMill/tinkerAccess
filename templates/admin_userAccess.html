@@ -49,7 +49,7 @@
 						<td> {{ item[3] }} </td>
 						<td>  <button type="button" class="btn btn-default" onclick="location.href='/admin/delUserAccess/{{item[1]}}/{{item[2]}}'"><span class="glyphicon glyphicon-remove" aria-hidden="true" ></span> Remove Access</button> 
 						
-						{% if item[5] == 0 %}
+						{% if item[5] == 1 %}
 							<button type="button" class="btn btn-default" onclick="location.href='/admin/removeTrainer/{{item[1]}}/{{item[2]}}'"><span class="glyphicon glyphicon-remove" aria-hidden="true" ></span> Remove as Trainer</button> 
 						{% else %}
 							<button type="button" class="btn btn-default" onclick="location.href='/admin/addTrainer/{{item[1]}}/{{item[2]}}'"><span class="glyphicon glyphicon-plus" aria-hidden="true" ></span> Add as Trainer</button> 
