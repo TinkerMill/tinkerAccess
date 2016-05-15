@@ -231,7 +231,7 @@ def loop():
       while GPIO.input( configOptions['pin_logout'] ) == GPIO.HIGH:
         time.sleep(.1)
         holdDownCount = holdDownCount + 1
-        if holdDownCount > 2000:
+        if holdDownCount > 20:
           marioMode = True
           cuurentTrainerId = currentUserID
           currentTrainerCode = currentBadge
