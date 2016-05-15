@@ -233,7 +233,7 @@ def loop():
         holdDownCount = holdDownCount + 1
         if holdDownCount > 20:
           marioMode = True
-          cuurentTrainerId = currentUserID
+          currentTrainerId = currentUserID
           currentTrainerCode = currentBadge
           LCD.lcd_string("Mario Mode" ,LCD.LCD_LINE_1)
           LCD.lcd_string("Activated" ,LCD.LCD_LINE_2)
