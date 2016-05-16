@@ -209,7 +209,7 @@ def loop():
   while True:
     time.sleep(.01)
 
-    if currentUser:
+    if (not marioMode) and currentUser:
       LCD.lcd_string(currentUser,LCD.LCD_LINE_1)
       if currentUserTime - time.time() < 300:
         led(True,False,True)
@@ -264,7 +264,10 @@ def loop():
         # contact the server and register this new badge on this equipment  
         url = "%s/admin/marioStar/%s/%s/%s/%s" % (configOptions['server'], currentTrainerId, currentTrainerCode, configOptions['deviceID'], badgeCode)
         logging.debug("calling server:" + url)
-        re = requests.get(url)
+        try:
+          re = requests.get(url)
+        except: 
+          logging.debug("Error talking to server")
         logging.debug("server response:" + re.text)
 
         LCD.lcd_string("Register of" ,LCD.LCD_LINE_1)
@@ -272,7 +275,10 @@ def loop():
       
       # otherwise just do a normal login
       else:
-        data = event_login(badgeCode)
+        try:
+          data = event_login(badgeCode)
+        except:
+          logging.debug("Error logging in")
       continue
 
 
