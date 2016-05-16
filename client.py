@@ -201,7 +201,7 @@ def event_login(badgeCode):
 
 
 def loop():
-  global currentUserTime, currentUser, configOptions, marioMode
+  global currentUserTime, currentUser, configOptions, marioMode, currentTrainerId , currentTrainerCode
 
   while True:
     time.sleep(.01)
