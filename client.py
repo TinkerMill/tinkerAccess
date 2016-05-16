@@ -231,12 +231,14 @@ def loop():
       while GPIO.input( configOptions['pin_logout'] ) == GPIO.HIGH:
         time.sleep(.1)
         holdDownCount = holdDownCount + 1
-        if holdDownCount > 20:
+        if holdDownCount > 25:
           marioMode = True
           currentTrainerId = currentUserID
           currentTrainerCode = currentBadge
           LCD.lcd_string("Mario Mode" ,LCD.LCD_LINE_1)
           LCD.lcd_string("Activated" ,LCD.LCD_LINE_2)
+          while GPIO.input( configOptions['pin_logout'] ) == GPIO.HIGH:
+            time.sleep(.1)
           break
 
       if not marioMode:
