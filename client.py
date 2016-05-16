@@ -120,9 +120,12 @@ def requestAccess(badgeCode):
 
 # what to do when the logout button is pressed
 def event_logout():
-  global configOptions, currentBadge, currentUser,currentUserID
+  global configOptions, currentBadge, currentUser,currentUserID, marioMode, currentTrainerId, currentTrainerCode
   isMachineRunning = False
   currentBadge = False
+  currentTrainerId = False
+  currentTrainerCode = False
+  marioMode = False
 
   # the loop makes sure the machine is powered down all the way 
   # before logging the user off
@@ -231,7 +234,7 @@ def loop():
       while GPIO.input( configOptions['pin_logout'] ) == GPIO.HIGH:
         time.sleep(.1)
         holdDownCount = holdDownCount + 1
-        if holdDownCount > 25:
+        if holdDownCount > 25 and currentUser:
           marioMode = True
           currentTrainerId = currentUserID
           currentTrainerCode = currentBadge
