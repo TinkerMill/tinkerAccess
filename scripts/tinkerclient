@@ -60,7 +60,7 @@ do_update() {
     fi
 
     rm -rf /tmp/updateTA
-    } >> /dev/null
+    } > /tmp/updateLog
 
 }
 
@@ -78,6 +78,10 @@ case "$1" in
     restart|reload|force-reload)
         do_stop
         do_start
+        ;;
+
+    update)
+        do_update
         ;;
 
     status)
