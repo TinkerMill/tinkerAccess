@@ -165,7 +165,7 @@ def marioStarMode(trainerid,trainerBadge, deviceid, userBadge):
   #print(userid)
   #print(len(userid))
 
-  if len(userid) == 1:
+  if len(userid) == 1 and len(trainer) == 2:
     userid = userid[0][0]
     exec_db("delete from deviceAccess where user=%s and device=%s" % (userid, deviceid))
     exec_db("insert into deviceAccess (user,device,time) values (%s, %s, 100)" % (userid, deviceid))
