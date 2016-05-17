@@ -9,6 +9,7 @@ import os
 import serial
 import serial.tools.list_ports
 import logging
+import logging.handlers
 import sys
 import RPi.GPIO as GPIO
 import time
@@ -58,7 +59,11 @@ if os.path.isfile(opts.configFileLocation):
   configOptions['logout_coast_time']      = c.getint('config', 'logout_coast_time')
 
 # setup logging
-logging.basicConfig(filename=configOptions['logFile'] , level=configOptions['logLevel'] )
+lg = logging.getLogger()
+lg.addHandler( logging.handlers.SysLogHandler('/dev/log') )
+lg.addHandler( logging.FileHandler(configOptions['logFile']) )
+lg.setLevel( configOptions['logLevel'] )
+#logging.basicConfig(filename=configOptions['logFile'] , level=configOptions['logLevel'] )
 #logging.basicConfig(level=configOptions['logLevel'] )
 
 def led(r,g,b):
