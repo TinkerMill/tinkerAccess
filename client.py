@@ -269,14 +269,25 @@ def loop():
         # contact the server and register this new badge on this equipment  
         url = "%s/admin/marioStar/%s/%s/%s/%s" % (configOptions['server'], currentTrainerId, currentTrainerCode, configOptions['deviceID'], badgeCode)
         logging.debug("calling server:" + url)
+
         try:
           re = requests.get(url)
+          
+          if re.text == "true":
+            LCD.lcd_string("Register of" ,LCD.LCD_LINE_1)
+            LCD.lcd_string(badgeCode ,LCD.LCD_LINE_2)
+          else:
+            LCD.lcd_string("!!FAILED!!" ,LCD.LCD_LINE_1)
+            LCD.lcd_string(badgeCode ,LCD.LCD_LINE_2)
+
         except: 
           logging.debug("Error talking to server")
+          LCD.lcd_string("Error Talking" ,LCD.LCD_LINE_1)
+          LCD.lcd_string("To Server" ,LCD.LCD_LINE_2) 
+
         logging.debug("server response:" + re.text)
 
-        LCD.lcd_string("Register of" ,LCD.LCD_LINE_1)
-        LCD.lcd_string(badgeCode ,LCD.LCD_LINE_2)
+        
       
       # otherwise just do a normal login
       else:
