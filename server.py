@@ -148,6 +148,11 @@ def addUser(userid, name):
   badgeCode = a[0]
   exec_db("insert into user (name,code) values ('%s','%s')" % (name, badgeCode[0] ))
   exec_db("delete from newuser where id=%s" % userid)
+
+  # if the database is dirty, make sure that any existing records are cleared out
+  userAccess = query_db("select id from user where code='%s'" % badgeCode)
+  exec_db("delete from deviceAccess where user=%s" % userAccess[0][0] )
+
   return redirect("/admin/interface/user")
 
 
