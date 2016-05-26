@@ -257,7 +257,8 @@ def loop():
 
     # if the serial port has data read it.
     if serialConnection.inWaiting() > 1:
-      badgeCode = serialConnection.readline().strip()[-13:]
+      #badgeCode = serialConnection.readline().strip()[-13:]
+      badgeCode = serialConnection.readline().strip()[3:]
       serialConnection.flushInput()
       serialConnection.flushOutput()  
 
