@@ -258,6 +258,8 @@ def loop():
     # if the serial port has data read it.
     if serialConnection.inWaiting() > 1:
       badgeCode = serialConnection.readline().strip()[-13:]
+      serialConnection.flushInput()
+      serialConnection.flushOutput()  
 
       # if mario mode is active, then register this badge on the machine
       if marioMode:
