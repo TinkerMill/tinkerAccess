@@ -162,15 +162,17 @@ http://localhost:5000/admin/marioStar/1/150060E726B4/0/2
 """
 @app.route("/admin/marioStar/<trainerid>/<trainerBadge>/<deviceid>/<userBadge>")
 def marioStarMode(trainerid,trainerBadge, deviceid, userBadge):  
-  trainer = query_db("select user.id from user join deviceAccess on deviceAccess.user=user.id  where user.id=%s and user.code='%s' and deviceAccess.trainer=1" % (trainerid, trainerBadge))
+  trainer = query_db("select user.id from user join deviceAccess on deviceAccess.user=user.id  where user.id=%s and user.code='%s' and deviceAccess.trainer=1 and deviceAccess.device=%s" % (trainerid, trainerBadge,deviceid))
   
   # the user must already exist in the system
   userid = query_db("select id from user where code='%s'" % (userBadge) )
 
-  #print(userid)
-  #print(len(userid))
+  print("userId", userid)
+  print("lenUserId=1", len(userid))
+  print("trainer", trainer)
+  print("lentrainer=1", len(trainer))
 
-  if len(userid) == 1 and len(trainer) == 2:
+  if len(userid) == 1 and len(trainer) == 1:
     userid = userid[0][0]
     exec_db("delete from deviceAccess where user=%s and device=%s" % (userid, deviceid))
     exec_db("insert into deviceAccess (user,device,time) values (%s, %s, 100)" % (userid, deviceid))
