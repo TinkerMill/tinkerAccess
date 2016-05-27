@@ -167,10 +167,10 @@ def marioStarMode(trainerid,trainerBadge, deviceid, userBadge):
   # the user must already exist in the system
   userid = query_db("select id from user where code='%s'" % (userBadge) )
 
-  print("userId", userid)
-  print("lenUserId=1", len(userid))
-  print("trainer", trainer)
-  print("lentrainer=1", len(trainer))
+  #print("userId", userid)
+  #print("lenUserId=1", len(userid))
+  #print("trainer", trainer)
+  #print("lentrainer=1", len(trainer))
 
   if len(userid) == 1 and len(trainer) == 1:
     userid = userid[0][0]
