@@ -13,6 +13,8 @@ import os
 import os.path
 import json
 import requests
+import csv
+import re
 
 app = Flask("simpleServer")
 
@@ -139,21 +141,54 @@ def checkLogin(user,password):
   else:
     return "false"
 
+# given a name and badge code, add the user to the database
+# and clear out any perms that id might have had in the past
+def userAdd(name, badgeCode):
+  exec_db("insert into user (name,code) values ('%s','%s')" % (name, badgeCode))
+
+  # if the database is dirty, make sure that any existing records are cleared out
+  userAccess = query_db("select id from user where code='%s'" % badgeCode)
+  if len(userAccess) > 0:
+    exec_db("delete from deviceAccess where user=%s" % userAccess[0][0] )
+
 @app.route("/admin/addUser/<userid>/name/<name>")
 def addUser(userid, name):
   if request.cookies.get('password') != C_password:
     return False
 
   a = query_db("select code from newuser where id=%s" % userid)
-  badgeCode = a[0]
-  exec_db("insert into user (name,code) values ('%s','%s')" % (name, badgeCode[0] ))
+  badgeCode = a[0][0]
+  userAdd(name,badgeCode)
   exec_db("delete from newuser where id=%s" % userid)
 
-  # if the database is dirty, make sure that any existing records are cleared out
-  userAccess = query_db("select id from user where code='%s'" % badgeCode)
-  exec_db("delete from deviceAccess where user=%s" % userAccess[0][0] )
+  return redirect("/admin/interface/user")
+
+
+@app.route("/admin/loadcsv", methods=['POST'])
+def loadCSV():
+  if request.cookies.get('password') != C_password:
+    return False
+
+  data = request.form['csv'] 
+
+  # stip leading , if it is there
+  data = map(lambda x: re.sub('^,', '', x), data.split("\n"))
+  reader = csv.reader(data, delimiter=',')
+  for row in reader:
+    if len(row) == 0:
+      continue
+
+    name = row[0]
+    code = row[1]
+
+    # print("Loading", name, code)
+    a = query_db("select code from user where code='%s'" % code)
+    if len(a) == 0:
+      userAdd(name, code)
 
   return redirect("/admin/interface/user")
+
+
 
 
 """
@@ -267,6 +302,13 @@ def viewLog():
   logs = query_db("select * from log")
   return render_template('admin_log.html', logs=logs)
 
+@app.route("/admin/interface/csv")
+def csvHTMLInterface():
+  if request.cookies.get('password') != C_password:
+    return redirect("/")
+  
+  return render_template('admin_csv.html')
+
 if __name__ == "__main__":
-  app.run(host='0.0.0.0')
-  #app.run(host='127.0.0.1', debug=True)
+  #app.run(host='0.0.0.0')
+  app.run(host='0.0.0.0', debug=True)
