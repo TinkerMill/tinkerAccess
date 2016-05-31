@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Signin Template for Bootstrap</title>
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+
+		<link rel="stylesheet" href="http://anijs.github.io/lib/anicollection/anicollection.css">
+
+		<script src="/static/js/jq.js" ></script>
+
+		<style>
+		body {
+			padding-top: 40px;
+			padding-bottom: 40px;
+			background-color: #eee;
+		}
+
+		</style>
+
+  </head>
+
+  <body>
+
+    <div class="container">
+    	<p>
+    	Paste csv into box below.  The format of the CSV is <b>User Name,Badge Code</b> </p>
+
+    	<p>Do not include a header.  Also make sure each item is on it's own line.  
+    	If the entry already exists in the database it
+    	will be ignored.</p>
+
+    	<form action="/admin/loadcsv" method="post">
+			<textarea name="csv" cols=80 rows=20></textarea><br>
+			<input type=submit value="Load">
+		</form>
+
+    </div> <!-- /container -->
+
+		
+  </body>
+</html>
