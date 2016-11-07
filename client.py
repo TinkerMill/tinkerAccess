@@ -168,10 +168,11 @@ def event_logout():
     currentUserID = False
   else:
     currentUserTime = 0
-
+  
+  #LCD Waiting Status	
   LCD.lcd_string("Scan Badge" ,LCD.LCD_LINE_1)
   LCD.lcd_string("To Login" ,LCD.LCD_LINE_2)
-  led(False,False,True)
+  led(False,False,True) #Blue LED
 
 def event_login(badgeCode):
   global currentUser,currentBadge, currentUserID, currentUserTime,globalDeviceName,configOptions
@@ -264,13 +265,15 @@ def loop():
       # if mario mode is active, then register this badge on the machine
       if marioMode:
 
-        # don re-register the trainer if she scans her badge again
+        # don't re-register the trainer if she scans her badge again
         if badgeCode == currentTrainerCode:
           continue
 
         # contact the server and register this new badge on this equipment  
         url = "%s/admin/marioStar/%s/%s/%s/%s" % (configOptions['server'], currentTrainerId, currentTrainerCode, configOptions['deviceID'], badgeCode)
         logging.debug("calling server:" + url)
+		LCD.lcd_string("Calling Server" ,LCD.LCD_LINE_1)
+        LCD.lcd_string("Please Wait..." ,LCD.LCD_LINE_2) 
 
         try:
           re = requests.get(url)
@@ -282,8 +285,8 @@ def loop():
             LCD.lcd_string("!!FAILED!!" ,LCD.LCD_LINE_1)
             LCD.lcd_string(badgeCode ,LCD.LCD_LINE_2)
 
-        except: 
-          logging.debug("Error talking to server")
+        except Exception as e: 
+          logging.debug("Error talking to server: %s" % e)
           LCD.lcd_string("Error Talking" ,LCD.LCD_LINE_1)
           LCD.lcd_string("To Server" ,LCD.LCD_LINE_2) 
 
@@ -295,8 +298,10 @@ def loop():
       else:
         try:
           data = event_login(badgeCode)
-        except:
-          logging.debug("Error logging in")
+        except Exception as e:
+          logging.debug("Error logging in: %s" % e)
+		  LCD.lcd_string("Error" ,LCD.LCD_LINE_1)
+          LCD.lcd_string("Logging in" ,LCD.LCD_LINE_2) 
       continue
 
 
