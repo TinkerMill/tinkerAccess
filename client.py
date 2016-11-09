@@ -169,7 +169,7 @@ def event_logout():
   else:
     currentUserTime = 0
   
-  #LCD Waiting Status	
+  #LCD Waiting Status   
   LCD.lcd_string("Scan Badge" ,LCD.LCD_LINE_1)
   LCD.lcd_string("To Login" ,LCD.LCD_LINE_2)
   led(False,False,True) #Blue LED
@@ -217,11 +217,9 @@ def loop():
 
     if (not marioMode) and currentUser:
       LCD.lcd_string(currentUser,LCD.LCD_LINE_1)
+      LCD.lcd_string( str( int(round( (currentUserTime - time.time())/3600 ))) + ":" + str( int(round( (currentUserTime - time.time())/60 ))) + ":" + str( int(round( (currentUserTime - time.time())))) ,LCD.LCD_LINE_2)
       if currentUserTime - time.time() < 300:
         led(True,False,True)
-        LCD.lcd_string( str( int(round( (currentUserTime - time.time())))) + " Seconds" ,LCD.LCD_LINE_2)
-      else:
-        LCD.lcd_string( str( int(round( (currentUserTime - time.time())/60 ))) + " Minutes" ,LCD.LCD_LINE_2)
 
     # if the user runs out of time, log them out
     if currentUser != False and currentUserTime < time.time():
@@ -272,7 +270,7 @@ def loop():
         # contact the server and register this new badge on this equipment  
         url = "%s/admin/marioStar/%s/%s/%s/%s" % (configOptions['server'], currentTrainerId, currentTrainerCode, configOptions['deviceID'], badgeCode)
         logging.debug("calling server:" + url)
-	LCD.lcd_string("Calling Server" ,LCD.LCD_LINE_1)
+    LCD.lcd_string("Calling Server" ,LCD.LCD_LINE_1)
         LCD.lcd_string("Please Wait..." ,LCD.LCD_LINE_2) 
 
         try:
