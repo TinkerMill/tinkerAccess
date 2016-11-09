@@ -16,7 +16,7 @@ sudo bash
 ./install.sh
 ```
 
-#### Manage theSservices
+#### Manage the Services
 
 To start/stop/restart the server:
 ```
@@ -29,15 +29,15 @@ sudo service tinkerclient [start/stop/restart]
 ```
 
 ### Device administration
-Due to the fact that incorrectly removing a device can cause big problems, and
-that it probably isn't done very much, the functionality to modify devices
+Incorrectly removing a device can cause big problems and
+is rarely needed, so the functionality to modify devices
 is located in the cli program devicemanager.py.  This program will allow
 you to add, delete, and rename a device.
 
-#### Add a new device
+#### Add a new device 
 ```sh
 cd /opt/tinkeraccess
-./devicemanager.py -a -n "front door"
+./devicemanager.py -a -n "<new device name>"
 ```
 #### Delete a device
 This will delete the device from the database, and it will also delete
@@ -46,12 +46,12 @@ the fact they have access to the device you just deleted.)
 ```sh
 cd /opt/tinkeraccess
 ./devicemanager.py -l
-./devicemanager.py -d -i <id_for_front_door>
+./devicemanager.py -d -i <device ID to be deleted>
 ```
 #### Rename a device
 ```sh
 /opt/tinkeraccess
-./devicemanager.py -r -i <id_for_device> -n "new name"
+./devicemanager.py -r -i <device ID for name change> -n "<new device name>"
 ```
 
 ### User Administration
