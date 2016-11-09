@@ -284,7 +284,7 @@ def loop():
             LCD.lcd_string(badgeCode ,LCD.LCD_LINE_2)
 
         except Exception as e: 
-          logging.debug("Error talking to server: %s" % e)
+          logging.debug("Error talking to server: %s" % str(e))
           LCD.lcd_string("Error Talking" ,LCD.LCD_LINE_1)
           LCD.lcd_string("To Server" ,LCD.LCD_LINE_2) 
 
@@ -297,7 +297,7 @@ def loop():
         try:
           data = event_login(badgeCode)
         except Exception as e:
-          logging.debug("Error logging in: %s" % e)
+          logging.debug("Error logging in: %s" % str(e))
           LCD.lcd_string("Error" ,LCD.LCD_LINE_1)
           LCD.lcd_string("Logging in" ,LCD.LCD_LINE_2) 
       continue
