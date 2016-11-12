@@ -16,6 +16,7 @@ import time
 import requests
 import signal
 import lcdModule as LCD
+import math
 
 # hold all the options loaded from the config file
 configOptions = {}
