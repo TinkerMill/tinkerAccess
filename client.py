@@ -217,7 +217,7 @@ def loop():
 
     if (not marioMode) and currentUser:
       LCD.lcd_string(currentUser,LCD.LCD_LINE_1)
-      LCD.lcd_string( str( int(round( (currentUserTime - time.time())/3600 ))) + ":" + str( int(round( ((currentUserTime - time.time())/60)%60 ))) + ":" + str( int(round( (currentUserTime - time.time())%60 ))) ,LCD.LCD_LINE_2)
+      LCD.lcd_string( str( int(math.floor( (currentUserTime - time.time())/3600 ))) + ":" + str( int(math.floor( ((currentUserTime - time.time())/60)%60 ))) + ":" + str( int(math.floor( (currentUserTime - time.time())%60 ))) ,LCD.LCD_LINE_2)
       if currentUserTime - time.time() < 300:
         led(True,False,True)
 
