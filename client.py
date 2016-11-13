@@ -301,7 +301,8 @@ def loop():
         except Exception as e:
           logging.debug("Error logging in: %s" % str(e))
           LCD.lcd_string("Error" ,LCD.LCD_LINE_1)
-          LCD.lcd_string("Logging in" ,LCD.LCD_LINE_2) 
+          LCD.lcd_string("Logging in" ,LCD.LCD_LINE_2)
+          time.sleep(2)           
       continue
 
 
