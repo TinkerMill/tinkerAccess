@@ -287,7 +287,8 @@ def loop():
         except Exception as e: 
           logging.debug("Error talking to server: %s" % str(e))
           LCD.lcd_string("Error Talking" ,LCD.LCD_LINE_1)
-          LCD.lcd_string("To Server" ,LCD.LCD_LINE_2) 
+          LCD.lcd_string("To Server" ,LCD.LCD_LINE_2)
+          time.sleep(2)          
 
         logging.debug("server response:" + re.text)
 
