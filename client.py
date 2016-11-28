@@ -159,14 +159,21 @@ def event_logout():
     # tell the server we have logged out
     url = "%s/device/%s/logout/%s" % (configOptions['server'], configOptions['deviceID'], currentUserID)
     logging.debug("calling server:" + url)
-    re = requests.get(url, timeout=5)
-    logging.debug("server response:" + re.text)
-
-    logging.info("%s logged out" % currentUser )
-    GPIO.output( configOptions['pin_relay'], GPIO.LOW )
-    currentUser = False
-    currentUserTime = 0
-    currentUserID = False
+    try:
+      re = requests.get(url, timeout=5)
+      logging.debug("server response:" + re.text)
+      re.raise_for_status()
+    except Exception as e:
+      logging.debug("Error logging out: %s" % str(e))
+      LCD.lcd_string("Error" ,LCD.LCD_LINE_1)
+      LCD.lcd_string("Logging out" ,LCD.LCD_LINE_2)
+      time.sleep(2)
+    else:
+      logging.info("%s logged out" % currentUser )
+      GPIO.output( configOptions['pin_relay'], GPIO.LOW )
+      currentUser = False
+      currentUserTime = 0
+      currentUserID = False
   else:
     currentUserTime = 0
   
