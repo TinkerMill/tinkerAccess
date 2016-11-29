@@ -289,8 +289,9 @@ def loop():
       else:
         try:
           event_login(badgeCode)
-        except Exception:
-          logging.exception("Error logging in")
+        except Exception as e:
+          logging.debug("Error logging in")
+          logging.exception(e)
           LCD.lcd_string("Error" ,LCD.LCD_LINE_1)
           LCD.lcd_string("Logging in" ,LCD.LCD_LINE_2)
           time.sleep(2)           
