@@ -13,10 +13,10 @@ import logging.handlers
 import sys
 import RPi.GPIO as GPIO
 import time
-import requests
 import signal
 import lcdModule as LCD
 import math
+from LoggedRequest import LoggedRequest
 
 # hold all the options loaded from the config file
 configOptions = {}
@@ -64,6 +64,7 @@ lg = logging.getLogger()
 lg.addHandler( logging.handlers.SysLogHandler('/dev/log') )
 lg.addHandler( logging.FileHandler(configOptions['logFile']) )
 lg.setLevel( configOptions['logLevel'] )
+requests = LoggedRequest(logging)
 #logging.basicConfig(filename=configOptions['logFile'] , level=configOptions['logLevel'] )
 #logging.basicConfig(level=configOptions['logLevel'] )
 
@@ -109,17 +110,12 @@ led(False,False,True)
 
 def requestAccess(badgeCode):
   global configOptions
-  url = "%s/device/%s/code/%s" % (configOptions['server'], configOptions['deviceID'], badgeCode)
-  logging.debug("calling server:" + url)
-
-  serverResponse = requests.get(url, timeout=5)
+  serverResponse = requests.get("%s/device/%s/code/%s" % (configOptions['server'], configOptions['deviceID'], badgeCode), timeout=5, action='request_access')
   data       = serverResponse.json()
   username   = data['username']
   devicename = data['devicename']
   userid     = data['userid']
   timelimit  = data['time']
-
-  logging.debug("server response %s,%s,%s,%s" % (username, devicename, userid, timelimit))
   return (username, devicename, timelimit, userid)
 
 
@@ -157,16 +153,18 @@ def event_logout():
     
   if currentUser:
     # tell the server we have logged out
-    url = "%s/device/%s/logout/%s" % (configOptions['server'], configOptions['deviceID'], currentUserID)
-    logging.debug("calling server:" + url)
-    re = requests.get(url, timeout=5)
-    logging.debug("server response:" + re.text)
-
-    logging.info("%s logged out" % currentUser )
-    GPIO.output( configOptions['pin_relay'], GPIO.LOW )
-    currentUser = False
-    currentUserTime = 0
-    currentUserID = False
+    try:
+      requests.get("%s/device/%s/logout/%s" % (configOptions['server'], configOptions['deviceID'], currentUserID), timeout=5, action='logout')
+    except Exception:
+      LCD.lcd_string("Error" ,LCD.LCD_LINE_1)
+      LCD.lcd_string("Logging out" ,LCD.LCD_LINE_2)
+      time.sleep(2)
+    else:
+      logging.info("%s logged out" % currentUser )
+      GPIO.output( configOptions['pin_relay'], GPIO.LOW )
+      currentUser = False
+      currentUserTime = 0
+      currentUserID = False
   else:
     currentUserTime = 0
   
@@ -275,7 +273,7 @@ def loop():
         LCD.lcd_string("Please Wait..." ,LCD.LCD_LINE_2) 
 
         try:
-          re = requests.get(url, timeout=5)
+          re = requests.get("%s/admin/marioStar/%s/%s/%s/%s" % (configOptions['server'], currentTrainerId, currentTrainerCode, configOptions['deviceID'], badgeCode), timeout=5, action='register_user')
           
           if re.text == "true":
             LCD.lcd_string("Register of" ,LCD.LCD_LINE_1)
@@ -284,22 +282,18 @@ def loop():
             LCD.lcd_string("!!FAILED!!" ,LCD.LCD_LINE_1)
             LCD.lcd_string(badgeCode ,LCD.LCD_LINE_2)
 
-        except Exception as e: 
-          logging.debug("Error talking to server: %s" % str(e))
+        except Exception:
           LCD.lcd_string("Error Talking" ,LCD.LCD_LINE_1)
           LCD.lcd_string("To Server" ,LCD.LCD_LINE_2)
           time.sleep(2)          
 
-        logging.debug("server response:" + re.text)
-
-        
-      
       # otherwise just do a normal login
       else:
         try:
-          data = event_login(badgeCode)
+          event_login(badgeCode)
         except Exception as e:
-          logging.debug("Error logging in: %s" % str(e))
+          logging.debug("Error logging in:")
+          logging.exception(e)
           LCD.lcd_string("Error" ,LCD.LCD_LINE_1)
           LCD.lcd_string("Logging in" ,LCD.LCD_LINE_2)
           time.sleep(2)           
