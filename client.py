@@ -266,10 +266,7 @@ def loop():
         if badgeCode == currentTrainerCode:
           continue
 
-        # contact the server and register this new badge on this equipment  
-        url = "%s/admin/marioStar/%s/%s/%s/%s" % (configOptions['server'], currentTrainerId, currentTrainerCode, configOptions['deviceID'], badgeCode)
-        logging.debug("calling server:" + url)
-        LCD.lcd_string("Calling Server" ,LCD.LCD_LINE_1)
+        LCD.lcd_string("Registering User" ,LCD.LCD_LINE_1)
         LCD.lcd_string("Please Wait..." ,LCD.LCD_LINE_2) 
 
         try:
