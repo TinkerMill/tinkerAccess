@@ -1,11 +1,21 @@
 ![taicon](/taicon.png)
 
 # tinkerAccess
-Raspberry Pi Access control system
+The tinkerAccess system is a Raspberry Pi based access control system that can be used to prevent unauthorized users from using devices that require special training, it could also conceivable be used to control electronic lock boxes, or doors.
 
-## Using the Server
-### Install the Server
-The server has been tested on a Rasberry Pi 2 Model B and Raspberry Pi 3. Installation is very simple.
+The system was originally designed and created by Matt Stallard, Ron Thomas, and Matt Peopping for TinkerMill a makerspace in Longmont, CO. It is continually being maintained and enhanced by other contributors in the community.
+
+### Install the tinkerAccess system
+
+There are two main components to the system. If you intend to use the client & server software on separate physical 
+devices than you will want to review the individual documents regarding the installation, 
+configuration and operation of each respective piece.
+
+- [tinker-access-server](/tinker_access_server/README.md) 
+- [tinker-access-client](/tinker_access_client/README.md)
+
+If, however you intend to use both server & client on the same physical device, 
+than you can follow these simple instructions.  
 
 From the Rasbian terminal:
 
@@ -15,55 +25,3 @@ cd tinkerAccess
 sudo bash
 ./install.sh
 ```
-
-#### Manage the Services
-
-To start/stop/restart the server:
-```
-sudo service tinkerserver [start/stop/restart]
-```
-
-To stop/start/restart the client:
-```
-sudo service tinkerclient [start/stop/restart]
-```
-
-### Device administration
-Incorrectly removing a device can cause big problems and
-is rarely needed, so the functionality to modify devices
-is located in the cli program devicemanager.py.  This program will allow
-you to add, delete, and rename a device.
-
-#### Add a new device 
-```sh
-cd /opt/tinkeraccess
-./devicemanager.py -a -n "<new device name>"
-```
-#### Delete a device
-This will delete the device from the database, and it will also delete
-all user access records from the database. (not user accounts, but
-the fact they have access to the device you just deleted.)
-```sh
-cd /opt/tinkeraccess
-./devicemanager.py -l
-./devicemanager.py -d -i <device ID to be deleted>
-```
-#### Rename a device
-```sh
-/opt/tinkeraccess
-./devicemanager.py -r -i <device ID for name change> -n "<new device name>"
-```
-
-### User Administration
-#### Adding a new user
-To add a new user, scan their badge on the card reader.  Once scanned
-if the users badge code is not in the database already, the user
-will be added to an Inactive Users table.  On the web gui go to:
-http://serverip:5000/admin/interface/newuser  and grant access to
-the badge you just swiped.
-#### Editing a user
-once a user exists in the system, you can use the Users tab to modify
-what they have access to.  go to http://serverip:5000/admin/interface/user,
-select the pencil next to the user you want to edit, and then from there
-you can remove or grant access to all the devices currently registered
-in the database
