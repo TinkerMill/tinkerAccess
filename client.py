@@ -112,7 +112,7 @@ def requestAccess(badgeCode):
   url = "%s/device/%s/code/%s" % (configOptions['server'], configOptions['deviceID'], badgeCode)
   logging.debug("calling server:" + url)
 
-  serverResponse = requests.get(url, timeout=5)
+  serverResponse = requests.get(url, timeout=10)
   data       = serverResponse.json()
   username   = data['username']
   devicename = data['devicename']
@@ -159,7 +159,7 @@ def event_logout():
     # tell the server we have logged out
     url = "%s/device/%s/logout/%s" % (configOptions['server'], configOptions['deviceID'], currentUserID)
     logging.debug("calling server:" + url)
-    re = requests.get(url, timeout=5)
+    re = requests.get(url, timeout=10)
     logging.debug("server response:" + re.text)
 
     logging.info("%s logged out" % currentUser )
@@ -275,7 +275,7 @@ def loop():
         LCD.lcd_string("Please Wait..." ,LCD.LCD_LINE_2) 
 
         try:
-          re = requests.get(url, timeout=5)
+          re = requests.get(url, timeout=10)
           
           if re.text == "true":
             LCD.lcd_string("Register of" ,LCD.LCD_LINE_1)
