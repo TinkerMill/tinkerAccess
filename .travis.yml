@@ -1,0 +1,62 @@
+language: python
+python:
+  - '2.7'
+cache: pip
+sudo: required
+
+env:
+  global:
+    - PYTHON_PACKAGE_NAME="tinker_access_client"
+    - VERSION="$(date -u '+%Y.%m.%d').${TRAVIS_BUILD_NUMBER}"
+    - PYTHON_PACKAGE_SRC="${TRAVIS_BUILD_DIR}/${PYTHON_PACKAGE_NAME}"
+    - TINKER_ACCESS_CLIENT_SRC="/usr/local/lib/python2.7/dist-packages/${PYTHON_PACKAGE_NAME}"
+    - VERSION_DEST="${TRAVIS_BUILD_DIR}/${PYTHON_PACKAGE_NAME}/${PYTHON_PACKAGE_NAME}/version.py"
+
+branches:
+  except:
+    #Important: Prevents version release 'tag' commits from initiating builds
+    - /^v[0-9a-z\-]*/
+
+install:
+  - pip install twine
+  - echo -e __version__="\"${VERSION}\"\n" > "${VERSION_DEST}"
+
+script:
+  - cd "${PYTHON_PACKAGE_SRC}"
+  - sudo pip install --upgrade --no-compile --force-reinstall --ignore-installed --no-cache-dir .
+  - sudo python setup.py test
+
+before_deploy:
+
+  #TODO: generating a change log for the release message would be nice....
+
+  - git config --global user.email "builds@travis-ci.com"
+  - git config --global user.name "Travis CI"
+  - git add "${VERSION_DEST}" && git commit -am "Set build VERSION number"
+  - git tag "v${VERSION}" -a -m "Generated tag from TravisCI build ${TRAVIS_BUILD_NUMBER}"
+
+  # IMPORTANT: suppressing output for this command prevents the decrypted GITHUB_API_KEY appearing in the build log
+  - git push --quiet --follow-tags "https://${GITHUB_API_KEY}@github.com/${TRAVIS_REPO_SLUG}" "v${VERSION}" > /dev/null 2>&1
+  - sudo chown -R ${USER}:`id -g -n` "${TINKER_ACCESS_CLIENT_SRC}"
+
+deploy:
+  provider: releases
+  api_key: ${GITHUB_API_KEY}
+  file_glob: true
+  file: ${TINKER_ACCESS_CLIENT_SRC}/version.py #TODO: this file should just be a change log, everything else is zipped
+  skip_cleanup: true
+  on:
+    tags: false
+    all_branches: true
+
+after_deploy:
+  - ${TRAVIS_BUILD_DIR}/scripts/publish.sh
+
+notifications:
+  slack:
+    rooms:
+      #tinkerMill/tinkerAccess
+      secure: iv+I490eGrLfOObnQnKZg9LGhddVuYSyxyJxc/RhFPQIhzizvi16HZCbF0dBep8M3stTNMvh340l0zNSynvIyfsAjCPlzTTA7vPGw69OQplcMtqNOTqwkXXnjwFngTktJCgfu2TIOe0VLCrISZ3c4HtF+kr8wsya628Ak+1GNtCMI3UZXj4IlIOGPqipBlX0IcItGhynV/BGhmi7BMQTryUGJoVoKSHFmk+mQS4KMDqrf61mykoBoT/wYalTkC4XoBaCf8+j+9v7BRC1crBugqOUt11oHkEgn8FnDSVqeAKaXAdPKs0DatziD2ZE/LMUzQD9WNxSPfE30oYnIjqyhIFkshpBG6VZfWCzza7p6xNKl3hCZq1VcxJwhrCl0MzHmlIUZn1a9AcMSL3fkxNo0EQLvuVX9V0iC9dkJ6VMsSaNyDTQO+iahLALvZDfN9NmyRRCtR/VHcO/joe/9UvO9rhtb/2dGB+E/y+oC/vTBvFf1Z3dY8p9qtWYnIS/jVKwnJjqMu6InEsd2wjxG6yW4AMkaYXnLKGHpQl3cXYbj8OfAU0wey3pYSGg9Hc7N07hvagNnqtM85fZj+3scdZ3vlZb+Z4V3OMR2vIO0XLoaBOp8EzxVJl5OimgMZVfpBTMgGcqd5g5HOC6DBEpXpL4Dc+TuxvGKqAh1LaE/rMrmDI=
+      #rmcqueen/tinkerAccess
+      secure: 1R4TB01aX1QCMs9tSMZ4gxKDVoxMNbZN957Z7kFNsLroAI5xZ5Kzk0skv3ARKECUmx9tT9DtZH52zxXtcqhJzARZOfJ/ujl+lUk+WlGhXL1HTOtBpKHVbBtVY3e+XhAmpA3i6mT1kqyU5OmeA4Wn97Il7Iw5NVDj1eq/xklrqK0+J7U7zul1nh7VMpfdr3rNeV3q7mhgCxiVlJvlVhwNsQrUFisJHVaGLJXoomi/hRaknjF5EQAmvPl0kIGfQqemESEPl7d/trZjXCruequt12lZ7K+pblExWrG1pz5qndP7kc/CtMbnCRuzt39CJfGzMSah68H9xCdMJddbvss4UFvu0lHmwofUcmGYBGSxidDhLO2cOMVopfQ4jjMHTPGLL6ojiVbfQxPXqSSONNq+hBklq1p3/glOt+8WWOSiBKQc0EIaGrr5Lq2+4foSuDZsIIpSTmvZ0hvc3Hy9gueNjtMeFezeBwnSJ37Gy4bZ2oDW+88pliu/B3u7bKaHprvYYb2dsnDw9RjAXA6Gf4/dZVgeYmNBPqxD2IVPSdFSHRP/+g0MYpMnNUuUFb9SyCkM4b1ttF7ERdfTFsZjxCWlWImQuZ4svZqZ380MfCzx0RWXfMDruPjnf1gLpsuC+pxFGFD7IWp9j5TcMvuctR6CXjpSTfLQD320m2RuVwpA4JE=
+

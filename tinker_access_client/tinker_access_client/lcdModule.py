@@ -1,4 +1,5 @@
-#!/usr/bin/python
+#!/usr/bin/env python
+
 # The wiring for the LCD is as follows:
 # 1 : GND
 # 2 : 5V
@@ -17,8 +18,7 @@
 # 15: LCD Backlight +5V**
 # 16: LCD Backlight GND
 
-#import
-import RPi.GPIO as GPIO
+import RPi
 import time
 
 # Define GPIO to LCD mapping
@@ -28,7 +28,6 @@ LCD_D4 = 25 # 11: Data Bit 4
 LCD_D5 = 24 # 12: Data Bit 5
 LCD_D6 = 23 # 13: Data Bit 6
 LCD_D7 = 18 # 14: Data Bit 7
-
 
 # Define some device constants
 LCD_WIDTH = 16    # Maximum characters per line
@@ -51,7 +50,7 @@ def main():
 
 
 def lcd_init():
-  GPIO.setwarnings(False)
+  GPIO = RPi.GPIO
   GPIO.setmode(GPIO.BCM)       # Use BCM GPIO numbers
   GPIO.setup(LCD_E, GPIO.OUT)  # E
   GPIO.setup(LCD_RS, GPIO.OUT) # RS
@@ -59,6 +58,7 @@ def lcd_init():
   GPIO.setup(LCD_D5, GPIO.OUT) # DB5
   GPIO.setup(LCD_D6, GPIO.OUT) # DB6
   GPIO.setup(LCD_D7, GPIO.OUT) # DB7
+
   # Initialise display
   lcd_byte(0x33,LCD_CMD) # 110011 Initialise
   lcd_byte(0x32,LCD_CMD) # 110010 Initialise
@@ -74,6 +74,7 @@ def lcd_byte(bits, mode):
   # mode = True  for character
   #        False for command
 
+  GPIO = RPi.GPIO
   GPIO.output(LCD_RS, mode) # RS
 
   # High bits
@@ -90,7 +91,6 @@ def lcd_byte(bits, mode):
   if bits&0x80==0x80:
     GPIO.output(LCD_D7, True)
 
-  # Toggle 'Enable' pin
   lcd_toggle_enable()
 
   # Low bits
@@ -107,11 +107,10 @@ def lcd_byte(bits, mode):
   if bits&0x08==0x08:
     GPIO.output(LCD_D7, True)
 
-  # Toggle 'Enable' pin
   lcd_toggle_enable()
 
 def lcd_toggle_enable():
-  # Toggle enable
+  GPIO = RPi.GPIO
   time.sleep(E_DELAY)
   GPIO.output(LCD_E, True)
   time.sleep(E_PULSE)
@@ -120,7 +119,6 @@ def lcd_toggle_enable():
 
 def lcd_string(message,line):
   # Send string to display
-  #print(line,"msg=",messageLJ, len(message))
   lcd_byte(line, LCD_CMD)
 
   if (len(message) > LCD_WIDTH) and 0:
@@ -129,17 +127,9 @@ def lcd_string(message,line):
       lcd_byte(line, LCD_CMD)
       for c in message[i:(len(message))]:
         lcd_byte(ord(c),LCD_CHR)
-        #print(line,"msg=",message, c)
 
   else:
     messageLJ = message.ljust(LCD_WIDTH," ")
     for i in range(LCD_WIDTH):
-      #print (i,messageLJ[i])
       lcd_byte(ord(messageLJ[i]),LCD_CHR)
-
-  
-
-
-def lcd_cleanup():
-    GPIO.cleanup()
 

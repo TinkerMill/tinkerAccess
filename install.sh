@@ -1,17 +1,16 @@
-#!/bin/bash
-#
+#!/usr/bin/env bash
+
+if [ "$(id -u)" != "0" ]; then
+   echo "This script must be run as root" 1>&2
+   exit 1
+fi
 
 dir="/opt/tinkeraccess"
 
-if [ ! -f /usr/local/bin/pip ] ; then
-wget https://bootstrap.pypa.io/get-pip.py
-python get-pip.py
-fi
-
-/usr/local/bin/pip install --upgrade pip
-/usr/local/bin/pip install --upgrade pyserial
+apt-get update
+apt-get install -U python-pip
+easy_install -U pip
 /usr/local/bin/pip install flask
-/usr/local/bin/pip install requests
 
 if [ ! -f /usr/bin/sqlite3 ] ; then
 apt-get update
@@ -34,9 +33,6 @@ cp server.cfg $dir
 chmod 755 $dir/server.py
 cp -r static $dir
 cp -r templates $dir
-cp client.py $dir
-cp client.cfg $dir
-cp lcdModule.py $dir
 cp devicemanager.py $dir
 
 # install the Server startup service
@@ -46,7 +42,4 @@ update-rc.d tinkerserver defaults 91
 service tinkerserver restart
 
 # install the Client startup service
-cp scripts/tinkerclient /etc/init.d
-chmod 755 /etc/init.d/tinkerclient
-update-rc.d  tinkerclient defaults 91
-service tinkerclient restart
+pip install --upgrade --force-reinstall --ignore-installed --no-cache-dir tinker-access-client
