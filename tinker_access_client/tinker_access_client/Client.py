@@ -397,19 +397,32 @@ class Client(Machine):
     #
 
     def __disable_power(self):
-        if self.__device.read(Channel.PIN, self.__opts.get(ClientOption.PIN_POWER_RELAY)):
-            self.__device.write(Channel.PIN, self.__opts.get(ClientOption.PIN_POWER_RELAY), False)
-            self.__wait_for_power_down()
-            self.__wait_for_logout_coast_time()
+        power_relay_pin = self.__opts.get(ClientOption.PIN_POWER_RELAY)
+        if self.__device.read(Channel.PIN, power_relay_pin):
+            is_machine_running = self.__wait_for_power_down()
+            if is_machine_running:
+                self.__wait_for_logout_coast_time()
+
+        if self.__device.read(Channel.PIN, power_relay_pin):
+            self.__device.write(Channel.PIN, power_relay_pin, False)
+            self.__show_disabling_power()
 
     def __wait_for_power_down(self):
+        power_relay_pin = self.__opts.get(ClientOption.PIN_POWER_RELAY)
         current_sense_pin = self.__opts.get(ClientOption.PIN_CURRENT_SENSE)
         max_power_down_timeout = self.__opts.get(ClientOption.MAX_POWER_DOWN_TIMEOUT)
 
+        if max_power_down_timeout is None:
+            max_power_down_timeout = float('inf')
+
         current = time.time()
+        is_machine_running = False
         while time.time() - current < max_power_down_timeout and self.__device.read(Channel.PIN, current_sense_pin):
-            self.__show_disabling_power()
+            is_machine_running = True
+            self.__show_waiting_for_power_down()
             time.sleep(0.1)
+
+        return is_machine_running
 
     def __wait_for_logout_coast_time(self):
         logout_coast_time = self.__opts.get(ClientOption.LOGOUT_COAST_TIME)
@@ -422,6 +435,14 @@ class Client(Machine):
             Channel.LCD,
             'DISABLING'.center(maximum_lcd_characters, ' '),
             'POWER...'.center(maximum_lcd_characters, ' ')
+        )
+        time.sleep(delay)
+
+    def __show_waiting_for_power_down(self, delay=0):
+        self.__device.write(
+            Channel.LCD,
+            'WAITING FOR'.center(maximum_lcd_characters, ' '),
+            'MACHINE TO STOP...'.center(maximum_lcd_characters, ' ')
         )
         time.sleep(delay)
 
