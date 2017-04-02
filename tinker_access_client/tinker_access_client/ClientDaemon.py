@@ -42,12 +42,13 @@ class ClientDaemon:
         else:
             return ['{0} is already running...\n'.format(PackageInfo.pip_package_name)], 1
 
+    #TODO: need to cover scenario of machine is in use, and stop command is recieved
+
     @staticmethod
     def stop(opts, args):
         logger = ClientLogger.setup(opts)
         pid_file = opts.get(ClientOption.PID_FILE)
         logout_coast_time = opts.get(ClientOption.LOGOUT_COAST_TIME)
-        max_power_down_timeout = opts.get(ClientOption.MAX_POWER_DOWN_TIMEOUT)
 
         try:
             for process_id in ClientDaemon.__get_process_ids():
@@ -61,7 +62,7 @@ class ClientDaemon:
         # Wait for what we assume will be a graceful exit,
         # this will exit early if the pid file is removed as expected.
         current = time.time()
-        max_wait_time = max_power_down_timeout + logout_coast_time + 5
+        max_wait_time = logout_coast_time + 5
         while time.time() - current < max_wait_time and os.path.isfile(pid_file):
             time.sleep(0.1)
 
@@ -159,11 +160,10 @@ class ClientDaemon:
         logger = ClientLogger.setup(opts)
         reboot_delay = opts.get(ClientOption.REBOOT_DELAY)
         logout_coast_time = opts.get(ClientOption.LOGOUT_COAST_TIME)
-        max_power_down_timeout = opts.get(ClientOption.MAX_POWER_DOWN_TIMEOUT)
         try:
             args[0] = Command.STOP.get('command')
             ClientDaemon.stop(opts, args)
-            time.sleep(max_power_down_timeout + logout_coast_time)
+            time.sleep(logout_coast_time)
             logger.debug('Restarting in %s seconds...', reboot_delay)
             time.sleep(reboot_delay)
             args[0] = Command.START.get('command')
