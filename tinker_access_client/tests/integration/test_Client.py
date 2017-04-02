@@ -20,6 +20,7 @@ def get_default_opts(temp_dir, opts=None):
     default_opts.update({
         ClientOption.DEBUG: True,
         ClientOption.LOG_LEVEL: 10,
+        ClientOption.MAX_POWER_DOWN_TIMEOUT: 5,
         ClientOption.PID_FILE: '{0}/{1}.pid'.format(temp_dir, PackageInfo.pip_package_name),
         ClientOption.LOG_FILE: '{0}/{1}.log'.format(temp_dir, PackageInfo.pip_package_name),
         ClientOption.CONFIG_FILE: '{0}/{1}.conf'.format(temp_dir, PackageInfo.pip_package_name),

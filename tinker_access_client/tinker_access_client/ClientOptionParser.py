@@ -24,7 +24,7 @@ ClientOptionDefaults = {
     ClientOption.REBOOT_ON_ERROR: False,
     ClientOption.SERIAL_PORT_SPEED: 9600,
     ClientOption.AUTO_UPDATE_INTERVAL: 5,
-    ClientOption.MAX_POWER_DOWN_TIMEOUT: 5,
+    ClientOption.MAX_POWER_DOWN_TIMEOUT: None,
     ClientOption.SERIAL_PORT_NAME: '/dev/ttyUSB0',
     ClientOption.SERVER_ADDRESS: 'http://localhost:5000',
     ClientOption.CONFIG_FILE: '/etc/{0}.conf'.format(PackageInfo.pip_package_name),
@@ -187,8 +187,8 @@ class ClientOptionParser(object):
 
         self.__parser.add_option(
             '--max-power-down-timeout',
-            help='the maximum number of seconds to wait for the current sense pin to go low '
-                 '[default:%default]',
+            help='the maximum number of seconds to wait for the user to disable power after clicking the logout button'
+                 '[default:%default] If None is specified, the system will wait indefinitely',
             default=ClientOptionDefaults[ClientOption.MAX_POWER_DOWN_TIMEOUT],
             dest=ClientOption.MAX_POWER_DOWN_TIMEOUT,
             type='int',
