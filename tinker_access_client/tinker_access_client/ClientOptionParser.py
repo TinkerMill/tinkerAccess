@@ -14,7 +14,7 @@ ClientOptionDefaults = {
     ClientOption.PIN_LED_RED: 21,
     ClientOption.DEVICE_ID: None,
     ClientOption.PIN_LED_BLUE: 20,
-    ClientOption.REBOOT_DELAY: 5,
+    ClientOption.REBOOT_DELAY: 300,
     ClientOption.PIN_LED_GREEN: 19,
     ClientOption.AUTO_UPDATE: False,
     ClientOption.FORCE_UPDATE: False,
