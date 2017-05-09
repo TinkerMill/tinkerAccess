@@ -1,149 +1,222 @@
+# -*- coding: utf-8 -*-
+# Original code found at:
+# https://gist.github.com/DenisFromHR/cc863375a6e19dce359d
+
+"""
+Compiled, mashed and generally mutilated 2014-2015 by Denis Pleic
+Made available under GNU GENERAL PUBLIC LICENSE
+
+# Modified Python I2C library for Raspberry Pi
+# as found on http://www.recantha.co.uk/blog/?p=4849
+# Joined existing 'i2c_lib.py' and 'lcddriver.py' into a single library
+# added bits and pieces from various sources
+# By DenisFromHR (Denis Pleic)
+# 2015-02-10, ver 0.1
+
+"""
+
+# Cobbled together from former TinkerAccess LcdApi.py and
+# http://www.circuitbasics.com/raspberry-pi-i2c-lcd-set-up-and-programming/
+# by kso512 (Chris Lindbergh)
+# 2017-05-07
+
+
+# The wiring for the LCD with backpack is as follows:
+#   LCD | Pin on Raspberry Pi
+#   ====|====================
+#   GND | 6 (GND)
+#   VCC | 4 (5V)
+#   SDA | 3 (GPIO2, SDA1 I2C)
+#   SCL | 5 (GPIO3, SCL1 I2C)
+
+
+# Start by initializing the i2c bus, then narrow down to the specific
+#   address of the LCD module:
+
 import time
 import logging
+import smbus
+
+# i2c bus (0 -- original Pi, 1 -- Rev 2 Pi)
+I2CBUS = 1
+
+class i2c_device:
+   def __init__(self, addr, port=I2CBUS):
+      self.addr = addr
+      self.bus = smbus.SMBus(port)
+
+# Write a single command to the i2c bus
+   def write_cmd(self, cmd):
+      self.bus.write_byte(self.addr, cmd)
+      sleep(0.0001)
+
+# Write a command and argument to the i2c bus
+   def write_cmd_arg(self, cmd, data):
+      self.bus.write_byte_data(self.addr, cmd, data)
+      sleep(0.0001)
+
+# Write a block of data to the i2c bus
+   def write_block_data(self, cmd, data):
+      self.bus.write_block_data(self.addr, cmd, data)
+      sleep(0.0001)
+
+# Read a single byte from the i2c bus
+   def read(self):
+      return self.bus.read_byte(self.addr)
+
+# Read from the i2c bus
+   def read_data(self, cmd):
+      return self.bus.read_byte_data(self.addr, cmd)
+
+# Read a block of data from the i2c bus
+   def read_block_data(self, cmd):
+      return self.bus.read_block_data(self.addr, cmd)
 
 
-# The wiring for the LCD is as follows:
-# 1 : GND
-# 2 : 5V
-# 3 : Contrast (0-5V)*      Tie to Gnd for max contrast
-# 4 : RS (Register Select)
-# 5 : R/W (Read Write)       - GROUND THIS PIN
-# 6 : Enable or Strobe
-# 7 : Data Bit 0             - NOT USED
-# 8 : Data Bit 1             - NOT USED
-# 9 : Data Bit 2             - NOT USED
-# 10: Data Bit 3             - NOT USED
-# 11: Data Bit 4
-# 12: Data Bit 5
-# 13: Data Bit 6
-# 14: Data Bit 7
-# 15: LCD Backlight +5V**
-# 16: LCD Backlight GND
+# LCD Address
+LCD_ADDRESS = 0x27
 
-# Define GPIO to LCD mapping
-LCD_RS = 7  # 4 : RS (Register Select)  [RPi pin 7 is connected to PiWedge 'CE1' ]
-LCD_E = 8  # 6 : Enable or Strobe      [RPi pin 8 is connected to PiWedge 'CE0' ]
-LCD_D4 = 25  # 11: Data Bit 4
-LCD_D5 = 24  # 12: Data Bit 5
-LCD_D6 = 23  # 13: Data Bit 6
-LCD_D7 = 18  # 14: Data Bit 7
+# LCD display init sleep delay
+LCD_INITDELAY = 0.2
 
-# Define some device constants
-LCD_WIDTH = 16  # Maximum characters per line
-LCD_CHR = True
-LCD_CMD = False
+# LCD commands
+LCD_CLEARDISPLAY = 0x01
+LCD_RETURNHOME = 0x02
+LCD_ENTRYMODESET = 0x04
+LCD_DISPLAYCONTROL = 0x08
+LCD_CURSORSHIFT = 0x10
+LCD_FUNCTIONSET = 0x20
+LCD_SETCGRAMADDR = 0x40
+LCD_SETDDRAMADDR = 0x80
 
-LCD_LINE_1 = 0x80  # LCD RAM address for the 1st line
-LCD_LINE_2 = 0xC0  # LCD RAM address for the 2nd line
+# flags for LCD display entry mode
+LCD_ENTRYRIGHT = 0x00
+LCD_ENTRYLEFT = 0x02
+LCD_ENTRYSHIFTINCREMENT = 0x01
+LCD_ENTRYSHIFTDECREMENT = 0x00
 
-# Timing constants
-E_PULSE = 0.0005
-E_DELAY = 0.0005
+# flags for LCD display on/off control
+LCD_DISPLAYON = 0x04
+LCD_DISPLAYOFF = 0x00
+LCD_CURSORON = 0x02
+LCD_CURSOROFF = 0x00
+LCD_BLINKON = 0x01
+LCD_BLINKOFF = 0x00
+
+# flags for LCD display/cursor shift
+LCD_DISPLAYMOVE = 0x08
+LCD_CURSORMOVE = 0x00
+LCD_MOVERIGHT = 0x04
+LCD_MOVELEFT = 0x00
+
+# flags for LCD function set
+LCD_8BITMODE = 0x10
+LCD_4BITMODE = 0x00
+LCD_2LINE = 0x08
+LCD_1LINE = 0x00
+LCD_5x10DOTS = 0x04
+LCD_5x8DOTS = 0x00
+
+# flags for LCD backlight control
+LCD_BACKLIGHT = 0x08
+LCD_NOBACKLIGHT = 0x00
+
+En = 0b00000100 # LCD Enable bit
+Rw = 0b00000010 # LCD Read/Write bit
+Rs = 0b00000001 # LCD Register select bit
 
 
 class LcdApi(object):
 
-    def __init__(self, gpio):
+    # Initialize objects and LCD
+    def __init__(self):
         self.__logger = logging.getLogger(__name__)
 
-        # noinspection PyPep8Naming
-        GPIO = self.__GPIO = gpio
-        GPIO.setup(LCD_E, GPIO.OUT)  # E
-        GPIO.setup(LCD_RS, GPIO.OUT)  # RS
-        GPIO.setup(LCD_D4, GPIO.OUT)  # DB4
-        GPIO.setup(LCD_D5, GPIO.OUT)  # DB5
-        GPIO.setup(LCD_D6, GPIO.OUT)  # DB6
-        GPIO.setup(LCD_D7, GPIO.OUT)  # DB7
+        self.lcd_device = i2c_device(LCD_ADDRESS)
+
+        self.lcd_write(0x03)
+        self.lcd_write(0x03)
+        self.lcd_write(0x03)
+        self.lcd_write(0x02)
 
         self.__init__display()
 
+    # Initialize display
     def __init__display(self):
-        # # Initialise display
-        self.lcd_byte(0x33, LCD_CMD)  # 110011 Initialise
-        self.lcd_byte(0x32, LCD_CMD)  # 110010 Initialise
-        self.lcd_byte(0x06, LCD_CMD)  # 000110 Cursor move direction
-        self.lcd_byte(0x0C, LCD_CMD)  # 001100 Display On,Cursor Off, Blink Off
-        self.lcd_byte(0x28, LCD_CMD)  # 101000 Data length, number of lines, font size
-        self.lcd_byte(0x01, LCD_CMD)  # 000001 Clear display
-        time.sleep(E_DELAY)
+        self.lcd_write(LCD_FUNCTIONSET | LCD_2LINE | LCD_5x8DOTS | LCD_4BITMODE)
+        self.lcd_write(LCD_DISPLAYCONTROL | LCD_DISPLAYON)
+        self.lcd_write(LCD_CLEARDISPLAY)
+        self.lcd_write(LCD_ENTRYMODESET | LCD_ENTRYLEFT)
+        time.sleep(LCD_INITDELAY)
 
-    def __enter__(self):
-        return self
+    # Write a command to LCD
+    def lcd_write(self, cmd, mode=0):
+        self.lcd_write_four_bits(mode | (cmd & 0xF0))
+        self.lcd_write_four_bits(mode | ((cmd << 4) & 0xF0))
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        pass
+    # Write four bits to the LCD
+    def lcd_write_four_bits(self, data):
+        self.lcd_device.write_cmd(data | LCD_BACKLIGHT)
+        self.lcd_strobe(data)
 
-    def lcd_byte(self, bits, mode):
+    # clocks EN to latch command
+    def lcd_strobe(self, data):
+        self.lcd_device.write_cmd(data | En | LCD_BACKLIGHT)
+        sleep(.0005)
+        self.lcd_device.write_cmd(((data & ~En) | LCD_BACKLIGHT))
+        sleep(.0001)
 
-        # Send byte to data pins
-        # bits = data
-        # mode = True  for character
-        #        False for command
+    # write a character to lcd (or character rom)
+    # 0x09: backlight | RS=DR< works!
+    def lcd_write_char(self, charvalue, mode=1):
+        self.lcd_write_four_bits(mode | (charvalue & 0xF0))
+        self.lcd_write_four_bits(mode | ((charvalue << 4) & 0xF0))
 
-        # noinspection PyPep8Naming
-        GPIO = self.__GPIO
-        GPIO.output(LCD_RS, mode)  # RS --Select Register
+    # put string function with optional char positioning
+    def lcd_display_string(self, string, line=1, pos=0):
+        if line == 1:
+            pos_new = pos
+        elif line == 2:
+            pos_new = 0x40 + pos
+        elif line == 3:
+            pos_new = 0x14 + pos
+        elif line == 4:
+            pos_new = 0x54 + pos
 
+        self.lcd_write(0x80 + pos_new)
 
-        # High bits
-        GPIO.output(LCD_D4, False)
-        GPIO.output(LCD_D5, False)
-        GPIO.output(LCD_D6, False)
-        GPIO.output(LCD_D7, False)
-        if bits & 0x10 == 0x10:
-            GPIO.output(LCD_D4, True)
-        if bits & 0x20 == 0x20:
-            GPIO.output(LCD_D5, True)
-        if bits & 0x40 == 0x40:
-            GPIO.output(LCD_D6, True)
-        if bits & 0x80 == 0x80:
-            GPIO.output(LCD_D7, True)
+        for char in string:
+            self.lcd_write(ord(char), Rs)
 
-        self.lcd_toggle_enable()
+    # clear lcd and set to home
+    def lcd_clear(self):
+        self.lcd_write(LCD_CLEARDISPLAY)
+        self.lcd_write(LCD_RETURNHOME)
 
-        # Low bits
-        GPIO.output(LCD_D4, False)
-        GPIO.output(LCD_D5, False)
-        GPIO.output(LCD_D6, False)
-        GPIO.output(LCD_D7, False)
-        if bits & 0x01 == 0x01:
-            GPIO.output(LCD_D4, True)
-        if bits & 0x02 == 0x02:
-            GPIO.output(LCD_D5, True)
-        if bits & 0x04 == 0x04:
-            GPIO.output(LCD_D6, True)
-        if bits & 0x08 == 0x08:
-            GPIO.output(LCD_D7, True)
+    # define backlight on/off (lcd.backlight(1); off= lcd.backlight(0)
+    def backlight(self, state): # for state, 1 = on, 0 = off
+        if state == 1:
+            self.lcd_device.write_cmd(LCD_BACKLIGHT)
+        elif state == 0:
+            self.lcd_device.write_cmd(LCD_NOBACKLIGHT)
 
-        self.lcd_toggle_enable()
+    # add custom characters (0 - 7)
+    def lcd_load_custom_chars(self, fontdata):
+        self.lcd_write(0x40);
+        for char in fontdata:
+            for line in char:
+                self.lcd_write_char(line)
 
-    def lcd_toggle_enable(self):
-
-        # noinspection PyPep8Naming
-        GPIO = self.__GPIO
-        time.sleep(E_DELAY)
-        GPIO.output(LCD_E, True)
-        time.sleep(E_PULSE)
-        GPIO.output(LCD_E, False)
-        time.sleep(E_DELAY)
-
-    def lcd_string(self, message, line):
-
-        # Send string to display
-        self.lcd_byte(line, LCD_CMD)
-
-        if (len(message) > LCD_WIDTH) and 0:
-            for i in range(len(message) - LCD_WIDTH + 1):
-                time.sleep(3)
-                self.lcd_byte(line, LCD_CMD)
-                for c in message[i:(len(message))]:
-                    self.lcd_byte(ord(c), LCD_CHR)
-
-        else:
-            messageLJ = message.ljust(LCD_WIDTH, ' ')
-            for i in range(LCD_WIDTH):
-                self.lcd_byte(ord(messageLJ[i]), LCD_CHR)
-
+    # Write two lines to the LCD, called from outside
     def write(self, first_line, second_line):
-        self.lcd_string(first_line, LCD_LINE_1)
-        self.lcd_string(second_line, LCD_LINE_2)
+
+	# Write the first line
+	for char in first_line:
+	    self.lcd_write(ord(char), Rs)
+
+	# Move to the second line
+	self.lcd_write(0xC0)
+
+	# Write the second line
+	for char in second_line:
+	    self.lcd_write(ord(char), Rs)
