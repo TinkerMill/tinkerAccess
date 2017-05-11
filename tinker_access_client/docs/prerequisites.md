@@ -23,8 +23,9 @@
   This is what has worked for me consistently:
   ```commandline
   sudo apt-get update
-  sudo apt-get install -U python-pip
-  sudo easy_install -U pip
+  sudo apt-get install python-pip
+  sudo easy_install pip
+  sudo pip install --upgrade  setuptools pip
   ```
 
 1. [Continue](../README.md)
