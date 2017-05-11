@@ -141,6 +141,13 @@ class LcdApi(object):
 
         self.__init__display()
 
+    # Fulfill context management requirements
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        pass
+
     # Initialize display
     def __init__display(self):
         self.lcd_write(LCD_FUNCTIONSET | LCD_2LINE | LCD_5x8DOTS | LCD_4BITMODE)
