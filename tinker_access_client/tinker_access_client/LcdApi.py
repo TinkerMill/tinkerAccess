@@ -35,7 +35,7 @@ Made available under GNU GENERAL PUBLIC LICENSE
 
 import time
 import logging
-import smbus
+import smbus2 as smbus
 
 # i2c bus (0 -- original Pi, 1 -- Rev 2 Pi)
 I2CBUS = 1
