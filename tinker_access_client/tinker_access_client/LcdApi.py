@@ -17,8 +17,8 @@ Made available under GNU GENERAL PUBLIC LICENSE
 
 # Cobbled together from former TinkerAccess LcdApi.py and
 # http://www.circuitbasics.com/raspberry-pi-i2c-lcd-set-up-and-programming/
-# by kso512 (Chris Lindbergh)
-# 2017-05-07
+# by kso512 (Chris Lindbergh) with lots of teaching from Erick McQueen
+# 2017-05
 
 
 # The wiring for the LCD with backpack is as follows:
@@ -48,17 +48,17 @@ class i2c_device:
 # Write a single command to the i2c bus
    def write_cmd(self, cmd):
       self.bus.write_byte(self.addr, cmd)
-      sleep(0.0001)
+      time.sleep(0.0001)
 
 # Write a command and argument to the i2c bus
    def write_cmd_arg(self, cmd, data):
       self.bus.write_byte_data(self.addr, cmd, data)
-      sleep(0.0001)
+      time.sleep(0.0001)
 
 # Write a block of data to the i2c bus
    def write_block_data(self, cmd, data):
       self.bus.write_block_data(self.addr, cmd, data)
-      sleep(0.0001)
+      time.sleep(0.0001)
 
 # Read a single byte from the i2c bus
    def read(self):
@@ -169,9 +169,9 @@ class LcdApi(object):
     # clocks EN to latch command
     def lcd_strobe(self, data):
         self.lcd_device.write_cmd(data | En | LCD_BACKLIGHT)
-        sleep(.0005)
+        time.sleep(.0005)
         self.lcd_device.write_cmd(((data & ~En) | LCD_BACKLIGHT))
-        sleep(.0001)
+        time.sleep(.0001)
 
     # write a character to lcd (or character rom)
     # 0x09: backlight | RS=DR< works!
