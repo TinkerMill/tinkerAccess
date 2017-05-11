@@ -5,7 +5,8 @@ import time
 import threading
 
 import serial
-from mock import patch
+import smbus2 as smbus
+from mock import patch, Mock
 
 from tinker_access_client.tinker_access_client.Client import Client
 from tinker_access_client.tinker_access_client.ClientOption import ClientOption
@@ -26,6 +27,9 @@ class VirtualDevice(object):
         self.__transitions = []
         self.__virtual_rpi = VirtualRpi(opts)
         self.__virtual_serial = VirtualSerial()
+
+	self.__lcd_patcher = patch.object(smbus, 'SMBus', return_value=Mock())
+	self.__lcd_patcher.start()
 
         #TODO: should only patch if the address, matches the option for the serial address
         self.__serial_patcher = patch.object(serial, 'Serial', return_value=self.__virtual_serial)
@@ -55,6 +59,7 @@ class VirtualDevice(object):
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.__client__update_status.stop()
         self.__serial_patcher.stop()
+	self.__lcd_patcher.stop()
         [sys.meta_path.remove(meta) for meta in sys.meta_path if meta is self.__virtual_rpi]
 
     def transitions(self):
@@ -81,3 +86,7 @@ class VirtualDevice(object):
 
     def read_pin(self, pin):
         return self.__virtual_rpi.read_pin(pin)
+
+    def __write_to_lcd(self, first_line, second_line):
+	pass
+
