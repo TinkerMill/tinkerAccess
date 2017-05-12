@@ -87,6 +87,3 @@ class VirtualDevice(object):
     def read_pin(self, pin):
         return self.__virtual_rpi.read_pin(pin)
 
-    def __write_to_lcd(self, first_line, second_line):
-	pass
-
