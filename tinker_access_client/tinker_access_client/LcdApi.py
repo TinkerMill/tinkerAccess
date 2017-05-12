@@ -216,14 +216,6 @@ class LcdApi(object):
 
     # Write two lines to the LCD, called from outside
     def write(self, first_line, second_line):
+	self.lcd_display_string(first_line, 1, 0)
+	self.lcd_display_string(second_line, 2, 0)
 
-	# Write the first line
-	for char in first_line:
-	    self.lcd_write(ord(char), Rs)
-
-	# Move to the second line
-	self.lcd_write(0xC0)
-
-	# Write the second line
-	for char in second_line:
-	    self.lcd_write(ord(char), Rs)
