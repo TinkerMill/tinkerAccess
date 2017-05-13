@@ -30,48 +30,9 @@ Made available under GNU GENERAL PUBLIC LICENSE
 #   SCL | 5 (GPIO3, SCL1 I2C)
 
 
-# Start by initializing the i2c bus, then narrow down to the specific
-#   address of the LCD module:
-
 import time
 import logging
-import smbus2 as smbus
-
-# i2c bus (0 -- original Pi, 1 -- Rev 2 Pi)
-I2CBUS = 1
-
-class i2c_device:
-   def __init__(self, addr, port=I2CBUS):
-      self.addr = addr
-      self.bus = smbus.SMBus(port)
-
-# Write a single command to the i2c bus
-   def write_cmd(self, cmd):
-      self.bus.write_byte_data(self.addr, cmd, 0)
-      time.sleep(0.0001)
-
-# Write a command and argument to the i2c bus
-   def write_cmd_arg(self, cmd, data):
-      self.bus.write_byte_data(self.addr, cmd, data)
-      time.sleep(0.0001)
-
-# Write a block of data to the i2c bus
-   def write_block_data(self, cmd, data):
-      self.bus.write_block_data(self.addr, cmd, data)
-      time.sleep(0.0001)
-
-# Read a single byte from the i2c bus
-   def read(self):
-      return self.bus.read_byte(self.addr)
-
-# Read from the i2c bus
-   def read_data(self, cmd):
-      return self.bus.read_byte_data(self.addr, cmd)
-
-# Read a block of data from the i2c bus
-   def read_block_data(self, cmd):
-      return self.bus.read_block_data(self.addr, cmd)
-
+import I2CApi
 
 # LCD Address
 LCD_ADDRESS = 0x27
@@ -125,14 +86,13 @@ En = 0b00000100 # LCD Enable bit
 Rw = 0b00000010 # LCD Read/Write bit
 Rs = 0b00000001 # LCD Register select bit
 
-
 class LcdApi(object):
 
     # Initialize objects and LCD
     def __init__(self):
         self.__logger = logging.getLogger(__name__)
 
-        self.lcd_device = i2c_device(LCD_ADDRESS)
+        self.lcd_device = I2CApi.i2c_device(LCD_ADDRESS)
 
         self.lcd_write(0x03)
         self.lcd_write(0x03)
