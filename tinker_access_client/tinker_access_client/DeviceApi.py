@@ -125,7 +125,7 @@ class DeviceApi(object):
         GPIO.output(self.__opts.get(ClientOption.PIN_LED_BLUE), blue)
 
     def __write_to_lcd(self, first_line, second_line):
-        with LcdApi(self.GPIO) as lcd:
+        with LcdApi() as lcd:
             lcd.write(first_line, second_line)
         self.__start_lcd_refresh_timer(first_line, second_line)
 

@@ -36,6 +36,7 @@ config = {
         'daemonize==2.4.7',
         'requests==2.12.4',
         'pyserial==3.2.1',
+	'smbus2==0.1.4' ,
         'retry==0.9.2'
     ],
 
