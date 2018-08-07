@@ -1,4 +1,5 @@
 # tinker-access-server
+All the commands below should be executed from the terminal on the relevant TinkerAccess server.
 
 #### Manage the Services
 
