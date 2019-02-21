@@ -34,7 +34,7 @@ config = {
     'install_requires': [
         'transitions==0.4.3',
         'daemonize==2.4.7',
-        'requests==2.12.4',
+        'requests>=2.20.0',
         'pyserial==3.2.1',
 	'smbus2==0.1.4' ,
         'retry==0.9.2'
@@ -46,7 +46,7 @@ config = {
         'backports.tempfile==1.0rc1',
         'transitions==0.4.3',
         'daemonize==2.4.7',
-        'requests==2.12.4',
+        'requests>=2.20.0',
         'pyserial==3.2.1',
         'mock==2.0.0',
         'nose==1.3.7'
