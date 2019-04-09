@@ -510,6 +510,7 @@ class Client(Machine):
         status_file = self.__opts.get(ClientOption.STATUS_FILE)
         with open(status_file, 'w') as f:
             f.write('{0}\n'.format(self.status()))
+            f.close()
     #
     # conditions - used to allow/prevent triggers causing a transition if the conditions are not met.
     #
