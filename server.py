@@ -355,6 +355,13 @@ class UserToolSummary:
   def __lt__(self, other):
     return self.total_time < other.total_time
 
+class DefaultDictByKey(dict):
+    def __init__(self, message):
+        self.message = str(message)
+
+    def __missing__(self, key):
+        return self.message+str(key)
+
 def genToolSummary(start_date=None, end_date=None):
   '''Function to generate tool summaries given start and end dates
         Input: start_date, end_date; defaults to "last month"
@@ -372,7 +379,7 @@ def genToolSummary(start_date=None, end_date=None):
     toolnames[str(tool[0])] = tool[1]
 
   users = query_db("SELECT id, name, code FROM user")
-  user_id_to_name = {}
+  user_id_to_name = DefaultDictByKey("Unknown user, id ")
   user_code_to_id = {}
   for user in users:
     user_id_to_name[str(user[0])] = str(user[1])
@@ -409,7 +416,17 @@ def genToolSummary(start_date=None, end_date=None):
       user_summaries[(user, tool)].logins += 1
       user_summaries[(user, tool)].name = user_id_to_name[user]
     elif fields[0] == 'logout':
-      user = user_code_to_id[user]
+      try:
+        user_id = user_code_to_id[user]
+      except KeyError:
+        if states[tool].in_use:
+          user_id = states[tool].active_user
+          user_code_to_id[user] = user_id
+          print(("Unknown user, code {}. Assuming user id {} from "+
+                  "prior tool login").format(user, user_id))
+        else:
+          print("Unknown user, code", user)
+
       summaries[tool].logouts += 1
       if not states[tool].in_use:
         pass
@@ -418,8 +435,8 @@ def genToolSummary(start_date=None, end_date=None):
       else:
         states[tool].in_use = False
         summaries[tool].total_time += (ts - states[tool].login_time)
-        if states[tool].active_user == user:
-          user_summaries[(user, tool)].total_time += (ts - states[tool].login_time)
+        if states[tool].active_user == user_id:
+          user_summaries[(user_id, tool)].total_time += (ts - states[tool].login_time)
         else:
           unmatched += 1
 
