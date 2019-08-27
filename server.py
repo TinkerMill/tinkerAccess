@@ -297,13 +297,32 @@ def userAccessInterface(userid):
   username   = query_db("select user.name from user where id=%s" % userid)[0][0]
   return render_template('admin_userAccess.html', devices=allDevices, access=userAccess, userid=userid, username=username)
 
-@app.route("/admin/interface/toolSummary/")
-def toolSummaryInterface():
-  if request.cookies.get('password') != C_password:
-    return redirect("/")
+@app.route("/toolSummary")
+@app.route("/toolSummary/<start_date>")
+@app.route("/toolSummary/<start_date>/<end_date>")
+def toolSummaryInterface(start_date=None, end_date=None):
+  #if request.cookies.get('password') != C_password:
+  #  return redirect("/")
 
-  tool_summary = genToolSummary()
-  return render_template('admin_toolUse.html', tools = tool_summary)
+  # calculate default start and end dates
+  if start_date is None:
+    today = datetime.datetime.now()
+    start_date = datetime.datetime(today.year - (today.month==1), ((today.month - 2)%12)+1, 1)
+  else:
+    start_date = datetime.datetime.strptime(start_date, "%Y-%m-%d")
+
+  if end_date is None:
+    end_year = start_date.year + (start_date.month==12)
+    end_month = ((start_date.month+1)%12)
+    end_day = min(start_date.day, monthrange(end_year, end_month)[1])
+    end_date = datetime.datetime(end_year, end_month, end_day)
+  else:
+    end_date = datetime.datetime.strptime(end_date, "%Y-%m-%d")
+
+  tool_summary = genToolSummary(start_date, end_date)
+  return render_template('toolUse.html', tools = tool_summary,
+          start = start_date.strftime("%Y-%m-%d"),
+          end = end_date.strftime("%Y-%m-%d"))
 
 @app.route("/admin/interface/log")
 def viewLog():
@@ -362,16 +381,10 @@ class DefaultDictByKey(dict):
     def __missing__(self, key):
         return self.message+str(key)
 
-def genToolSummary(start_date=None, end_date=None):
+def genToolSummary(start_date, end_date):
   '''Function to generate tool summaries given start and end dates
         Input: start_date, end_date; defaults to "last month"
         Output: Dictionary of tools, with associated summaries'''
-
-  # calculate default start and end dates
-  if start_date is None or end_date is None:
-    today = datetime.datetime.now()
-    end_date = datetime.datetime(today.year, today.month, 1)
-    start_date = datetime.datetime(today.year - (today.month==1), ((today.month - 2)%12)+1, 1)
 
   tools = query_db("SELECT id, name FROM device")
   toolnames = {}
