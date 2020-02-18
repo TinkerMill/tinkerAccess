@@ -898,37 +898,6 @@ You are welcome to use this library for commercial purposes. For attribution, we
 </package>
 </packages>
 </library>
-<library name="SparkFun-Jumpers">
-<description>&lt;h3&gt;SparkFun Jumpers&lt;/h3&gt;
-In this library you'll find jumpers, or other semipermanent means of changing current paths. The least permanent form is the solder jumper. These can be changed by adding, removing, or moving solder. In cases that are less likely to be changed we have jumpers that are connected with traces. These can be cut with a razor, or reconnected with solder. Reference designator JP.
-&lt;br&gt;
-&lt;br&gt;
-We've spent an enormous amount of time creating and checking these footprints and parts, but it is &lt;b&gt; the end user's responsibility&lt;/b&gt; to ensure correctness and suitablity for a given componet or application. 
-&lt;br&gt;
-&lt;br&gt;If you enjoy using this library, please buy one of our products at &lt;a href=" www.sparkfun.com"&gt;SparkFun.com&lt;/a&gt;.
-&lt;br&gt;
-&lt;br&gt;
-&lt;b&gt;Licensing:&lt;/b&gt; Creative Commons ShareAlike 4.0 International - https://creativecommons.org/licenses/by-sa/4.0/ 
-&lt;br&gt;
-&lt;br&gt;
-You are welcome to use this library for commercial purposes. For attribution, we ask that when you begin to sell your device using our footprint, you email us with a link to the product being sold. We want bragging rights that we helped (in a very small part) to create your 8th world wonder. We would like the opportunity to feature your device on our homepage.</description>
-<packages>
-<package name="SMT-JUMPER_2_NC_PASTE_NO-SILK" urn="urn:adsk.eagle:footprint:39260/1">
-<text x="0" y="1.143" size="0.6096" layer="25" font="vector" ratio="20" align="bottom-center">&gt;NAME</text>
-<text x="0" y="-1.143" size="0.6096" layer="27" font="vector" ratio="20" align="top-center">&gt;VALUE</text>
-<rectangle x1="-1.2446" y1="-1.1176" x2="1.2446" y2="1.1176" layer="31"/>
-<smd name="1" x="-0.4064" y="0" dx="0.635" dy="1.27" layer="1" cream="no"/>
-<smd name="2" x="0.4064" y="0" dx="0.635" dy="1.27" layer="1" cream="no"/>
-</package>
-</packages>
-<packages3d>
-<package3d name="SMT-JUMPER_2_NC_PASTE_NO-SILK" urn="urn:adsk.eagle:package:39283/1" type="box">
-<packageinstances>
-<packageinstance name="SMT-JUMPER_2_NC_PASTE_NO-SILK"/>
-</packageinstances>
-</package3d>
-</packages3d>
-</library>
 </libraries>
 <attributes>
 <attribute name="REV" value="A"/>
@@ -1336,10 +1305,6 @@ Please make sure your boards conform to these design rules.</description>
 <attribute name="PARTNUMBER" value="Si8600" x="36.195" y="14.732" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="36.195" y="11.597" size="1.27" layer="27" align="top-center"/>
 </element>
-<element name="BUZZ" library="SparkFun-Jumpers" package="SMT-JUMPER_2_NC_PASTE_NO-SILK" package3d_urn="urn:adsk.eagle:package:39283/1" value="JUMPER-SMT_2_NC_PASTE_NO-SILK" x="2.286" y="30.861" smashed="yes" rot="R90">
-<attribute name="NAME" x="1.143" y="30.861" size="0.6096" layer="25" font="vector" ratio="20" rot="R90" align="bottom-center"/>
-<attribute name="VALUE" x="3.429" y="30.861" size="0.6096" layer="27" font="vector" ratio="20" rot="R90" align="top-center"/>
-</element>
 </elements>
 <signals>
 <signal name="BSDA">
@@ -1589,6 +1554,55 @@ Please make sure your boards conform to these design rules.</description>
 <contactref element="C5" pad="2"/>
 <via x="47.1248" y="22.0798" extent="1-16" drill="0.5" diameter="0.55" shape="square"/>
 <contactref element="U1" pad="4"/>
+<wire x1="52.6" y1="45.7" x2="56.63" y2="51.23" width="0" layer="19" extent="1-1"/>
+<wire x1="52.6" y1="44" x2="52.6" y2="45.7" width="0" layer="19" extent="1-1"/>
+<wire x1="52.6" y1="42.3" x2="52.6" y2="44" width="0" layer="19" extent="1-1"/>
+<wire x1="49.85" y1="43" x2="52.6" y2="42.3" width="0" layer="19" extent="1-1"/>
+<wire x1="54.9" y1="40.6" x2="52.6" y2="42.3" width="0" layer="19" extent="1-1"/>
+<wire x1="44.9" y1="45.6" x2="49.85" y2="43" width="0" layer="19" extent="1-1"/>
+<wire x1="49.85" y1="35" x2="54.9" y2="40.6" width="0" layer="19" extent="1-1"/>
+<wire x1="50.9" y1="32.6" x2="49.85" y2="35" width="0" layer="19" extent="1-1"/>
+<wire x1="49" y1="32.35" x2="50.9" y2="32.6" width="0" layer="19" extent="1-1"/>
+<wire x1="43.2" y1="28.8" x2="46" y2="32.3001" width="0" layer="19" extent="1-16"/>
+<wire x1="43.4" y1="25.6" x2="43.2" y2="28.8" width="0" layer="19" extent="16-16"/>
+<wire x1="43.373" y1="23.889" x2="43.4" y2="25.6" width="0" layer="19" extent="1-1"/>
+<wire x1="46.85" y1="26" x2="43.4" y2="25.6" width="0" layer="19" extent="1-1"/>
+<wire x1="46.85" y1="24.5" x2="46.85" y2="26" width="0" layer="19" extent="1-1"/>
+<wire x1="47.1248" y1="22.0798" x2="46.85" y2="24.5" width="0" layer="19" extent="1-1"/>
+<wire x1="47.8583" y1="18.8976" x2="47.1248" y2="22.0798" width="0" layer="19" extent="1-1"/>
+<wire x1="46.951" y1="16.002" x2="47.8583" y2="18.8976" width="0" layer="19" extent="1-1"/>
+<wire x1="42.56" y1="17.235" x2="46.951" y2="16.002" width="0" layer="19" extent="1-16"/>
+<wire x1="40.005" y1="11.732" x2="42.56" y2="17.235" width="0" layer="19" extent="1-16"/>
+<wire x1="53.9828" y1="18.0158" x2="47.8583" y2="18.8976" width="0" layer="19" extent="1-1"/>
+<wire x1="58.9" y1="16.6" x2="53.9828" y2="18.0158" width="0" layer="19" extent="1-1"/>
+<wire x1="60" y1="20" x2="58.9" y2="16.6" width="0" layer="19" extent="1-1"/>
+<wire x1="60.9" y1="24.6" x2="60" y2="20" width="0" layer="19" extent="1-1"/>
+<wire x1="49.01" y1="53.77" x2="56.63" y2="51.23" width="0" layer="19" extent="1-1"/>
+<wire x1="43.93" y1="53.77" x2="49.01" y2="53.77" width="0" layer="19" extent="1-1"/>
+<wire x1="38.85" y1="51.23" x2="43.93" y2="53.77" width="0" layer="19" extent="1-1"/>
+<wire x1="31.23" y1="53.77" x2="38.85" y2="51.23" width="0" layer="19" extent="1-1"/>
+<wire x1="23.61" y1="53.77" x2="31.23" y2="53.77" width="0" layer="19" extent="1-1"/>
+<wire x1="18.53" y1="51.23" x2="23.61" y2="53.77" width="0" layer="19" extent="1-1"/>
+<wire x1="13.45" y1="53.77" x2="18.53" y2="51.23" width="0" layer="19" extent="1-1"/>
+<wire x1="14.9" y1="45.6" x2="18.53" y2="51.23" width="0" layer="19" extent="1-1"/>
+<wire x1="17.35" y1="41" x2="14.9" y2="45.6" width="0" layer="19" extent="1-1"/>
+<wire x1="12.8" y1="40.3" x2="17.35" y2="41" width="0" layer="19" extent="1-1"/>
+<wire x1="14.5" y1="36.6" x2="12.8" y2="40.3" width="0" layer="19" extent="1-1"/>
+<wire x1="16.65" y1="34.85" x2="14.5" y2="36.6" width="0" layer="19" extent="1-1"/>
+<wire x1="16.95" y1="31.8" x2="16.65" y2="34.85" width="0" layer="19" extent="1-1"/>
+<wire x1="20.9868" y1="30.9934" x2="16.95" y2="31.8" width="0" layer="19" extent="1-1"/>
+<wire x1="16.65" y1="21.85" x2="16.6" y2="21.841" width="0" layer="19" extent="1-1"/>
+<wire x1="7.5" y1="38.6" x2="12.8" y2="40.3" width="0" layer="19" extent="1-1"/>
+<wire x1="23.1" y1="18.4" x2="16.65" y2="21.85" width="0" layer="19" extent="1-1"/>
+<wire x1="23.1" y1="13.7" x2="23.1" y2="18.4" width="0" layer="19" extent="1-1"/>
+<wire x1="20.35" y1="11.525" x2="23.1" y2="13.7" width="0" layer="19" extent="1-1"/>
+<wire x1="16.9" y1="13.6" x2="20.35" y2="11.525" width="0" layer="19" extent="1-1"/>
+<wire x1="29.2688" y1="14.1318" x2="23.1" y2="13.7" width="0" layer="19" extent="16-16"/>
+<wire x1="26.1" y1="7" x2="20.35" y2="11.525" width="0" layer="19" extent="1-1"/>
+<wire x1="4.7" y1="45.5" x2="7.5" y2="38.6" width="0" layer="19" extent="1-1"/>
+<wire x1="61.9" y1="34.6" x2="54.9" y2="40.6" width="0" layer="19" extent="1-1"/>
+<wire x1="4.55" y1="23.95" x2="16.6" y2="21.841" width="0" layer="19" extent="1-1"/>
+<wire x1="8.8" y1="2.9" x2="16.9" y2="13.6" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="TXD">
 <contactref element="RPI1" pad="8"/>
@@ -1684,8 +1698,6 @@ Please make sure your boards conform to these design rules.</description>
 <contactref element="LS1" pad="+"/>
 <wire x1="1.95" y1="30.4436" x2="6.3564" y2="30.4436" width="0.5" layer="1"/>
 <wire x1="6.3564" y1="30.4436" x2="7.95" y2="28.85" width="0.5" layer="1"/>
-<contactref element="BUZZ" pad="1"/>
-<wire x1="2.286" y1="30.4546" x2="1.95" y2="30.4436" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="N$3">
 <contactref element="LS1" pad="-"/>
@@ -1792,11 +1804,9 @@ Please make sure your boards conform to these design rules.</description>
 <wire x1="49.2404" y1="19.8476" x2="47.8583" y2="19.8476" width="0.254" layer="1"/>
 <wire x1="47.8583" y1="17.9476" x2="47.8989" y2="17.907" width="0.254" layer="1"/>
 <wire x1="47.8989" y1="17.907" x2="49.53" y2="17.907" width="0.254" layer="1"/>
-<contactref element="BUZZ" pad="2"/>
 <wire x1="48.84" y1="9.4" x2="48.856" y2="9.4" width="0" layer="19" extent="16-16"/>
 <wire x1="50.86" y1="11.4" x2="50.84" y2="11.4" width="0" layer="19" extent="1-1"/>
 <wire x1="48.883" y1="9.427" x2="48.856" y2="9.4" width="0" layer="19" extent="1-1"/>
-<wire x1="2.286" y1="31.2674" x2="1.95" y2="31.2564" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="N$4">
 <contactref element="R2" pad="2"/>
