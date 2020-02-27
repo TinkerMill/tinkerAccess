@@ -18,7 +18,7 @@ DAEMON="python $DIR/server.py"
 DAEMON_NAME=tinkerAccessServer
 
 # Add any command line options for your daemon here
-DAEMON_OPTS=""
+DAEMON_OPTS="--noreload"
 
 # This next line determines what user the script runs as.
 # Root generally not recommended but necessary if you are using the Raspberry Pi GPIO from Python.
@@ -40,6 +40,7 @@ do_start () {
 do_stop () {
     log_daemon_msg "Stopping system $DAEMON_NAME daemon"
     start-stop-daemon --stop --pidfile $PIDFILE --retry 10
+    rm -f $PIDFILE
     log_end_msg $?
 }
 
