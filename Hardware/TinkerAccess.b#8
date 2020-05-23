@@ -1364,7 +1364,7 @@ Please make sure your boards conform to these design rules.</description>
 <signal name="GPIO4">
 <contactref element="RPI1" pad="7"/>
 </signal>
-<signal name="GPIO17">
+<signal name="RELAY">
 <contactref element="RPI1" pad="11"/>
 <via x="21" y="14" extent="1-16" drill="0.35"/>
 <wire x1="21" y1="51.16" x2="21.07" y2="51.23" width="0.508" layer="16"/>
@@ -1467,7 +1467,7 @@ Please make sure your boards conform to these design rules.</description>
 <wire x1="52.6" y1="22.6" x2="52.6" y2="41.8" width="0.254" layer="16"/>
 <wire x1="52.6834" y1="15.2614" x2="52.6844" y2="15.236" width="0" layer="19" extent="1-1"/>
 </signal>
-<signal name="GPIO19">
+<signal name="LED_GREEN">
 <contactref element="R6" pad="1"/>
 <wire x1="61.6" y1="49.25" x2="63.5" y2="47.35" width="0.3" layer="1"/>
 <wire x1="54.9" y1="49.25" x2="61.6" y2="49.25" width="0.3" layer="1"/>
@@ -1681,7 +1681,7 @@ Please make sure your boards conform to these design rules.</description>
 <wire x1="50.25" y1="52.25" x2="51.55" y2="53.55" width="0.3" layer="1"/>
 <wire x1="51.55" y1="53.55" x2="51.55" y2="53.77" width="0.3" layer="1"/>
 </signal>
-<signal name="GPIO20">
+<signal name="LED_BLUE">
 <contactref element="RPI1" pad="38"/>
 <contactref element="R7" pad="1"/>
 <wire x1="54.09" y1="53.77" x2="54.09" y2="53.11" width="0.3" layer="16"/>
@@ -1692,7 +1692,7 @@ Please make sure your boards conform to these design rules.</description>
 <wire x1="58.4" y1="47.3" x2="59.95" y2="47.3" width="0.3" layer="1"/>
 <wire x1="59.95" y1="47.3" x2="60" y2="47.35" width="0.3" layer="1"/>
 </signal>
-<signal name="GPIO21">
+<signal name="LED_RED">
 <contactref element="RPI1" pad="40"/>
 <contactref element="R5" pad="1"/>
 <wire x1="56.63" y1="53.77" x2="56.63" y2="53.07" width="0.3" layer="16"/>

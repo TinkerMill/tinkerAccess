@@ -1304,10 +1304,6 @@ Please make sure your boards conform to these design rules.</description>
 <attribute name="NAME" x="1.143" y="30.861" size="0.6096" layer="25" font="vector" ratio="20" rot="R90" align="bottom-center"/>
 <attribute name="VALUE" x="3.429" y="30.861" size="0.6096" layer="27" font="vector" ratio="20" rot="R90" align="top-center"/>
 </element>
-<element name="ALWAYS_ON" library="SparkFun-Jumpers" package="SMT-JUMPER_2_NC_PASTE_NO-SILK" package3d_urn="urn:adsk.eagle:package:39283/1" value="JUMPER-SMT_2_NC_PASTE_NO-SILK" x="-2.921" y="1.016" smashed="yes">
-<attribute name="NAME" x="-2.921" y="2.159" size="0.6096" layer="25" font="vector" ratio="20" align="bottom-center"/>
-<attribute name="VALUE" x="-2.921" y="-0.127" size="0.6096" layer="27" font="vector" ratio="20" align="top-center"/>
-</element>
 </elements>
 <signals>
 <signal name="BSDA">
@@ -1764,8 +1760,6 @@ Please make sure your boards conform to these design rules.</description>
 <wire x1="47.8583" y1="17.9476" x2="48.8544" y2="17.9476" width="0.254" layer="1"/>
 <wire x1="49.53" y1="17.272" x2="49.53" y2="12.71" width="0.254" layer="1"/>
 <wire x1="48.8544" y1="17.9476" x2="49.53" y2="17.272" width="0.254" layer="1"/>
-<contactref element="ALWAYS_ON" pad="2"/>
-<wire x1="-2.5146" y1="1.016" x2="17.14" y2="9.76" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="N$4">
 <contactref element="R2" pad="2"/>
@@ -2022,8 +2016,6 @@ Please make sure your boards conform to these design rules.</description>
 <wire x1="46.8274" y1="19.8476" x2="47.8583" y2="19.8476" width="0.254" layer="1"/>
 <wire x1="26.072" y1="48.768" x2="40.8651625" y2="48.768" width="0.254" layer="16"/>
 <wire x1="44.1072" y1="22.5678" x2="46.8274" y2="19.8476" width="0.254" layer="1"/>
-<contactref element="ALWAYS_ON" pad="1"/>
-<wire x1="-3.3274" y1="1.016" x2="47.8583" y2="19.8476" width="0" layer="19" extent="1-1"/>
 </signal>
 </signals>
 <mfgpreviewcolors>
