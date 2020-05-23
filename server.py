@@ -15,11 +15,14 @@ import json
 import requests
 import csv
 import re
+from collections import defaultdict, namedtuple
+import datetime
+from calendar import monthrange
 
 app = Flask("simpleServer")
 
 
-c = ConfigParser.SafeConfigParser()
+c = ConfigParser.ConfigParser()
 configPath=None
 
 for p in ["/opt/tinkeraccess/server.cfg", "server.cfg"]:
@@ -294,6 +297,33 @@ def userAccessInterface(userid):
   username   = query_db("select user.name from user where id=%s" % userid)[0][0]
   return render_template('admin_userAccess.html', devices=allDevices, access=userAccess, userid=userid, username=username)
 
+@app.route("/toolSummary")
+@app.route("/toolSummary/<start_date>")
+@app.route("/toolSummary/<start_date>/<end_date>")
+def toolSummaryInterface(start_date=None, end_date=None):
+  #if request.cookies.get('password') != C_password:
+  #  return redirect("/")
+
+  # calculate default start and end dates
+  if start_date is None:
+    today = datetime.datetime.now()
+    start_date = datetime.datetime(today.year - (today.month==1), ((today.month - 2)%12)+1, 1)
+  else:
+    start_date = datetime.datetime.strptime(start_date, "%Y-%m-%d")
+
+  if end_date is None:
+    end_year = start_date.year + (start_date.month==12)
+    end_month = ((start_date.month+1)%12)
+    end_day = min(start_date.day, monthrange(end_year, end_month)[1])
+    end_date = datetime.datetime(end_year, end_month, end_day)
+  else:
+    end_date = datetime.datetime.strptime(end_date, "%Y-%m-%d")
+
+  tool_summary = genToolSummary(start_date, end_date)
+  return render_template('toolUse.html', tools = tool_summary,
+          start = start_date.strftime("%Y-%m-%d"),
+          end = end_date.strftime("%Y-%m-%d"))
+
 @app.route("/admin/interface/log")
 def viewLog():
   if request.cookies.get('password') != C_password:
@@ -309,6 +339,143 @@ def csvHTMLInterface():
   
   return render_template('admin_csv.html')
 
+#### Helper functions for tool summary ####
+
+# define some classes for data records
+class ToolSummary:
+  __slots__ = ['logins', 'logouts', 'total_time']
+  def __init__(self, logins=0, logouts=0, total_time=datetime.timedelta()):
+    self.logins = logins
+    self.logouts = logouts
+    self.total_time = total_time
+
+  def __repr__(self):
+    return "ToolSummary(logins={}, logouts={}, total_time={})".format(
+        self.logins, self.logouts, self.total_time)
+
+class ToolState:
+  __slots__ = ['in_use', 'active_user', 'login_time']
+  def __init__(self, in_use=False, active_user=0, login_time=0):
+    self.in_use = in_use
+    self.active_user = active_user
+    self.login_time = login_time
+
+class UserToolSummary:
+  __slots__ = ['name', 'logins', 'total_time']
+  def __init__(self, name='', logins=0, total_time=datetime.timedelta()):
+    self.name = ''
+    self.logins = logins
+    self.total_time = total_time
+
+  def __repr__(self):
+    return "UserToolSummary(logins={}, total_time={})".format(
+        self.logins, self.total_time)
+
+  def __lt__(self, other):
+    return self.total_time < other.total_time
+
+class DefaultDictByKey(dict):
+    def __init__(self, message):
+        self.message = str(message)
+
+    def __missing__(self, key):
+        return self.message+str(key)
+
+def genToolSummary(start_date, end_date):
+  '''Function to generate tool summaries given start and end dates
+        Input: start_date, end_date; defaults to "last month"
+        Output: Dictionary of tools, with associated summaries'''
+
+  tools = query_db("SELECT id, name FROM device")
+  toolnames = {}
+  for tool in tools:
+    toolnames[str(tool[0])] = tool[1]
+
+  users = query_db("SELECT id, name, code FROM user")
+  user_id_to_name = DefaultDictByKey("Unknown user, id ")
+  user_code_to_id = {}
+  for user in users:
+    user_id_to_name[str(user[0])] = str(user[1])
+    user_code_to_id[str(user[2])] = str(user[0])
+
+  # generate summaries
+  msgs = query_db("SELECT message, Timestamp FROM log WHERE Timestamp BETWEEN ? AND ?", (start_date.strftime('%Y-%m-%d'), end_date.strftime('%Y-%m-%d')))
+
+  summaries = defaultdict(ToolSummary)
+  states = defaultdict(ToolState)
+  user_summaries = defaultdict(UserToolSummary)
+
+  other_msgs = 0;
+
+  unmatched = 0
+  for msg in msgs:
+    ts = datetime.datetime.strptime(msg[1], '%Y-%m-%d %H:%M:%S')
+    fields = msg[0].split(':')
+    if (len(fields) != 3) or (fields[0] not in ('login', 'logout')):
+      other_msgs += 1
+      continue
+
+    tool = fields[1]
+    user = fields[2]
+    if fields[0] == 'login':
+      summaries[tool].logins += 1
+      if states[tool].in_use:
+        pass
+        #print('Login without logout: ', ts, toolnames[tool],
+            #user_id_to_name[user], states[tool].login_time)
+      states[tool].in_use = True
+      states[tool].active_user = user
+      states[tool].login_time = ts
+      user_summaries[(user, tool)].logins += 1
+      user_summaries[(user, tool)].name = user_id_to_name[user]
+    elif fields[0] == 'logout':
+      try:
+        user_id = user_code_to_id[user]
+      except KeyError:
+        if states[tool].in_use:
+          user_id = states[tool].active_user
+          user_code_to_id[user] = user_id
+          print(("Unknown user, code {}. Assuming user id {} from "+
+                  "prior tool login").format(user, user_id))
+        else:
+          print("Unknown user, code", user)
+
+      summaries[tool].logouts += 1
+      if not states[tool].in_use:
+        pass
+        #print('Logout without login: ', ts, toolnames[tool],
+        #    user_id_to_name[user])
+      else:
+        states[tool].in_use = False
+        summaries[tool].total_time += (ts - states[tool].login_time)
+        if states[tool].active_user == user_id:
+          user_summaries[(user_id, tool)].total_time += (ts - states[tool].login_time)
+        else:
+          unmatched += 1
+
+  leaderboards = defaultdict(list)
+  for ((_, tool), s) in user_summaries.items():
+    leaderboards[tool].append(s)
+
+  #print('non-login/logout messages:', other_msgs)
+  #print('unmatched login/logout pairs:', unmatched)
+
+  out_sum = dict()
+  for (tool, s) in summaries.items():
+    out_sum[tool] = dict()
+    out_sum[tool]['name'] = toolnames[tool]
+    out_sum[tool]['logins'] = s.logins
+    out_sum[tool]['logouts'] = s.logouts
+    out_sum[tool]['total'] = s.total_time
+    out_sum[tool]['leaderboard'] = list()
+
+    leaderboards[tool].sort()
+    for s in list(reversed(leaderboards[tool]))[:10]:
+      out_sum[tool]['leaderboard'].append((s.name, s.total_time))
+
+  return out_sum
+
 if __name__ == "__main__":
   #app.run(host='0.0.0.0')
-  app.run(host='0.0.0.0', debug=True)
+  use_reload = not (len(sys.argv) > 1 and sys.argv[1] == '--noreload')
+  app.run(host='0.0.0.0', debug=True, use_reloader=use_reload)
