@@ -5897,6 +5897,8 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <sheets>
 <sheet>
 <plain>
+<text x="-15.24" y="142.24" size="1.778" layer="91">GPIO 17 is used by the RELAY.
+GPIO 20, 19, 21 are for the RGB LED.</text>
 </plain>
 <instances>
 <instance part="RPI1" gate="G$1" x="2.54" y="114.3" smashed="yes"/>
@@ -6198,7 +6200,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <label x="-27.94" y="127" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="GPIO17" class="0">
+<net name="RELAY" class="0">
 <segment>
 <pinref part="RPI1" gate="G$1" pin="GPIO17"/>
 <wire x1="-15.24" y1="121.92" x2="-27.94" y2="121.92" width="0.1524" layer="91"/>
@@ -6282,7 +6284,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <wire x1="-35.56" y1="99.06" x2="-63.5" y2="99.06" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="GPIO19" class="0">
+<net name="LED_GREEN" class="0">
 <segment>
 <pinref part="R6" gate="G$1" pin="1"/>
 <wire x1="33.02" y1="170.18" x2="17.78" y2="170.18" width="0.1524" layer="91"/>
@@ -6291,7 +6293,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <segment>
 <pinref part="RPI1" gate="G$1" pin="GPIO19"/>
 <wire x1="-30.48" y1="91.44" x2="-15.24" y2="91.44" width="0.1524" layer="91"/>
-<label x="-27.94" y="91.44" size="1.778" layer="95"/>
+<label x="-33.02" y="91.44" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="GPIO26" class="0">
@@ -6533,7 +6535,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <label x="-7.62" y="167.64" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="GPIO20" class="0">
+<net name="LED_BLUE" class="0">
 <segment>
 <pinref part="RPI1" gate="G$1" pin="GPIO20"/>
 <wire x1="22.86" y1="88.9" x2="38.1" y2="88.9" width="0.1524" layer="91"/>
@@ -6545,7 +6547,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <label x="12.7" y="172.72" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="GPIO21" class="0">
+<net name="LED_RED" class="0">
 <segment>
 <wire x1="22.86" y1="86.36" x2="38.1" y2="86.36" width="0.1524" layer="91"/>
 <pinref part="RPI1" gate="G$1" pin="GPIO21"/>
@@ -6975,6 +6977,10 @@ You are welcome to use this library for commercial purposes. For attribution, we
 </schematic>
 </drawing>
 <compatibility>
+<note version="6.3" minversion="6.2.2" severity="warning">
+Since Version 6.2.2 text objects can contain more than one line,
+which will not be processed correctly with this version.
+</note>
 <note version="8.2" severity="warning">
 Since Version 8.2, EAGLE supports online libraries. The ids
 of those online libraries will not be understood (or retained)

@@ -5856,7 +5856,6 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="GND16" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="U1" library="TinkerMill" deviceset="SI8600" device="SO-8" package3d_urn="urn:adsk.eagle:package:9206928/1" value="SOIC-8SOIC-8"/>
 <part name="BUZZ" library="SparkFun-Jumpers" deviceset="JUMPER-SMT_2_NC_PASTE" device="_NO-SILK" package3d_urn="urn:adsk.eagle:package:39283/1"/>
-<part name="ALWAYS_ON" library="SparkFun-Jumpers" deviceset="JUMPER-SMT_2_NC_PASTE" device="_NO-SILK" package3d_urn="urn:adsk.eagle:package:39283/1"/>
 </parts>
 <sheets>
 <sheet>
@@ -6111,8 +6110,8 @@ GPIO 20, 19, 21 are for the RGB LED.</text>
 <instance part="GND15" gate="1" x="-106.68" y="198.12" smashed="yes">
 <attribute name="VALUE" x="-109.22" y="195.58" size="1.778" layer="96"/>
 </instance>
-<instance part="SUPPLY8" gate="G$1" x="-124.46" y="228.6" smashed="yes">
-<attribute name="VALUE" x="-124.46" y="231.394" size="1.778" layer="96" align="bottom-center"/>
+<instance part="SUPPLY8" gate="G$1" x="-124.46" y="223.52" smashed="yes">
+<attribute name="VALUE" x="-124.46" y="226.314" size="1.778" layer="96" align="bottom-center"/>
 </instance>
 <instance part="C5" gate="G$1" x="-93.98" y="213.36" smashed="yes">
 <attribute name="NAME" x="-92.456" y="216.281" size="1.778" layer="95" font="vector"/>
@@ -6128,10 +6127,6 @@ GPIO 20, 19, 21 are for the RGB LED.</text>
 <instance part="BUZZ" gate="G$1" x="119.38" y="137.16" smashed="yes" rot="R90">
 <attribute name="NAME" x="116.84" y="134.62" size="1.778" layer="95" font="vector" rot="R90"/>
 <attribute name="VALUE" x="121.92" y="134.62" size="1.778" layer="96" font="vector" rot="R90" align="top-left"/>
-</instance>
-<instance part="ALWAYS_ON" gate="G$1" x="-134.62" y="220.98" smashed="yes" rot="R90">
-<attribute name="NAME" x="-137.16" y="218.44" size="1.778" layer="95" font="vector" rot="R90"/>
-<attribute name="VALUE" x="-132.08" y="218.44" size="1.778" layer="96" font="vector" rot="R90" align="top-left"/>
 </instance>
 </instances>
 <busses>
@@ -6670,12 +6665,8 @@ GPIO 20, 19, 21 are for the RGB LED.</text>
 <segment>
 <pinref part="IC1" gate="G1" pin="IN"/>
 <wire x1="-119.38" y1="218.44" x2="-124.46" y2="218.44" width="0.1524" layer="91"/>
-<wire x1="-124.46" y1="218.44" x2="-124.46" y2="226.06" width="0.1524" layer="91"/>
+<wire x1="-124.46" y1="218.44" x2="-124.46" y2="223.52" width="0.1524" layer="91"/>
 <pinref part="SUPPLY8" gate="G$1" pin="5V"/>
-<pinref part="ALWAYS_ON" gate="G$1" pin="2"/>
-<wire x1="-124.46" y1="226.06" x2="-124.46" y2="228.6" width="0.1524" layer="91"/>
-<wire x1="-134.62" y1="226.06" x2="-124.46" y2="226.06" width="0.1524" layer="91"/>
-<junction x="-124.46" y="226.06"/>
 </segment>
 </net>
 <net name="N$4" class="0">
@@ -6931,9 +6922,6 @@ GPIO 20, 19, 21 are for the RGB LED.</text>
 <pinref part="IC1" gate="G1" pin="EN"/>
 <wire x1="-124.46" y1="213.36" x2="-119.38" y2="213.36" width="0.1524" layer="91"/>
 <label x="-129.54" y="213.36" size="1.778" layer="95"/>
-<pinref part="ALWAYS_ON" gate="G$1" pin="1"/>
-<wire x1="-134.62" y1="215.9" x2="-134.62" y2="213.36" width="0.1524" layer="91"/>
-<wire x1="-124.46" y1="213.36" x2="-134.62" y2="213.36" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="RPI1" gate="G$1" pin="GPIO27"/>

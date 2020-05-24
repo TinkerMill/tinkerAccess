@@ -6212,13 +6212,6 @@ GPIO 20, 19, 21 are for the RGB LED.</text>
 <label x="142.24" y="119.38" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="GPIO27" class="0">
-<segment>
-<pinref part="RPI1" gate="G$1" pin="GPIO27"/>
-<wire x1="-27.94" y1="119.38" x2="-15.24" y2="119.38" width="0.1524" layer="91"/>
-<label x="-27.94" y="119.38" size="1.778" layer="95"/>
-</segment>
-</net>
 <net name="GPIO22" class="0">
 <segment>
 <pinref part="RPI1" gate="G$1" pin="GPIO22"/>
@@ -6710,10 +6703,6 @@ GPIO 20, 19, 21 are for the RGB LED.</text>
 <pinref part="IC1" gate="G1" pin="IN"/>
 <wire x1="-119.38" y1="218.44" x2="-124.46" y2="218.44" width="0.1524" layer="91"/>
 <wire x1="-124.46" y1="218.44" x2="-124.46" y2="223.52" width="0.1524" layer="91"/>
-<wire x1="-124.46" y1="218.44" x2="-124.46" y2="213.36" width="0.1524" layer="91"/>
-<junction x="-124.46" y="218.44"/>
-<pinref part="IC1" gate="G1" pin="EN"/>
-<wire x1="-124.46" y1="213.36" x2="-119.38" y2="213.36" width="0.1524" layer="91"/>
 <pinref part="SUPPLY8" gate="G$1" pin="5V"/>
 </segment>
 </net>
@@ -6963,6 +6952,18 @@ GPIO 20, 19, 21 are for the RGB LED.</text>
 <wire x1="60.96" y1="208.28" x2="38.1" y2="208.28" width="0.1524" layer="91"/>
 <label x="55.88" y="208.28" size="1.778" layer="95"/>
 <pinref part="U1" gate="G$1" pin="BGND"/>
+</segment>
+</net>
+<net name="3.3V_EN" class="0">
+<segment>
+<pinref part="IC1" gate="G1" pin="EN"/>
+<wire x1="-124.46" y1="213.36" x2="-119.38" y2="213.36" width="0.1524" layer="91"/>
+<label x="-129.54" y="213.36" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="RPI1" gate="G$1" pin="GPIO27"/>
+<wire x1="-27.94" y1="119.38" x2="-15.24" y2="119.38" width="0.1524" layer="91"/>
+<label x="-27.94" y="119.38" size="1.778" layer="95"/>
 </segment>
 </net>
 </nets>

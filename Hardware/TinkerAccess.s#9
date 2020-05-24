@@ -6800,6 +6800,11 @@ SMD package'</description>
 <label x="-15.24" y="215.9" size="1.778" layer="95"/>
 <pinref part="U1" gate="G$1" pin="AVDD"/>
 </segment>
+<segment>
+<wire x1="60.96" y1="215.9" x2="38.1" y2="215.9" width="0.1524" layer="91"/>
+<label x="55.88" y="215.9" size="1.778" layer="95"/>
+<pinref part="U1" gate="G$1" pin="BVDD"/>
+</segment>
 </net>
 <net name="SDA" class="0">
 <segment>
@@ -6840,13 +6845,6 @@ SMD package'</description>
 <wire x1="60.96" y1="208.28" x2="38.1" y2="208.28" width="0.1524" layer="91"/>
 <label x="55.88" y="208.28" size="1.778" layer="95"/>
 <pinref part="U1" gate="G$1" pin="BGND"/>
-</segment>
-</net>
-<net name="N$12" class="0">
-<segment>
-<wire x1="60.96" y1="215.9" x2="38.1" y2="215.9" width="0.1524" layer="91"/>
-<label x="55.88" y="215.9" size="1.778" layer="95"/>
-<pinref part="U1" gate="G$1" pin="BVDD"/>
 </segment>
 </net>
 </nets>
