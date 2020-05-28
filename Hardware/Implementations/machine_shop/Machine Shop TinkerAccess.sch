@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="9.5.1">
+<eagle version="9.6.1">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -1553,7 +1553,7 @@ ELECTRICAL SUB-PANEL</text>
 <text x="53.34" y="170.18" size="2.54" layer="94" align="bottom-center">MAIN FEED</text>
 <text x="175.26" y="12.7" size="2.1844" layer="95" align="top-left">TinkerMill
 Longmont, CO</text>
-<text x="243.84" y="7.62" size="2.1844" layer="95">0.2</text>
+<text x="243.84" y="7.62" size="2.1844" layer="95">0.3</text>
 <wire x1="46.99" y1="53.34" x2="64.77" y2="53.34" width="0.254" layer="94"/>
 <wire x1="64.77" y1="53.34" x2="64.77" y2="35.56" width="0.254" layer="94"/>
 <wire x1="64.77" y1="35.56" x2="46.99" y2="35.56" width="0.254" layer="94"/>
@@ -1683,8 +1683,8 @@ SUB-PANEL</text>
 TO TINKERACCESS MODULE</text>
 <text x="175.26" y="12.7" size="2.1844" layer="95" align="top-left">TinkerMill
 Longmont, CO</text>
-<text x="243.84" y="7.62" size="2.1844" layer="95">0.2</text>
-<text x="127" y="132.08" size="2.54" layer="97" align="bottom-center">HIGH VOLTAGE CONTACTOR ENCLOSURE</text>
+<text x="243.84" y="7.62" size="2.1844" layer="95">0.3</text>
+<text x="127" y="139.7" size="2.54" layer="97" align="bottom-center">HIGH VOLTAGE CONTACTOR ENCLOSURE</text>
 <wire x1="21.59" y1="86.36" x2="33.02" y2="86.36" width="0.1524" layer="94" style="shortdash"/>
 <wire x1="33.02" y1="86.36" x2="33.02" y2="76.2" width="0.1524" layer="94" style="shortdash"/>
 <wire x1="33.02" y1="76.2" x2="21.59" y2="76.2" width="0.1524" layer="94" style="shortdash"/>
@@ -1695,9 +1695,9 @@ Longmont, CO</text>
 <wire x1="33.02" y1="105.41" x2="20.32" y2="105.41" width="0.1524" layer="94" style="shortdash"/>
 <wire x1="20.32" y1="105.41" x2="20.32" y2="114.3" width="0.1524" layer="94" style="shortdash"/>
 <wire x1="246.38" y1="40.64" x2="53.34" y2="40.64" width="0.1524" layer="94" style="shortdash"/>
-<wire x1="53.34" y1="40.64" x2="53.34" y2="129.54" width="0.1524" layer="94" style="shortdash"/>
-<wire x1="53.34" y1="129.54" x2="246.38" y2="129.54" width="0.1524" layer="94" style="shortdash"/>
-<wire x1="246.38" y1="129.54" x2="246.38" y2="40.64" width="0.1524" layer="94" style="shortdash"/>
+<wire x1="53.34" y1="40.64" x2="53.34" y2="137.16" width="0.1524" layer="94" style="shortdash"/>
+<wire x1="53.34" y1="137.16" x2="246.38" y2="137.16" width="0.1524" layer="94" style="shortdash"/>
+<wire x1="246.38" y1="137.16" x2="246.38" y2="40.64" width="0.1524" layer="94" style="shortdash"/>
 <wire x1="22.86" y1="64.77" x2="7.62" y2="64.77" width="0.254" layer="94"/>
 <wire x1="7.62" y1="64.77" x2="7.62" y2="41.91" width="0.254" layer="94"/>
 <wire x1="7.62" y1="41.91" x2="22.86" y2="41.91" width="0.254" layer="94"/>
@@ -1716,9 +1716,9 @@ Longmont, CO</text>
 <text x="43.18" y="48.26" size="1.778" layer="97">J1-1</text>
 <text x="43.18" y="45.72" size="1.778" layer="97">J1-2</text>
 <wire x1="175.26" y1="167.64" x2="246.38" y2="167.64" width="0.1524" layer="94" style="shortdash"/>
-<wire x1="246.38" y1="167.64" x2="246.38" y2="137.16" width="0.1524" layer="94" style="shortdash"/>
-<wire x1="246.38" y1="137.16" x2="175.26" y2="137.16" width="0.1524" layer="94" style="shortdash"/>
-<wire x1="175.26" y1="137.16" x2="175.26" y2="167.64" width="0.1524" layer="94" style="shortdash"/>
+<wire x1="246.38" y1="167.64" x2="246.38" y2="142.24" width="0.1524" layer="94" style="shortdash"/>
+<wire x1="246.38" y1="142.24" x2="175.26" y2="142.24" width="0.1524" layer="94" style="shortdash"/>
+<wire x1="175.26" y1="142.24" x2="175.26" y2="167.64" width="0.1524" layer="94" style="shortdash"/>
 <text x="193.04" y="170.18" size="2.54" layer="97" align="bottom-center">DISCONNECT</text>
 <wire x1="25.4" y1="53.34" x2="25.3614125" y2="55.3248" width="0.254" layer="94"/>
 <wire x1="25.3614125" y1="55.3248" x2="25.24681875" y2="57.249290625" width="0.254" layer="94"/>
@@ -1831,9 +1831,9 @@ Longmont, CO</text>
 <attribute name="NAME" x="116.84" y="53.34" size="1.778" layer="95" align="bottom-right"/>
 <attribute name="VALUE" x="121.92" y="53.34" size="1.778" layer="96"/>
 </instance>
-<instance part="SW2" gate="G$1" x="218.44" y="147.32" smashed="yes"/>
-<instance part="SUPPLY2" gate="G$1" x="241.3" y="149.86" smashed="yes">
-<attribute name="VALUE" x="241.3" y="144.78" size="1.778" layer="96" align="top-center"/>
+<instance part="SW2" gate="G$1" x="218.44" y="154.94" smashed="yes"/>
+<instance part="SUPPLY2" gate="G$1" x="241.3" y="154.94" smashed="yes">
+<attribute name="VALUE" x="241.3" y="149.86" size="1.778" layer="96" align="top-center"/>
 </instance>
 <instance part="LP1" gate="G$1" x="240.03" y="53.34" smashed="yes" rot="R90">
 <attribute name="NAME" x="240.03" y="66.04" size="1.778" layer="104" align="center"/>
@@ -1851,21 +1851,31 @@ Longmont, CO</text>
 <net name="S1" class="0">
 <segment>
 <pinref part="K1" gate="G$1" pin="L1"/>
-<wire x1="210.82" y1="86.36" x2="210.82" y2="142.24" width="0.1524" layer="91"/>
+<wire x1="210.82" y1="86.36" x2="210.82" y2="132.08" width="0.1524" layer="91"/>
 <pinref part="SW2" gate="G$1" pin="T1"/>
+<pinref part="CB1" gate="G$1" pin="L1"/>
+<wire x1="210.82" y1="132.08" x2="210.82" y2="149.86" width="0.1524" layer="91"/>
+<wire x1="182.88" y1="124.46" x2="182.88" y2="132.08" width="0.1524" layer="91"/>
+<wire x1="182.88" y1="132.08" x2="210.82" y2="132.08" width="0.1524" layer="91"/>
+<junction x="210.82" y="132.08"/>
 </segment>
 </net>
 <net name="S2" class="0">
 <segment>
 <pinref part="K1" gate="G$1" pin="L2"/>
-<wire x1="218.44" y1="86.36" x2="218.44" y2="142.24" width="0.1524" layer="91"/>
+<wire x1="218.44" y1="86.36" x2="218.44" y2="127" width="0.1524" layer="91"/>
 <pinref part="SW2" gate="G$1" pin="T2"/>
+<pinref part="CB1" gate="G$1" pin="L2"/>
+<wire x1="218.44" y1="127" x2="218.44" y2="149.86" width="0.1524" layer="91"/>
+<wire x1="187.96" y1="124.46" x2="187.96" y2="127" width="0.1524" layer="91"/>
+<wire x1="187.96" y1="127" x2="218.44" y2="127" width="0.1524" layer="91"/>
+<junction x="218.44" y="127"/>
 </segment>
 </net>
 <net name="S3" class="0">
 <segment>
 <pinref part="K1" gate="G$1" pin="L3"/>
-<wire x1="226.06" y1="86.36" x2="226.06" y2="142.24" width="0.1524" layer="91"/>
+<wire x1="226.06" y1="86.36" x2="226.06" y2="149.86" width="0.1524" layer="91"/>
 <pinref part="SW2" gate="G$1" pin="T3"/>
 </segment>
 </net>
@@ -1937,15 +1947,15 @@ Longmont, CO</text>
 <net name="EARTH" class="0">
 <segment>
 <pinref part="SUPPLY2" gate="G$1" pin="EARTH"/>
-<wire x1="241.3" y1="149.86" x2="241.3" y2="152.4" width="0.1524" layer="91"/>
+<wire x1="241.3" y1="154.94" x2="241.3" y2="160.02" width="0.1524" layer="91"/>
 <pinref part="SUPPLY1" gate="G$1" pin="EARTH"/>
 <wire x1="241.3" y1="111.76" x2="241.3" y2="114.3" width="0.1524" layer="91"/>
 <wire x1="241.3" y1="114.3" x2="233.68" y2="114.3" width="0.1524" layer="91"/>
-<wire x1="233.68" y1="114.3" x2="233.68" y2="152.4" width="0.1524" layer="91"/>
+<wire x1="233.68" y1="114.3" x2="233.68" y2="160.02" width="0.1524" layer="91"/>
 <label x="233.68" y="170.18" size="1.778" layer="95" rot="R90" xref="yes"/>
-<wire x1="233.68" y1="152.4" x2="233.68" y2="170.18" width="0.1524" layer="91"/>
-<wire x1="241.3" y1="152.4" x2="233.68" y2="152.4" width="0.1524" layer="91"/>
-<junction x="233.68" y="152.4"/>
+<wire x1="233.68" y1="160.02" x2="233.68" y2="170.18" width="0.1524" layer="91"/>
+<wire x1="241.3" y1="160.02" x2="233.68" y2="160.02" width="0.1524" layer="91"/>
+<junction x="233.68" y="160.02"/>
 <junction x="233.68" y="114.3"/>
 <wire x1="233.68" y1="114.3" x2="233.68" y2="38.1" width="0.1524" layer="91"/>
 <label x="233.68" y="38.1" size="1.778" layer="95" rot="R270" xref="yes"/>
@@ -2188,31 +2198,21 @@ Longmont, CO</text>
 <net name="L1" class="0">
 <segment>
 <pinref part="SW2" gate="G$1" pin="L1"/>
-<wire x1="210.82" y1="152.4" x2="210.82" y2="162.56" width="0.1524" layer="91"/>
 <label x="210.82" y="175.26" size="1.778" layer="95" rot="R90" xref="yes"/>
-<pinref part="CB1" gate="G$1" pin="L1"/>
-<wire x1="210.82" y1="162.56" x2="210.82" y2="175.26" width="0.1524" layer="91"/>
-<wire x1="182.88" y1="124.46" x2="182.88" y2="162.56" width="0.1524" layer="91"/>
-<wire x1="182.88" y1="162.56" x2="210.82" y2="162.56" width="0.1524" layer="91"/>
-<junction x="210.82" y="162.56"/>
+<wire x1="210.82" y1="160.02" x2="210.82" y2="175.26" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="L2" class="0">
 <segment>
 <pinref part="SW2" gate="G$1" pin="L2"/>
-<wire x1="218.44" y1="152.4" x2="218.44" y2="157.48" width="0.1524" layer="91"/>
 <label x="218.44" y="175.26" size="1.778" layer="95" rot="R90" xref="yes"/>
-<pinref part="CB1" gate="G$1" pin="L2"/>
-<wire x1="218.44" y1="157.48" x2="218.44" y2="175.26" width="0.1524" layer="91"/>
-<wire x1="187.96" y1="124.46" x2="187.96" y2="157.48" width="0.1524" layer="91"/>
-<wire x1="187.96" y1="157.48" x2="218.44" y2="157.48" width="0.1524" layer="91"/>
-<junction x="218.44" y="157.48"/>
+<wire x1="218.44" y1="160.02" x2="218.44" y2="175.26" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="L3" class="0">
 <segment>
 <pinref part="SW2" gate="G$1" pin="L3"/>
-<wire x1="226.06" y1="152.4" x2="226.06" y2="175.26" width="0.1524" layer="91"/>
+<wire x1="226.06" y1="160.02" x2="226.06" y2="175.26" width="0.1524" layer="91"/>
 <label x="226.06" y="175.26" size="1.778" layer="95" rot="R90" xref="yes"/>
 </segment>
 </net>
@@ -2222,7 +2222,7 @@ Longmont, CO</text>
 <plain>
 <text x="175.26" y="12.7" size="2.1844" layer="95" align="top-left">TinkerMill
 Longmont, CO</text>
-<text x="243.84" y="7.62" size="2.1844" layer="95">0.2</text>
+<text x="243.84" y="7.62" size="2.1844" layer="95">0.3</text>
 <text x="95.25" y="114.3" size="1.778" layer="97" align="center-left">+5V</text>
 <text x="95.25" y="111.76" size="1.778" layer="97" align="center-left">GND</text>
 <text x="95.25" y="73.66" size="1.778" layer="97" align="center-left">RELAY1</text>
