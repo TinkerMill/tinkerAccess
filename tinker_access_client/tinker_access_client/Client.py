@@ -2,16 +2,16 @@ import time
 import threading
 from transitions import Machine
 
-from State import State
-from PackageInfo import PackageInfo
-from ClientLogger import ClientLogger
-from DeviceApi import DeviceApi, Channel
-from CommandExecutor import CommandExecutor
-from AutoUpdateTimer import AutoUpdateTimer
-from TinkerAccessServerApi import TinkerAccessServerApi
-from ClientOptionParser import ClientOptionParser, ClientOption
-from UserRegistrationException import UserRegistrationException
-from UnauthorizedAccessException import UnauthorizedAccessException
+from .State import State
+from .PackageInfo import PackageInfo
+from .ClientLogger import ClientLogger
+from .DeviceApi import DeviceApi, Channel
+from .CommandExecutor import CommandExecutor
+from .AutoUpdateTimer import AutoUpdateTimer
+from .TinkerAccessServerApi import TinkerAccessServerApi
+from .ClientOptionParser import ClientOptionParser, ClientOption
+from .UserRegistrationException import UserRegistrationException
+from .UnauthorizedAccessException import UnauthorizedAccessException
 
 maximum_lcd_characters = 16
 training_mode_delay_seconds = 2

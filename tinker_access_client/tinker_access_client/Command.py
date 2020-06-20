@@ -1,5 +1,5 @@
 
-from PackageInfo import PackageInfo
+from .PackageInfo import PackageInfo
 
 
 class Command(object):

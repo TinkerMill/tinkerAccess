@@ -2,8 +2,8 @@ import logging
 from setuptools import setup, find_packages
 from setuptools.command.install import install as _install
 
-from tinker_access_client.PackageInfo import PackageInfo
-from tinker_access_client.ServiceInstaller import ServiceInstaller
+from .tinker_access_client.PackageInfo import PackageInfo
+from .tinker_access_client.ServiceInstaller import ServiceInstaller
 
 
 # noinspection PyClassHasNoInit,PyPep8Naming,PyBroadException

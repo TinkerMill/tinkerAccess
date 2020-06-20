@@ -3,12 +3,12 @@ import json
 import serial
 import logging
 import threading
-from LcdApi import LcdApi
-from ClientOptionParser import ClientOption
+from .LcdApi import LcdApi
+from .ClientOptionParser import ClientOption
 
 
 class Channel(object):
-    LCD, SERIAL, LED, PIN = range(0, 4)
+    LCD, SERIAL, LED, PIN = list(range(0, 4))
 
     def __new__(cls, channel):
         for key, value in vars(Channel).items():

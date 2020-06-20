@@ -1,8 +1,8 @@
 import logging
-from ClientOption import ClientOption
-from LoggedRequest import LoggedRequest
-from UserRegistrationException import UserRegistrationException
-from UnauthorizedAccessException import UnauthorizedAccessException
+from .ClientOption import ClientOption
+from .LoggedRequest import LoggedRequest
+from .UserRegistrationException import UserRegistrationException
+from .UnauthorizedAccessException import UnauthorizedAccessException
 
 
 class TinkerAccessServerApi(object):

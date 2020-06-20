@@ -2,8 +2,8 @@ import os
 import logging
 import logging.config as config
 import logging.handlers as handlers
-from ContextFilter import ContextFilter
-from ClientOptionParser import ClientOptionParser, ClientOption
+from .ContextFilter import ContextFilter
+from .ClientOptionParser import ClientOptionParser, ClientOption
 
 
 class ClientLogger(object):

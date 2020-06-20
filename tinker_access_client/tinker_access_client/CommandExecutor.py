@@ -2,7 +2,7 @@ import os
 import tempfile
 import subprocess
 
-from ClientLogger import ClientLogger
+from .ClientLogger import ClientLogger
 
 
 class CommandExecutor(object):
@@ -13,7 +13,7 @@ class CommandExecutor(object):
 
     def ensure_execute_permission(self, path):
         try:
-            os.chmod(path, 0755)
+            os.chmod(path, 0o755)
         except Exception as e:
             self.__logger.exception(e)
             raise e

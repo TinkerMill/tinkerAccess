@@ -1,2 +1,2 @@
-import GPIO
+from . import GPIO
 

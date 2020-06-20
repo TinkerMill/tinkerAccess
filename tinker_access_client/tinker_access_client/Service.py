@@ -15,12 +15,12 @@
 
 import os
 import sys
-from State import State
-from PackageInfo import PackageInfo
-from ClientLogger import ClientLogger
-from ClientDaemon import ClientDaemon
-from CommandHandler import CommandHandler
-from ClientOptionParser import ClientOptionParser, Command
+from .State import State
+from .PackageInfo import PackageInfo
+from .ClientLogger import ClientLogger
+from .ClientDaemon import ClientDaemon
+from .CommandHandler import CommandHandler
+from .ClientOptionParser import ClientOptionParser, Command
 
 
 def __handle_status_command(opts, args):

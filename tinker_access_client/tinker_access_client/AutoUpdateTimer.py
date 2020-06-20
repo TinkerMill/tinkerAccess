@@ -1,9 +1,9 @@
 import threading
 
-from PackageInfo import PackageInfo
-from ClientLogger import ClientLogger
-from ClientOption import ClientOption
-from CommandExecutor import CommandExecutor
+from .PackageInfo import PackageInfo
+from .ClientLogger import ClientLogger
+from .ClientOption import ClientOption
+from .CommandExecutor import CommandExecutor
 
 
 class AutoUpdateTimer(object):

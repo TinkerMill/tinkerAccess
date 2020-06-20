@@ -7,7 +7,7 @@
 
 from flask import Flask,g,request,render_template,redirect
 import sqlite3
-import ConfigParser
+import configparser
 import sys
 import os
 import os.path
@@ -22,7 +22,7 @@ from calendar import monthrange
 app = Flask("simpleServer")
 
 
-c = ConfigParser.ConfigParser()
+c = configparser.ConfigParser()
 configPath=None
 
 for p in ["/opt/tinkeraccess/server.cfg", "server.cfg"]:
@@ -175,7 +175,7 @@ def loadCSV():
   data = request.form['csv'] 
 
   # stip leading , if it is there
-  data = map(lambda x: re.sub('^,', '', x), data.split("\n"))
+  data = [re.sub('^,', '', x) for x in data.split("\n")]
   reader = csv.reader(data, delimiter=',')
   for row in reader:
     if len(row) == 0:

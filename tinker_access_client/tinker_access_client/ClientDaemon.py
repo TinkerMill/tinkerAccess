@@ -4,15 +4,15 @@ import signal
 import subprocess
 from subprocess import CalledProcessError
 
-from State import State
-from Client import Client
-from Command import Command
+from .State import State
+from .Client import Client
+from .Command import Command
 from daemonize import Daemonize
-from PackageInfo import PackageInfo
-from ClientOption import ClientOption
-from ClientLogger import ClientLogger
-from LoggedRequest import LoggedRequest
-from CommandExecutor import CommandExecutor
+from .PackageInfo import PackageInfo
+from .ClientOption import ClientOption
+from .ClientLogger import ClientLogger
+from .LoggedRequest import LoggedRequest
+from .CommandExecutor import CommandExecutor
 
 
 # noinspection PyClassHasNoInit

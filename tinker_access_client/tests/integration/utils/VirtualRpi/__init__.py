@@ -1,5 +1,5 @@
 import sys
-import RPi
+from . import RPi
 from tests.integration.utils.VirtualRpi.RPi.GPIO import GPIO
 
 

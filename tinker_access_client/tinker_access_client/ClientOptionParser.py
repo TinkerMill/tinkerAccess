@@ -1,11 +1,11 @@
 import os
 import sys
-import ConfigParser
+import configparser
 from optparse import OptionParser, OptionGroup
 
-from Command import Command
-from PackageInfo import PackageInfo
-from ClientOption import ClientOption
+from .Command import Command
+from .PackageInfo import PackageInfo
+from .ClientOption import ClientOption
 
 ClientOptionDefaults = {
     ClientOption.DEBUG: False,
@@ -294,7 +294,7 @@ class ClientOptionParser(object):
             options = options + group.option_list[:]
 
         if os.path.isfile(items.get(ClientOption.CONFIG_FILE)):
-            config_file_parser = ConfigParser.RawConfigParser()
+            config_file_parser = configparser.RawConfigParser()
             config_file_parser.read(items.get(ClientOption.CONFIG_FILE))
             for item in config_file_parser.items('config'):
                 option = next((i for i in options if i.dest == item[0]), None)

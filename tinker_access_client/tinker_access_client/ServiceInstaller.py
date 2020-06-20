@@ -1,9 +1,9 @@
 import os
 import time
 
-from PackageInfo import PackageInfo
-from ClientLogger import ClientLogger
-from CommandExecutor import CommandExecutor
+from .PackageInfo import PackageInfo
+from .ClientLogger import ClientLogger
+from .CommandExecutor import CommandExecutor
 
 
 class ServiceInstaller(object):

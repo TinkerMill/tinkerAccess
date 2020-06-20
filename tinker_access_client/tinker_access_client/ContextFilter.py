@@ -1,6 +1,6 @@
 import logging
-from PackageInfo import PackageInfo
-from ClientOptionParser import ClientOption
+from .PackageInfo import PackageInfo
+from .ClientOptionParser import ClientOption
 
 
 class ContextFilter(logging.Filter):

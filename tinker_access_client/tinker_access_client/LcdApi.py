@@ -32,7 +32,7 @@ Made available under GNU GENERAL PUBLIC LICENSE
 
 import time
 import logging
-import I2CApi
+from . import I2CApi
 
 # LCD Address
 LCD_ADDRESS = 0x27

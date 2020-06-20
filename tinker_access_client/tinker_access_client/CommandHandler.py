@@ -1,6 +1,6 @@
 import logging
-from Command import Command
-from PackageInfo import PackageInfo
+from .Command import Command
+from .PackageInfo import PackageInfo
 
 
 class CommandHandler(object):

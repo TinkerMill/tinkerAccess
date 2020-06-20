@@ -1,11 +1,11 @@
-from __future__ import absolute_import
+
 
 import os
 import unittest
 
 from mock import patch
 from optparse import OptionParser
-from ConfigParser import RawConfigParser
+from configparser import RawConfigParser
 from tinker_access_client.tinker_access_client.ClientOptionParser import ClientOption, ClientOptionParser
 
 
@@ -34,12 +34,12 @@ class ClientOptionParserTests(unittest.TestCase):
         ]
 
         opts = ClientOptionParser().parse_args(command_line_arguments)[0]
-        expected_keys = vars(ClientOption).keys()
+        expected_keys = list(vars(ClientOption).keys())
         expected_keys.remove('__module__')
         expected_keys.remove('__doc__')
         expected_number_of_options = len(expected_keys)
 
-        actual_keys = opts.keys()
+        actual_keys = list(opts.keys())
         actual_number_of_options = len(actual_keys)
 
         for key in expected_keys:

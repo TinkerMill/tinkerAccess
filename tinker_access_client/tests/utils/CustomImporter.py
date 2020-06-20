@@ -1,8 +1,8 @@
 import sys
 
-import MockRPi
-import MockLcd
-import serial
+from . import MockRPi
+from . import MockLcd
+from . import serial
 
 
 def add_custom_importer():

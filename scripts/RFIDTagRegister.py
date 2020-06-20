@@ -18,13 +18,13 @@ default_rfid_reader_port = "COM3"
 
 # main program for reading and pasting tag numbers
 def main(rfid_reader = default_rfid_reader_port):      
-  print "Connecting to Sparkfun RFID reader on port ", rfid_reader
+  print("Connecting to Sparkfun RFID reader on port ", rfid_reader)
   try:
     ser = serial.Serial(rfid_reader, timeout=1)                 # connect to the rfid reader
-    print "Successfully connected to RFID reader on ", rfid_reader
+    print("Successfully connected to RFID reader on ", rfid_reader)
     rfid_reader_opened = 1
   except:
-    print "Failed to connect to RFID reader on port ", rfid_reader
+    print("Failed to connect to RFID reader on port ", rfid_reader)
     rfid_reader_opened = 0
 
   # if the RFID reader was successfully connected, start reading and processing tags    
@@ -39,7 +39,7 @@ def main(rfid_reader = default_rfid_reader_port):
       if len(rfid_data) > 0:
 
         rfid_data = rfid_data[1:13]     # strip off all data but the tag number
-        print "Tag data:", rfid_data    # print the tag number to console
+        print("Tag data:", rfid_data)    # print the tag number to console
         pyautogui.typewrite(rfid_data)  # auto-type the tag number to focus window      
         pyautogui.typewrite(['tab'])    # auto-type a tab to the focus window to move to the next field
 
