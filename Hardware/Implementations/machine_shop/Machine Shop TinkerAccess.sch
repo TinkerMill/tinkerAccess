@@ -1555,7 +1555,7 @@ ELECTRICAL SUB-PANEL</text>
 <text x="68.58" y="170.18" size="2.54" layer="94" align="bottom-center">MAIN FEED</text>
 <text x="175.26" y="12.7" size="2.1844" layer="95" align="top-left">TinkerMill
 Longmont, CO</text>
-<text x="243.84" y="7.62" size="2.1844" layer="95">0.4</text>
+<text x="243.84" y="7.62" size="2.1844" layer="95">0.5</text>
 <wire x1="95.25" y1="53.34" x2="113.03" y2="53.34" width="0.254" layer="94"/>
 <wire x1="113.03" y1="53.34" x2="113.03" y2="35.56" width="0.254" layer="94"/>
 <wire x1="113.03" y1="35.56" x2="95.25" y2="35.56" width="0.254" layer="94"/>
@@ -1684,7 +1684,7 @@ SUB-PANEL</text>
 TO TINKERACCESS MODULE</text>
 <text x="175.26" y="12.7" size="2.1844" layer="95" align="top-left">TinkerMill
 Longmont, CO</text>
-<text x="243.84" y="7.62" size="2.1844" layer="95">0.4</text>
+<text x="243.84" y="7.62" size="2.1844" layer="95">0.5</text>
 <text x="127" y="139.7" size="2.54" layer="97" align="bottom-center">HIGH VOLTAGE CONTACTOR ENCLOSURE</text>
 <wire x1="21.59" y1="86.36" x2="33.02" y2="86.36" width="0.1524" layer="94" style="shortdash"/>
 <wire x1="33.02" y1="86.36" x2="33.02" y2="76.2" width="0.1524" layer="94" style="shortdash"/>
@@ -1720,7 +1720,7 @@ Longmont, CO</text>
 <text x="193.04" y="170.18" size="2.54" layer="97" align="bottom-center">DISCONNECT</text>
 <text x="15.24" y="182.88" size="1.778" layer="97" align="top-left">NOTES:
 
-1) E-STOP SENSE IS CONNECTED TO RPi GPIO26 SO THAT TINKERACCESS CAN AUTOMATICALLY LOGOUT USER
+1) E-STOP SENSE IS CONNECTED TO RPi GPIO6 SO THAT TINKERACCESS CAN AUTOMATICALLY LOGOUT USER
      ON AN E-STOP EVENT. THIS ENSURES THAT POWER IS NOT IMMEDIATELY RESTORED WHEN E-STOP IS RESET.</text>
 <text x="240.03" y="53.34" size="1.778" layer="97" align="center">G</text>
 <wire x1="25.4" y1="49.53" x2="25.313453125" y2="51.8309" width="0.254" layer="94"/>
@@ -2255,7 +2255,7 @@ Longmont, CO</text>
 <plain>
 <text x="175.26" y="12.7" size="2.1844" layer="95" align="top-left">TinkerMill
 Longmont, CO</text>
-<text x="243.84" y="7.62" size="2.1844" layer="95">0.4</text>
+<text x="243.84" y="7.62" size="2.1844" layer="95">0.5</text>
 <text x="95.25" y="114.3" size="1.778" layer="97" align="center-left">+5V</text>
 <text x="95.25" y="111.76" size="1.778" layer="97" align="center-left">GND</text>
 <text x="95.25" y="73.66" size="1.778" layer="97" align="center-left">RELAY1</text>
@@ -2463,10 +2463,10 @@ FROM CONTACTOR ENCLOSURE</text>
 </net>
 <net name="RED" class="0">
 <segment>
-<label x="114.3" y="45.72" size="1.778" layer="95" rot="R90"/>
-<pinref part="J4" gate="G$1" pin="1"/>
-<wire x1="22.86" y1="43.18" x2="114.3" y2="43.18" width="0.1524" layer="91"/>
-<wire x1="114.3" y1="43.18" x2="114.3" y2="53.34" width="0.1524" layer="91"/>
+<label x="132.08" y="45.72" size="1.778" layer="95" rot="R90"/>
+<wire x1="22.86" y1="43.18" x2="132.08" y2="43.18" width="0.1524" layer="91"/>
+<pinref part="J6" gate="G$1" pin="2"/>
+<wire x1="132.08" y1="43.18" x2="132.08" y2="53.34" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="BRN" class="0">
