@@ -43,50 +43,31 @@ class i2c_device:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.bus.close()
-        pass
 
     # Write a single command to the i2c bus
     def write_cmd(self, cmd):
         self.bus.write_byte_data(self.addr, cmd, 0)
         time.sleep(0.0001)
-	#self.bus.close()#
 
     # Write a command and argument to the i2c bus
     def write_cmd_arg(self, cmd, data):
         self.bus.write_byte_data(self.addr, cmd, data)
         time.sleep(0.0001)
-	#self.bus.close()#
 
     # Write a block of data to the i2c bus
     def write_block_data(self, cmd, data):
         self.bus.write_i2c_block_data(self.addr, cmd, data)
         time.sleep(0.0001)
-	#self.bus.close()#
 
     # Read a single byte from the i2c bus
     def read(self):
-         
-	bit = self.bus.read_byte(self.addr)#
-	time.sleep(0.001)#
-#	self.bus.close()#
-	return bit#
+        return self.bus.read_byte(self.addr)
 
     # Read from the i2c bus
     def read_data(self, cmd):
- 	bit = self.bus.read_byte_data(self.addr, cmd)#
-	time.sleep(0.001)#
-#	self.bus.close()#
-	return bit#
+        return self.bus.read_byte_data(self.addr, cmd)
 
     # Read a block of data from the i2c bus
     def read_block_data(self, cmd):
-        bit = self.bus.read_block_data(self.addr, cmd)#
-	time.sleep(0.001)#
-#	self.bus.close()#
-	return bit#
+        return self.bus.read_block_data(self.addr, cmd)
 
-
-
-
-    def close(self):
-	self.bus.close()
