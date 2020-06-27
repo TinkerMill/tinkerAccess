@@ -33,14 +33,32 @@ Made available under GNU GENERAL PUBLIC LICENSE
 import time
 import logging
 import I2CApi
+from ClientOptionParser import ClientOption
 
 # LCD Address
-LCD_ADDRESS = 0x27
+LCD_BACKPACK_ADDRESS = 0x27
+LCD_SERLCD_ADDRESS = 0x72
 
 # LCD display init sleep delay
 LCD_INITDELAY = 0.2
 
-# LCD commands
+# SerLCD command characters
+SERLCD_SPECIAL_CMD = 254
+SERLCD_SETTING_CMD = 0x7C
+
+# SerLCD special commands
+SERLCD_RETURNHOME = 0x02
+SERLCD_ENTRYMODESET = 0x04
+SERLCD_DISPLAYCONTROL = 0x08
+SERLCD_CURSORSHIFT = 0x10
+SERLCD_SETDDRAMADDR = 0x80
+
+# SerLCD setting commands (partial list)
+SERLCD_CONTRAST = 0x18
+SERLCD_RGB_BACKLIGHT = 0x2B
+SERLCD_CLEARDISPLAY = 0x2D
+
+# LCD commands for backpack only
 LCD_CLEARDISPLAY = 0x01
 LCD_RETURNHOME = 0x02
 LCD_ENTRYMODESET = 0x04
@@ -50,13 +68,13 @@ LCD_FUNCTIONSET = 0x20
 LCD_SETCGRAMADDR = 0x40
 LCD_SETDDRAMADDR = 0x80
 
-# flags for LCD display entry mode
+# flags for LCD display entry mode, common to backpack and SerLCD
 LCD_ENTRYRIGHT = 0x00
 LCD_ENTRYLEFT = 0x02
 LCD_ENTRYSHIFTINCREMENT = 0x01
 LCD_ENTRYSHIFTDECREMENT = 0x00
 
-# flags for LCD display on/off control
+# flags for LCD display on/off control, common to backpack and SerLCD
 LCD_DISPLAYON = 0x04
 LCD_DISPLAYOFF = 0x00
 LCD_CURSORON = 0x02
@@ -64,13 +82,13 @@ LCD_CURSOROFF = 0x00
 LCD_BLINKON = 0x01
 LCD_BLINKOFF = 0x00
 
-# flags for LCD display/cursor shift
+# flags for LCD display/cursor shift, common to backpack and SerLCD
 LCD_DISPLAYMOVE = 0x08
 LCD_CURSORMOVE = 0x00
 LCD_MOVERIGHT = 0x04
 LCD_MOVELEFT = 0x00
 
-# flags for LCD function set
+# flags for LCD function set, backpack only
 LCD_8BITMODE = 0x10
 LCD_4BITMODE = 0x00
 LCD_2LINE = 0x08
@@ -78,7 +96,7 @@ LCD_1LINE = 0x00
 LCD_5x10DOTS = 0x04
 LCD_5x8DOTS = 0x00
 
-# flags for LCD backlight control
+# flags for LCD backlight control, backpack only
 LCD_BACKLIGHT = 0x08
 LCD_NOBACKLIGHT = 0x00
 
@@ -89,17 +107,28 @@ Rs = 0b00000001 # LCD Register select bit
 class LcdApi(object):
 
     # Initialize objects and LCD
-    def __init__(self):
+    def __init__(self, opts, init=True):
         self.__logger = logging.getLogger(__name__)
+        self.__opts = opts
+        self.__init = init
+        self.__serlcd = self.__opts.get(ClientOption.DISPLAY_SERLCD)
 
-        self.lcd_device = I2CApi.i2c_device(LCD_ADDRESS)
+        if self.__serlcd:
+            # SerLCD address
+            self.lcd_device = I2CApi.i2c_device(LCD_SERLCD_ADDRESS)
+        else:
+            # Backpack address
+            self.lcd_device = I2CApi.i2c_device(LCD_BACKPACK_ADDRESS)
 
-        self.lcd_write(0x03)
-        self.lcd_write(0x03)
-        self.lcd_write(0x03)
-        self.lcd_write(0x02)
+        if not self.__serlcd:
+            # Only for backpack
+            self.lcd_write(0x03)
+            self.lcd_write(0x03)
+            self.lcd_write(0x03)
+            self.lcd_write(0x02)
 
-        self.__init__display()
+        if (self.__init):
+            self.__init__display()
 
     # Fulfill context management requirements
     def __enter__(self):
@@ -110,23 +139,38 @@ class LcdApi(object):
 
     # Initialize display
     def __init__display(self):
-        self.lcd_write(LCD_FUNCTIONSET | LCD_2LINE | LCD_5x8DOTS | LCD_4BITMODE)
-        self.lcd_write(LCD_DISPLAYCONTROL | LCD_DISPLAYON)
-        self.lcd_write(LCD_CLEARDISPLAY)
-        self.lcd_write(LCD_ENTRYMODESET | LCD_ENTRYLEFT)
-        time.sleep(LCD_INITDELAY)
 
-    # Write a command to LCD
+        if self.__serlcd:
+            # SerLCD
+            self.serlcd_write(SERLCD_SPECIAL_CMD, [LCD_DISPLAYCONTROL | LCD_DISPLAYON | LCD_CURSOROFF | LCD_BLINKOFF])
+            self.serlcd_write(SERLCD_SPECIAL_CMD, [LCD_ENTRYMODESET | LCD_ENTRYLEFT | LCD_ENTRYSHIFTDECREMENT])
+            self.serlcd_write(SERLCD_SETTING_CMD, [SERLCD_CLEARDISPLAY])
+            #self.serlcd_write(SERLCD_SETTING_CMD, [SERLCD_RGB_BACKLIGHT, 0, 0, 0])
+
+        else:
+            # Backpack
+            self.lcd_write(LCD_FUNCTIONSET | LCD_2LINE | LCD_5x8DOTS | LCD_4BITMODE)
+            self.lcd_write(LCD_DISPLAYCONTROL | LCD_DISPLAYON)
+            self.lcd_write(LCD_CLEARDISPLAY)
+            self.lcd_write(LCD_ENTRYMODESET | LCD_ENTRYLEFT)
+            
+        time.sleep(LCD_INITDELAY)
+        
+    # Write a command to SerLCD
+    def serlcd_write(self, cmd, data):
+        self.lcd_device.write_block_data(cmd, data)
+        
+    # Write a command to backpack LCD
     def lcd_write(self, cmd, mode=0):
         self.lcd_write_four_bits(mode | (cmd & 0xF0))
         self.lcd_write_four_bits(mode | ((cmd << 4) & 0xF0))
 
-    # Write four bits to the LCD
+    # Write four bits to the backpack LCD
     def lcd_write_four_bits(self, data):
         self.lcd_device.write_cmd(data | LCD_BACKLIGHT)
         self.lcd_strobe(data)
 
-    # clocks EN to latch command
+    # clocks EN to latch command for backpack
     def lcd_strobe(self, data):
         self.lcd_device.write_cmd(data | En | LCD_BACKLIGHT)
         time.sleep(.0005)
@@ -150,10 +194,16 @@ class LcdApi(object):
         elif line == 4:
             pos_new = 0x54 + pos
 
-        self.lcd_write(0x80 + pos_new)
+        if self.__serlcd:
+            # SerLCD
+            self.serlcd_write(SERLCD_SPECIAL_CMD, [SERLCD_SETDDRAMADDR + pos_new] + [ord(char) for char in string])
+            
+        else:
+            # Backpack
+            self.lcd_write(0x80 + pos_new)
 
-        for char in string:
-            self.lcd_write(ord(char), Rs)
+            for char in string:
+                self.lcd_write(ord(char), Rs)
 
     # clear lcd and set to home
     def lcd_clear(self):
@@ -180,4 +230,9 @@ class LcdApi(object):
 	self.lcd_display_string(second_line, 2, 0)
 	time.sleep(0.02)
 	self.lcd_device.close()
+
+    # Set the RGB backlight (SerLCD only)
+    def rgb_backlight(self, red, green, blue):
+        if self.__serlcd:
+            self.serlcd_write(SERLCD_SETTING_CMD, [SERLCD_RGB_BACKLIGHT, (0,255)[red], (0,255)[green], (0,255)[blue]])
 

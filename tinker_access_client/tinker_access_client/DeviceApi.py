@@ -53,6 +53,21 @@ class DeviceApi(object):
         GPIO.setup(self.__opts.get(ClientOption.PIN_POWER_RELAY), GPIO.OUT)
         GPIO.setup(self.__opts.get(ClientOption.PIN_LOGOUT), GPIO.IN, GPIO.PUD_DOWN)
         GPIO.setup(self.__opts.get(ClientOption.PIN_CURRENT_SENSE), GPIO.IN, GPIO.PUD_DOWN)
+
+        if self.__opts.get(ClientOption.USE_3V3_EN):
+            # Toggle the 3.3V enable to reset I2C devices
+            GPIO.setup(self.__opts.get(ClientOption.PIN_3V3_EN), GPIO.OUT)
+            GPIO.output(self.__opts.get(ClientOption.PIN_3V3_EN), GPIO.LOW)
+            time.sleep(1)
+            GPIO.output(self.__opts.get(ClientOption.PIN_3V3_EN), GPIO.HIGH)
+            time.sleep(2)
+
+        if self.__opts.get(ClientOption.USE_ESTOP):
+            if self.__opts.get(ClientOption.ESTOP_ACTIVE_HI):
+                GPIO.setup(self.__opts.get(ClientOption.PIN_ESTOP), GPIO.IN, GPIO.PUD_UP)
+            else:
+                GPIO.setup(self.__opts.get(ClientOption.PIN_ESTOP), GPIO.IN, GPIO.PUD_DOWN)
+
         self.GPIO = GPIO
 
     def __configure_serial(self):
@@ -124,9 +139,50 @@ class DeviceApi(object):
         GPIO.output(self.__opts.get(ClientOption.PIN_LED_GREEN), green)
         GPIO.output(self.__opts.get(ClientOption.PIN_LED_BLUE), blue)
 
+        # Retry backlight write multiple times, then raise error if unsuccessful
+        num_attempts = 5
+        for attempt in range(num_attempts):
+            try:
+                self.__call_lcd_backlight(red, green, blue)
+            except Exception as e:
+                if attempt == (num_attempts-1):
+                    # All attempts exhausted, report as fatal
+                    raise e
+            else:
+                break
+
+    def __call_lcd_backlight(self, red, green, blue):
+        try:
+            with LcdApi(self.__opts, False) as lcd:
+                lcd.rgb_backlight(red, green, blue)
+        except Exception as e:
+            self.__logger.debug('LCD I2C write backlight failed with colors \'%d %d %d\'.', red, green, blue)
+            self.__logger.exception(e)
+            raise e
+
     def __write_to_lcd(self, first_line, second_line):
-        with LcdApi() as lcd:
-            lcd.write(first_line, second_line)
+        # Retry write multiple times, then raise error if unsuccessful
+        num_attempts = 5
+        for attempt in range(num_attempts):
+            try:
+                self.__call_lcd_write(first_line, second_line)
+            except Exception as e:
+                if attempt == (num_attempts-1):
+                    # All attempts exhausted, report as fatal
+                    raise e
+            else:
+                break
+
+    def __call_lcd_write(self, first_line, second_line):
+        try:
+            self.__cancel_lcd_refresh_timer()
+            with LcdApi(self.__opts) as lcd:
+                lcd.write(first_line, second_line)
+        except Exception as e:
+            self.__logger.debug('LCD I2C write message failed with message \'%s %s\'.', first_line, second_line)
+            self.__logger.exception(e)
+            raise e
+
         self.__start_lcd_refresh_timer(first_line, second_line)
 
     def __cancel_lcd_refresh_timer(self):
@@ -136,13 +192,17 @@ class DeviceApi(object):
         self.__lcd_refresh_timer = None
 
     def __lcd_refresh_timer_tick(self, first_line, second_line):
-        if not self.__should_exit:
-            self.__write_to_lcd(first_line, second_line)
+        try:
+            if not self.__should_exit:
+                self.__write_to_lcd(first_line, second_line)
+        except Exception as e:
+            self.__fault = e
+            self.__stop()
 
-    def __start_lcd_refresh_timer(self, first_line, second_line):
+    def __start_lcd_refresh_timer(self, first_line, second_line, interval=30):
         self.__cancel_lcd_refresh_timer()
         self.__lcd_refresh_timer = threading.Timer(
-            30,
+            interval,
             self.__lcd_refresh_timer_tick,
             [first_line, second_line]
         )
@@ -175,15 +235,16 @@ class DeviceApi(object):
                 if not GPIO.input(pin):
                     self.__do_callback(call_back, args, kwargs)
 
-            # def both_edge_detected(*args, **kwargs):
-            #     self.__do_callback(call_back, args, kwargs)
+            def both_edge_detected(*args, **kwargs):
+                time.sleep(.5)
+                self.__do_callback(call_back, args, kwargs)
 
             if direction == self.GPIO.RISING:
-                GPIO.add_event_detect(pin, direction, callback=rising_edge_detected, bouncetime=500)#, bouncetime=250)
+                GPIO.add_event_detect(pin, direction, callback=rising_edge_detected, bouncetime=500)
             elif direction == self.GPIO.FALLING:
-                GPIO.add_event_detect(pin, direction, callback=falling_edge_detected, bouncetime=500)  # , bouncetime=250)
-            # elif direction == self.GPIO.BOTH:
-            #     GPIO.add_event_detect(pin, direction, callback=both_edge_detected)  # , bouncetime=250)
+                GPIO.add_event_detect(pin, direction, callback=falling_edge_detected, bouncetime=500)
+            elif direction == self.GPIO.BOTH:
+                GPIO.add_event_detect(pin, direction, callback=both_edge_detected, bouncetime=500 )
             else:
                 raise NotImplementedError
 

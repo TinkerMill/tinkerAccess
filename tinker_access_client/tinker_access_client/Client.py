@@ -20,6 +20,8 @@ logout_timer_interval_seconds = 1
 
 class Trigger(object):
     IDLE = 'idle'
+    ESTOP = 'estop'
+    RESET = 'reset'
     LOGIN = 'login'
     LOGOUT = 'logout'
     TERMINATE = 'terminate'
@@ -48,6 +50,18 @@ class Client(Machine):
             },
 
             {
+                'source': [State.INITIALIZED, State.IDLE, State.IN_USE, State.IN_TRAINING],
+                'trigger': Trigger.ESTOP,
+                'dest': State.ESTOP
+            },
+
+            {
+                'source': [State.ESTOP],
+                'trigger': Trigger.RESET,
+                'dest': State.IDLE
+            },
+
+            {
                 'source': [State.IDLE],
                 'trigger': Trigger.LOGIN,
                 'dest': State.IN_USE,
@@ -68,7 +82,7 @@ class Client(Machine):
             },
 
             {
-                'source': [State.IDLE],
+                'source': [State.IDLE, State.ESTOP],
                 'trigger': Trigger.LOGOUT,
                 'dest': State.IN_TRAINING,
                 'conditions': ['is_waiting_for_training']
@@ -81,7 +95,7 @@ class Client(Machine):
             }
         ]
 
-        Machine.__init__(self, queued=True, states=states,
+        Machine.__init__(self, queued=True, states=states, ignore_invalid_triggers=True,
                          transitions=transitions, initial=State.INITIALIZED, after_state_change='update_status')
 
     def __enter__(self):
@@ -90,6 +104,23 @@ class Client(Machine):
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.terminate()
+
+    #
+    # estop -- The machine is in e-stop and waiting e-stop to be cleared or enter training mode
+    #
+
+    def __ensure_estop(self):
+        self.__do_logout()
+        self.__disable_power()
+        self.__show_red_led()
+        self.__show_estop_activated()
+
+    def __show_estop_activated(self):
+        self.__device.write(
+            Channel.LCD,
+            'E-STOP ACTIVATED'.center(maximum_lcd_characters, ' '),
+            'RESET THE SWITCH'.center(maximum_lcd_characters, ' ')
+        )
 
     #
     # idle -- The machine is idle and waiting for a badge to be scanned
@@ -281,6 +312,15 @@ class Client(Machine):
     # training - the client has entered training mode
     #
 
+    def __ensure_training_mode(self):
+        self.__do_logout()
+        self.__disable_power()
+        self.__show_magenta_led()
+        self.__show_training_mode_activated(1)
+
+    def __show_magenta_led(self):
+        self.__device.write(Channel.LED, True, False, True)
+
     def __show_training_mode_activated(self, delay=0):
         self.__device.write(
             Channel.LCD,
@@ -311,7 +351,7 @@ class Client(Machine):
         return self.__user_info is not None
 
     def __prompt_for_trainer_badge(self):
-        self.__show_blue_led()
+        self.__show_magenta_led()
         self.__show_scan_trainer_badge()
 
     def __show_scan_trainer_badge(self):
@@ -330,7 +370,7 @@ class Client(Machine):
         time.sleep(delay)
 
     def __prompt_for_student_badge(self):
-        self.__show_blue_led()
+        self.__show_magenta_led()
         self.__show_scan_student_badge()
 
     def __show_scan_student_badge(self, delay=0):
@@ -493,6 +533,29 @@ class Client(Machine):
             self.login(*args, **kwargs)
 
     #
+    # logout_detected - logout button detected
+    #
+
+    def logout_detected(self, *args, **kwargs):
+        if self.is_estop_activated() and (self.state == State.IN_TRAINING):
+            # Call estop() if exiting training and estop button is activated
+            self.estop()
+        else:
+            # Otherwise call logout()
+            self.logout()
+
+    #
+    # estop_change - change in status of e-stop input
+    #
+
+    def estop_change(self, *args, **kwargs):
+        if self.is_estop_activated() and (self.state != State.IN_TRAINING):
+            # Do not call estop() from in_traning state, wait to call it upon exit.
+            self.estop()
+        else:
+            self.reset()
+
+    #
     # wait - wait for the next edge detection event from the device.
     #
 
@@ -514,6 +577,12 @@ class Client(Machine):
     #
     # conditions - used to allow/prevent triggers causing a transition if the conditions are not met.
     #
+
+    def is_estop_activated(self):
+        return self.__opts.get(ClientOption.USE_ESTOP) and (
+            (self.__opts.get(ClientOption.ESTOP_ACTIVE_HI) and self.__device.read(Channel.PIN, self.__opts.get(ClientOption.PIN_ESTOP))) or
+            (not self.__opts.get(ClientOption.ESTOP_ACTIVE_HI) and not self.__device.read(Channel.PIN, self.__opts.get(ClientOption.PIN_ESTOP)))
+        )
 
     def is_in_use(self):
         return self.status() == State.IN_USE or self.state == State.IN_TRAINING
@@ -547,17 +616,18 @@ class Client(Machine):
 
         return False
 
+    def on_enter_estop(self, *args, **kwargs):
+        self.__ensure_estop()
+
     def on_enter_idle(self, *args, **kwargs):
         self.__ensure_idle()
-        self.__show_scan_badge()
 
     def on_enter_in_use(self, *args, **kwargs):
         self.__ensure_in_use()
         self.__start_logout_timer()
 
     def on_enter_in_training(self, *args, **kwargs):
-        self.__ensure_idle()
-        self.__show_training_mode_activated(1)
+        self.__ensure_training_mode()
         self.__show_scan_trainer_badge()
 
     def on_enter_terminated(self, *args, **kwargs):
@@ -584,10 +654,23 @@ class Client(Machine):
                     Channel.PIN,
                     pin=opts.get(ClientOption.PIN_LOGOUT),
                     direction=device.GPIO.RISING,
-                    call_back=client.logout
+                    call_back=client.logout_detected
                 )
 
-                client.idle()
+                if opts.get(ClientOption.USE_ESTOP):
+
+                    device.on(
+                        Channel.PIN,
+                        pin=opts.get(ClientOption.PIN_ESTOP),
+                        direction=device.GPIO.BOTH,
+                        call_back=client.estop_change
+                    )
+
+                if client.is_estop_activated():
+                    client.estop()
+                else:
+                    client.idle()
+
                 auto_update_timer.start()
                 while not client.is_terminated():
                     logger.debug('%s is waiting...', PackageInfo.pip_package_name)

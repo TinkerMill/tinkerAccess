@@ -19,9 +19,15 @@ ClientOptionDefaults = {
     ClientOption.AUTO_UPDATE: False,
     ClientOption.FORCE_UPDATE: False,
     ClientOption.PIN_POWER_RELAY: 17,
+    ClientOption.PIN_ESTOP: 6,
+    ClientOption.USE_ESTOP: False,
+    ClientOption.ESTOP_ACTIVE_HI: False,
+    ClientOption.PIN_3V3_EN: 27,
+    ClientOption.USE_3V3_EN: False,
     ClientOption.LOGOUT_COAST_TIME: 0,
     ClientOption.PIN_CURRENT_SENSE: 12,
     ClientOption.REBOOT_ON_ERROR: False,
+    ClientOption.DISPLAY_SERLCD: False,    
     ClientOption.SERIAL_PORT_SPEED: 9600,
     ClientOption.AUTO_UPDATE_INTERVAL: 5,
     ClientOption.MAX_POWER_DOWN_TIMEOUT: None,
@@ -269,6 +275,48 @@ class ClientOptionParser(object):
         )
 
         self.__parser.add_option(
+            '--pin-estop',
+            help='the e-stop pin [default:%default]',
+            default=ClientOptionDefaults[ClientOption.PIN_ESTOP],
+            dest=ClientOption.PIN_ESTOP,
+            type='int',
+            action='store'
+        )
+
+        self.__parser.add_option(
+            '--pin-3v3-en',
+            help='the 3.3V enable pin [default:%default]',
+            default=ClientOptionDefaults[ClientOption.PIN_3V3_EN],
+            dest=ClientOption.PIN_3V3_EN,
+            type='int',
+            action='store'
+        )
+
+        self.__parser.add_option(
+            '--use-estop',
+            help='use the e-stop pin to detect an e-stop event [default:%default]',
+            default=ClientOptionDefaults[ClientOption.USE_ESTOP],
+            dest=ClientOption.USE_ESTOP,
+            action='store_true'
+        )
+
+        self.__parser.add_option(
+            '--estop-active-hi',
+            help='an e-stop event is an active high logic level [default:%default]',
+            default=ClientOptionDefaults[ClientOption.ESTOP_ACTIVE_HI],
+            dest=ClientOption.ESTOP_ACTIVE_HI,
+            action='store_true'
+        )
+
+        self.__parser.add_option(
+            '--use-3v3-en',
+            help='use the 3.3v enable pin function [default:\'%default\']',
+            default=ClientOptionDefaults[ClientOption.USE_3V3_EN],
+            dest=ClientOption.USE_3V3_EN,
+            action='store_true'
+        )
+
+        self.__parser.add_option(
             '--serial-port-name',
             help='the serial port name to use [default:\'%default\']',
             default=ClientOptionDefaults[ClientOption.SERIAL_PORT_NAME],
@@ -283,6 +331,16 @@ class ClientOptionParser(object):
             dest=ClientOption.SERIAL_PORT_SPEED,
             type='int',
             action='store'
+        )
+
+        self.__parser.add_option(
+            '--display-serlcd',
+            help='The SparkFun LCD-14072 SerLCD display is connected. '
+                 'If this flag is not set, then the original backpack style display '
+                 'is assumed to be connected. [default:\'%default\']',
+            default=ClientOptionDefaults[ClientOption.DISPLAY_SERLCD],
+            dest=ClientOption.DISPLAY_SERLCD,
+            action='store_true'
         )
 
     def parse_args(self, args=None, values=None):
