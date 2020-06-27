@@ -119,31 +119,31 @@ class ClientTest(unittest.TestCase, CustomAssertions):
                 device.hold_logout(3)
                 expected_transitions.append(State.IN_TRAINING)
                 self.assertTransitions(device, expected_transitions)
-                self.assertIdlePins(opts, device)
+                self.assertTrainingPins(opts, device)
 
                 # Assert that a bad login attempt for the trainer doesn't cause any state transition
                 mock_get.return_value = invalid_login_response
                 device.scan_badge('some_badge_code')
                 self.assertTransitions(device, expected_transitions)
-                self.assertIdlePins(opts, device)
+                self.assertTrainingPins(opts, device)
 
                 # Assert that a good login attempt for the trainer doesn't cause any state transition
                 mock_get.return_value = valid_login_response
                 device.scan_badge('some_badge_code')
                 self.assertTransitions(device, expected_transitions)
-                self.assertIdlePins(opts, device)
+                self.assertTrainingPins(opts, device)
 
                 # Assert that a bad login attempt for the student doesn't cause any state transition
                 mock_get.return_value = invalid_login_response
                 device.scan_badge('some_badge_code')
                 self.assertTransitions(device, expected_transitions)
-                self.assertIdlePins(opts, device)
+                self.assertTrainingPins(opts, device)
 
                 # Assert that a good login attempt for the student doesn't cause any state transition
                 mock_get.return_value = valid_login_response
                 device.scan_badge('some_badge_code')
                 self.assertTransitions(device, expected_transitions)
-                self.assertIdlePins(opts, device)
+                self.assertTrainingPins(opts, device)
 
                 # Assert the the logout pin cause the device to return to an idle state.
                 device.hold_logout()

@@ -13,6 +13,14 @@ class CustomAssertions(object):
             (opts.get(ClientOption.PIN_LED_BLUE), True),
         ])
 
+    def assertTrainingPins(self, opts, device):
+        self.assertPins(device, [
+            (opts.get(ClientOption.PIN_POWER_RELAY), False),
+            (opts.get(ClientOption.PIN_LED_RED), True),
+            (opts.get(ClientOption.PIN_LED_GREEN), False),
+            (opts.get(ClientOption.PIN_LED_BLUE), True),
+        ])
+
     def assertInUsePins(self, opts, device):
         self.assertPins(device, [
             (opts.get(ClientOption.PIN_POWER_RELAY), True),
