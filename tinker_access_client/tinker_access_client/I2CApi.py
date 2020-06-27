@@ -33,6 +33,10 @@ class i2c_device:
         self.addr = addr
         self.bus = smbus.SMBus(port)
 
+    # Fix for 'too many files open' error
+    def __del__(self):
+        self.bus.close()
+
     # Fulfill context management requirements
     def __enter__(self):
         return self
@@ -52,7 +56,7 @@ class i2c_device:
 
     # Write a block of data to the i2c bus
     def write_block_data(self, cmd, data):
-        self.bus.write_block_data(self.addr, cmd, data)
+        self.bus.write_i2c_block_data(self.addr, cmd, data)
         time.sleep(0.0001)
 
     # Read a single byte from the i2c bus
