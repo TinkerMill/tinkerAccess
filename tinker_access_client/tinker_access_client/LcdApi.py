@@ -178,4 +178,6 @@ class LcdApi(object):
     def write(self, first_line, second_line):
 	self.lcd_display_string(first_line, 1, 0)
 	self.lcd_display_string(second_line, 2, 0)
+	time.sleep(0.02)
+	self.lcd_device.close()
 
