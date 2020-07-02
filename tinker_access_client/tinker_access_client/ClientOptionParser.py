@@ -31,6 +31,7 @@ ClientOptionDefaults = {
     ClientOption.SERIAL_PORT_SPEED: 9600,
     ClientOption.AUTO_UPDATE_INTERVAL: 5,
     ClientOption.MAX_POWER_DOWN_TIMEOUT: None,
+    ClientOption.ALLOW_USER_OVERRIDE: False,
     ClientOption.SERIAL_PORT_NAME: '/dev/ttyUSB0',
     ClientOption.SERVER_ADDRESS: 'http://localhost:5000',
     ClientOption.CONFIG_FILE: '/etc/{0}.conf'.format(PackageInfo.pip_package_name),
@@ -201,6 +202,14 @@ class ClientOptionParser(object):
             action='store'
         )
 
+        self.__parser.add_option(
+            '--allow-user-override',
+            help='allow a new user to override the current user login [default:%default]',
+            default=ClientOptionDefaults[ClientOption.ALLOW_USER_OVERRIDE],
+            dest=ClientOption.ALLOW_USER_OVERRIDE,
+            action='store_true'
+        )
+        
         self.__parser.add_option(
             '--reboot-on-error',
             help='Any unhandled errors will cause the device to reboot after the specified '

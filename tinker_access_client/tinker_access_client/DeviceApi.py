@@ -25,7 +25,10 @@ class DeviceApi(object):
         self.__fault = None
         self.__should_exit = False
         self.__edge_detected = False
+        self.__first_line = ""
+        self.__second_line = ""
         self.__lcd_refresh_timer = None
+        self.__write_lcd_lock = threading.Lock()
         self.__logger = logging.getLogger(__name__)
 
     def __enter__(self):
@@ -160,18 +163,29 @@ class DeviceApi(object):
             self.__logger.exception(e)
             raise e
 
-    def __write_to_lcd(self, first_line, second_line):
+    def __write_to_lcd(self, first_line, second_line, refresh=False):
+        # Get the lock to allow only one thread to call the LCD write at a time
+        self.__write_lcd_lock.acquire()
+
+        # If not a refresh write, update the stored lines
+        if not refresh:
+            self.__first_line = first_line
+            self.__second_line = second_line
+
         # Retry write multiple times, then raise error if unsuccessful
         num_attempts = 5
         for attempt in range(num_attempts):
             try:
-                self.__call_lcd_write(first_line, second_line)
+                self.__call_lcd_write(self.__first_line, self.__second_line)
             except Exception as e:
                 if attempt == (num_attempts-1):
-                    # All attempts exhausted, report as fatal
+                    # All attempts exhausted, report as fatal and make sure to release the lock
+                    self.__write_lcd_lock.release()
                     raise e
             else:
                 break
+
+        self.__write_lcd_lock.release()
 
     def __call_lcd_write(self, first_line, second_line):
         try:
@@ -183,7 +197,7 @@ class DeviceApi(object):
             self.__logger.exception(e)
             raise e
 
-        self.__start_lcd_refresh_timer(first_line, second_line)
+        self.__start_lcd_refresh_timer()
 
     def __cancel_lcd_refresh_timer(self):
         if self.__lcd_refresh_timer:
@@ -191,20 +205,19 @@ class DeviceApi(object):
 
         self.__lcd_refresh_timer = None
 
-    def __lcd_refresh_timer_tick(self, first_line, second_line):
+    def __lcd_refresh_timer_tick(self):
         try:
             if not self.__should_exit:
-                self.__write_to_lcd(first_line, second_line)
+                self.__write_to_lcd("", "", True)
         except Exception as e:
             self.__fault = e
             self.__stop()
 
-    def __start_lcd_refresh_timer(self, first_line, second_line, interval=30):
+    def __start_lcd_refresh_timer(self, interval=30):
         self.__cancel_lcd_refresh_timer()
         self.__lcd_refresh_timer = threading.Timer(
             interval,
-            self.__lcd_refresh_timer_tick,
-            [first_line, second_line]
+            self.__lcd_refresh_timer_tick
         )
         self.__lcd_refresh_timer.start()
 

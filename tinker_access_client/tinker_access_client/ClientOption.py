@@ -28,5 +28,6 @@ class ClientOption:
     PIN_CURRENT_SENSE = 'pin_current_sense'
     LOGOUT_COAST_TIME = 'logout_coast_time'
     LOGGING_CONFIG_FILE = 'logging_config_file'
+    ALLOW_USER_OVERRIDE = 'allow_user_override'
     AUTO_UPDATE_INTERVAL = 'auto_update_interval'
     MAX_POWER_DOWN_TIMEOUT = 'max_power_down_timeout'

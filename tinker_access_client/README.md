@@ -147,3 +147,5 @@ auto_update: true
 - __--serial-port-speed=[serial_port_speed]__: The serial port speed to use [default:9600]
 
 - __--display-serlcd=[display_serlcd]__: Send commands for the SparkFun LCD-14072 SerLCD display if true, otherwise send commands for the original backpack style display [default:'False']
+
+- __--allow-user-override=[allow_user_override]__: Allows a new user to login and takover the current user login session [default:'False']
