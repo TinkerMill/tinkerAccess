@@ -21,7 +21,7 @@ logout_timer_interval_seconds = 1
 class Trigger(object):
     IDLE = 'idle'
     ESTOP = 'estop'
-    RESET = 'reset'
+    BYPASS = 'bypass'
     LOGIN = 'login'
     LOGOUT = 'logout'
     TERMINATE = 'terminate'
@@ -34,6 +34,7 @@ class Client(Machine):
         self.__device = device
         self.__user_info = None
         self.__logout_timer = None
+        self.__logout_timer_lock = threading.Lock()        
         self.__logger = ClientLogger.setup(opts)
         self.__tinkerAccessServerApi = TinkerAccessServerApi(opts)
 
@@ -44,21 +45,21 @@ class Client(Machine):
 
         transitions = [
             {
-                'source': [State.INITIALIZED],
+                'source': [State.INITIALIZED, State.ESTOP, State.BYPASSED],
                 'trigger': Trigger.IDLE,
                 'dest': State.IDLE
             },
 
             {
-                'source': [State.INITIALIZED, State.IDLE, State.IN_USE, State.IN_TRAINING],
+                'source': [State.INITIALIZED, State.BYPASSED, State.IDLE, State.IN_USE, State.IN_TRAINING],
                 'trigger': Trigger.ESTOP,
                 'dest': State.ESTOP
             },
 
             {
-                'source': [State.ESTOP],
-                'trigger': Trigger.RESET,
-                'dest': State.IDLE
+                'source': [State.INITIALIZED, State.ESTOP, State.IDLE, State.IN_TRAINING],
+                'trigger': Trigger.BYPASS,
+                'dest': State.BYPASSED
             },
 
             {
@@ -82,7 +83,7 @@ class Client(Machine):
             },
 
             {
-                'source': [State.IDLE, State.ESTOP],
+                'source': [State.IDLE, State.ESTOP, State.BYPASSED],
                 'trigger': Trigger.LOGOUT,
                 'dest': State.IN_TRAINING,
                 'conditions': ['is_waiting_for_training']
@@ -123,6 +124,26 @@ class Client(Machine):
         )
 
     #
+    # bypassed -- The machine has been bypassed and waiting for bypass to be cleared or enter training mode
+    #
+
+    def __ensure_bypass(self):
+        self.__do_logout()
+        self.__disable_power()
+        self.__show_yellow_led()
+        self.__show_bypassed()
+
+    def __show_yellow_led(self):
+        self.__device.write(Channel.LED, True, True, False)
+
+    def __show_bypassed(self):
+        self.__device.write(
+            Channel.LCD,
+            'TINKERACCESS'.center(maximum_lcd_characters, ' '),
+            'IS BYPASSED'.center(maximum_lcd_characters, ' ')
+        )
+
+    #
     # idle -- The machine is idle and waiting for a badge to be scanned
     #
 
@@ -132,7 +153,7 @@ class Client(Machine):
         self.__show_blue_led()
         self.__show_scan_badge()
 
-    def __do_login(self, *args, **kwargs):
+    def __do_login(self, override, *args, **kwargs):
         badge_code = kwargs.get('badge_code')
 
         # noinspection PyBroadException
@@ -146,10 +167,17 @@ class Client(Machine):
 
         except UnauthorizedAccessException as e:
             self.__handle_unauthorized_access_exception()
-            self.__ensure_idle()
+            if not override:
+                self.__ensure_idle()
+            else:
+                self.__ensure_in_use()
+
         except Exception as e:
             self.__handle_unexpected_exception()
-            self.__ensure_idle()
+            if not override:
+                self.__ensure_idle()
+            else:
+                self.__ensure_in_use()
 
         return self.__user_info is not None
 
@@ -224,8 +252,8 @@ class Client(Machine):
     def __show_green_led(self):
         self.__device.write(Channel.LED, False, True, False)
 
-    def __start_logout_timer(self):
-        self.__cancel_logout_timer()
+    def __start_logout_timer(self, refresh=False):
+        self.__cancel_logout_timer(refresh)
         self.__logout_timer = threading.Timer(
             logout_timer_interval_seconds,
             self.__logout_timer_tick
@@ -233,16 +261,28 @@ class Client(Machine):
         self.__logout_timer.start()
 
     def __logout_timer_tick(self):
-        if not self.is_terminated() and self.__user_info:
-            remaining_seconds = self.__user_info.get('remaining_seconds')
+        self.__logout_timer_lock.acquire()
+        thread_locked = True
 
-            if remaining_seconds <= 0:
-                self.logout()
-                return
+        try:
+            if not self.is_terminated() and self.__user_info and self.__logout_timer:
+                remaining_seconds = self.__user_info.get('remaining_seconds')
 
-            self.__user_info['remaining_seconds'] = (remaining_seconds - logout_timer_interval_seconds)
-            self.__show_remaining_time()
-            self.__start_logout_timer()
+                if remaining_seconds <= 0:
+                    # Release the lock before triggering logout
+                    self.__logout_timer_lock.release()
+                    thread_locked = False
+                    self.logout()
+                    return
+
+                self.__user_info['remaining_seconds'] = (remaining_seconds - logout_timer_interval_seconds)
+                self.__show_remaining_time()
+                self.__start_logout_timer(True)
+        except Exception as e:
+            raise e
+        finally:
+            if thread_locked:
+                self.__logout_timer_lock.release()
 
     def __show_remaining_time(self):
         remaining_seconds = self.__user_info.get('remaining_seconds')
@@ -262,11 +302,19 @@ class Client(Machine):
         red_led_status = self.__device.read(Channel.PIN, self.__opts.get(ClientOption.PIN_LED_RED))
         self.__device.write(Channel.LED, not red_led_status, False, False)
 
-    def __cancel_logout_timer(self):
-        if self.__logout_timer:
-            self.__logout_timer.cancel()
+    def __cancel_logout_timer(self, refresh=False):
+        if not refresh:
+            self.__logout_timer_lock.acquire()
 
-        self.__logout_timer = None
+        try:
+            if self.__logout_timer:
+                self.__logout_timer.cancel()
+        except Exception as e:
+            raise e
+        finally:
+            self.__logout_timer = None
+            if not refresh:
+                self.__logout_timer_lock.release()
 
     def __extend_session(self):
         self.__cancel_logout_timer()
@@ -538,10 +586,13 @@ class Client(Machine):
 
     def logout_detected(self, *args, **kwargs):
         if self.is_estop_activated() and (self.state == State.IN_TRAINING):
-            # Call estop() if exiting training and estop button is activated
+            # Call estop() if exiting training and estop button is active to trigger return to estop state
             self.estop()
+        elif self.is_bypass_detected() and (self.state == State.IN_TRAINING):
+            # Call bypass() if exiting training and bypass is detected to trigger return to bypassed state
+            self.bypass()
         else:
-            # Otherwise call logout()
+            # Otherwise call logout() to return to idle
             self.logout()
 
     #
@@ -549,11 +600,35 @@ class Client(Machine):
     #
 
     def estop_change(self, *args, **kwargs):
-        if self.is_estop_activated() and (self.state != State.IN_TRAINING):
-            # Do not call estop() from in_traning state, wait to call it upon exit.
-            self.estop()
-        else:
-            self.reset()
+        if self.is_estop_activated():
+            # E-Stop pushbutton was pressed
+            if self.state != State.IN_TRAINING:
+                # Do not call estop() from in_training state, wait to call it upon exit from state
+                self.estop()
+        elif self.state == State.ESTOP:
+            # E-Stop pushbutton was reset and in ESTOP state, wait for a potential bypass detect
+            time.sleep(0.5)
+            if self.is_bypass_detected():
+                # Bypass detected so transition to bypass mode instead
+                self.bypass()
+            else:
+                # E-Stop was reset and no bypass detected so transition to idle
+                self.idle()
+
+    #
+    # bypass_change - change in status of bypass detect input
+    #
+
+    def bypass_change(self, *args, **kwargs):
+        if self.is_bypass_detected():
+            # Bypass was detected
+            if self.state == State.IDLE:
+                # Do not call bypass() from in_training state, wait to call it upon exit from state
+                # Only trigger positive edge change of bypass detect from IDLE state
+                self.bypass()
+        elif self.state == State.BYPASSED:
+            # Bypass detect was cleared and in BYPASSED state, trigger return to IDLE
+            self.idle()
 
     #
     # wait - wait for the next edge detection event from the device.
@@ -584,6 +659,9 @@ class Client(Machine):
             (not self.__opts.get(ClientOption.ESTOP_ACTIVE_HI) and not self.__device.read(Channel.PIN, self.__opts.get(ClientOption.PIN_ESTOP)))
         )
 
+    def is_bypass_detected(self):
+        return self.__opts.get(ClientOption.USE_BYPASS_DETECT) and self.__device.read(Channel.PIN, self.__opts.get(ClientOption.PIN_BYPASS_DETECT))
+
     def is_in_use(self):
         return self.status() == State.IN_USE or self.state == State.IN_TRAINING
 
@@ -591,7 +669,7 @@ class Client(Machine):
         return self.status() == State.TERMINATED
 
     def is_authorized(self, *args, **kwargs):
-        return self.__do_login(*args, **kwargs)
+        return self.__do_login(False, *args, **kwargs)
 
     def is_waiting_for_training(self, *args, **kwargs):
         current = time.time()
@@ -603,9 +681,16 @@ class Client(Machine):
 
     def should_extend_current_session(self, *args, **kwargs):
         if self.__is_current_badge_code(*args, **kwargs):
+            # Same user badge, extend session
             self.__extend_session()
             return True
-        return False
+        elif self.__opts.get(ClientOption.ALLOW_USER_OVERRIDE):
+            # Different user badge and override allowed, attempt new login
+            self.__cancel_logout_timer()
+            self.__do_login(True, *args, **kwargs)
+            return True
+        else:
+            return False
 
     def __is_current_badge_code(self, *args, **kwargs):
         new_badge_code = kwargs.get('badge_code')
@@ -618,9 +703,18 @@ class Client(Machine):
 
     def on_enter_estop(self, *args, **kwargs):
         self.__ensure_estop()
+        self.__logger.warning('Emergency Stop Detected')
+
+    def on_enter_bypassed(self, *args, **kwargs):
+        self.__ensure_bypass()
+        self.__logger.warning('TinkerAccess has been Bypassed')
 
     def on_enter_idle(self, *args, **kwargs):
         self.__ensure_idle()
+        # Wait to make sure bypass is not detected
+        time.sleep(0.5)
+        if self.is_bypass_detected():
+            self.bypass()
 
     def on_enter_in_use(self, *args, **kwargs):
         self.__ensure_in_use()
@@ -666,8 +760,19 @@ class Client(Machine):
                         call_back=client.estop_change
                     )
 
+                if opts.get(ClientOption.USE_BYPASS_DETECT):
+
+                    device.on(
+                        Channel.PIN,
+                        pin=opts.get(ClientOption.PIN_BYPASS_DETECT),
+                        direction=device.GPIO.BOTH,
+                        call_back=client.bypass_change
+                    )
+
                 if client.is_estop_activated():
                     client.estop()
+                elif client.is_bypass_detected():
+                    client.bypass()
                 else:
                     client.idle()
 

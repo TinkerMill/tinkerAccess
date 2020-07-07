@@ -24,6 +24,8 @@ ClientOptionDefaults = {
     ClientOption.ESTOP_ACTIVE_HI: False,
     ClientOption.PIN_3V3_EN: 27,
     ClientOption.USE_3V3_EN: False,
+    ClientOption.PIN_BYPASS_DETECT: 13,
+    ClientOption.USE_BYPASS_DETECT: False,
     ClientOption.LOGOUT_COAST_TIME: 0,
     ClientOption.PIN_CURRENT_SENSE: 12,
     ClientOption.REBOOT_ON_ERROR: False,
@@ -31,6 +33,7 @@ ClientOptionDefaults = {
     ClientOption.SERIAL_PORT_SPEED: 9600,
     ClientOption.AUTO_UPDATE_INTERVAL: 5,
     ClientOption.MAX_POWER_DOWN_TIMEOUT: None,
+    ClientOption.ALLOW_USER_OVERRIDE: False,
     ClientOption.SERIAL_PORT_NAME: '/dev/ttyUSB0',
     ClientOption.SERVER_ADDRESS: 'http://localhost:5000',
     ClientOption.CONFIG_FILE: '/etc/{0}.conf'.format(PackageInfo.pip_package_name),
@@ -202,6 +205,14 @@ class ClientOptionParser(object):
         )
 
         self.__parser.add_option(
+            '--allow-user-override',
+            help='allow a new user to override the current user login [default:%default]',
+            default=ClientOptionDefaults[ClientOption.ALLOW_USER_OVERRIDE],
+            dest=ClientOption.ALLOW_USER_OVERRIDE,
+            action='store_true'
+        )
+
+        self.__parser.add_option(
             '--reboot-on-error',
             help='Any unhandled errors will cause the device to reboot after the specified '
                  '--reboot-delay, specified in minutes.'
@@ -293,6 +304,15 @@ class ClientOptionParser(object):
         )
 
         self.__parser.add_option(
+            '--pin-bypass-detect',
+            help='the bypass detect pin [default:%default]',
+            default=ClientOptionDefaults[ClientOption.PIN_BYPASS_DETECT],
+            dest=ClientOption.PIN_BYPASS_DETECT,
+            type='int',
+            action='store'
+        )
+
+        self.__parser.add_option(
             '--use-estop',
             help='use the e-stop pin to detect an e-stop event [default:%default]',
             default=ClientOptionDefaults[ClientOption.USE_ESTOP],
@@ -313,6 +333,14 @@ class ClientOptionParser(object):
             help='use the 3.3v enable pin function [default:\'%default\']',
             default=ClientOptionDefaults[ClientOption.USE_3V3_EN],
             dest=ClientOption.USE_3V3_EN,
+            action='store_true'
+        )
+
+        self.__parser.add_option(
+            '--use-bypass-detect',
+            help='use the bypass detect pin function [default:\'%default\']',
+            default=ClientOptionDefaults[ClientOption.USE_BYPASS_DETECT],
+            dest=ClientOption.USE_BYPASS_DETECT,
             action='store_true'
         )
 

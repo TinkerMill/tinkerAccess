@@ -134,11 +134,15 @@ auto_update: true
 
 - __--pin-estop=[pin_estop]__: The E-STOP input pin [default:6]
 
+- __--pin-bypass-detect=[pin_bypass_detect]__: The bypass detect input pin [default:13]
+
 - __--pin-3v3-en=[pin_3v3_en]__: The 3.3V enable pin [default:27]
 
 - __--use-estop=[use_estop]__: The E-STOP input pin will be used to detect E-STOP events and automatically logout the user [default:'False']
 
 - __--estop-active-hi=[estop_active_hi]__: The E-STOP input pin is detected as active high if true, otherwise the input is active low [default:'False']
+
+- __--use-bypass-detect=[use_bypass_detect]__: The bypass detect input pin will be monitored to log a tamper or bypass event [default:'False']
 
 - __--use-3v3-en=[use_3v3_en]__: The 3.3V enable output pin will be cycled during start-up or certain errors. Feature only on newer boards [default:'False']
 
@@ -147,3 +151,5 @@ auto_update: true
 - __--serial-port-speed=[serial_port_speed]__: The serial port speed to use [default:9600]
 
 - __--display-serlcd=[display_serlcd]__: Send commands for the SparkFun LCD-14072 SerLCD display if true, otherwise send commands for the original backpack style display [default:'False']
+
+- __--allow-user-override=[allow_user_override]__: Allows a new user to login and takover the current user login session [default:'False']
