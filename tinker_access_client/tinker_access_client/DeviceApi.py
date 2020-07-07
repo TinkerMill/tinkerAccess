@@ -71,6 +71,9 @@ class DeviceApi(object):
             else:
                 GPIO.setup(self.__opts.get(ClientOption.PIN_ESTOP), GPIO.IN, GPIO.PUD_DOWN)
 
+        if self.__opts.get(ClientOption.USE_BYPASS_DETECT):
+            GPIO.setup(self.__opts.get(ClientOption.PIN_BYPASS_DETECT), GPIO.IN, GPIO.PUD_UP)
+
         self.GPIO = GPIO
 
     def __configure_serial(self):

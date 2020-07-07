@@ -26,6 +26,8 @@ class ClientOption:
     SERIAL_PORT_NAME = 'serial_port_name'
     SERIAL_PORT_SPEED = 'serial_port_speed'
     PIN_CURRENT_SENSE = 'pin_current_sense'
+    PIN_BYPASS_DETECT = 'pin_bypass_detect'
+    USE_BYPASS_DETECT = 'use_bypass_detect'
     LOGOUT_COAST_TIME = 'logout_coast_time'
     LOGGING_CONFIG_FILE = 'logging_config_file'
     ALLOW_USER_OVERRIDE = 'allow_user_override'

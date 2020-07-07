@@ -21,7 +21,7 @@ logout_timer_interval_seconds = 1
 class Trigger(object):
     IDLE = 'idle'
     ESTOP = 'estop'
-    RESET = 'reset'
+    BYPASS = 'bypass'
     LOGIN = 'login'
     LOGOUT = 'logout'
     TERMINATE = 'terminate'
@@ -45,21 +45,21 @@ class Client(Machine):
 
         transitions = [
             {
-                'source': [State.INITIALIZED],
+                'source': [State.INITIALIZED, State.ESTOP, State.BYPASSED],
                 'trigger': Trigger.IDLE,
                 'dest': State.IDLE
             },
 
             {
-                'source': [State.INITIALIZED, State.IDLE, State.IN_USE, State.IN_TRAINING],
+                'source': [State.INITIALIZED, State.BYPASSED, State.IDLE, State.IN_USE, State.IN_TRAINING],
                 'trigger': Trigger.ESTOP,
                 'dest': State.ESTOP
             },
 
             {
-                'source': [State.ESTOP],
-                'trigger': Trigger.RESET,
-                'dest': State.IDLE
+                'source': [State.INITIALIZED, State.ESTOP, State.IDLE, State.IN_TRAINING],
+                'trigger': Trigger.BYPASS,
+                'dest': State.BYPASSED
             },
 
             {
@@ -83,7 +83,7 @@ class Client(Machine):
             },
 
             {
-                'source': [State.IDLE, State.ESTOP],
+                'source': [State.IDLE, State.ESTOP, State.BYPASSED],
                 'trigger': Trigger.LOGOUT,
                 'dest': State.IN_TRAINING,
                 'conditions': ['is_waiting_for_training']
@@ -121,6 +121,26 @@ class Client(Machine):
             Channel.LCD,
             'E-STOP ACTIVATED'.center(maximum_lcd_characters, ' '),
             'RESET THE SWITCH'.center(maximum_lcd_characters, ' ')
+        )
+
+    #
+    # bypassed -- The machine has been bypassed and waiting for bypass to be cleared or enter training mode
+    #
+
+    def __ensure_bypass(self):
+        self.__do_logout()
+        self.__disable_power()
+        self.__show_yellow_led()
+        self.__show_bypassed()
+
+    def __show_yellow_led(self):
+        self.__device.write(Channel.LED, True, True, False)
+
+    def __show_bypassed(self):
+        self.__device.write(
+            Channel.LCD,
+            'TINKERACCESS'.center(maximum_lcd_characters, ' '),
+            'IS BYPASSED'.center(maximum_lcd_characters, ' ')
         )
 
     #
@@ -295,7 +315,7 @@ class Client(Machine):
             self.__logout_timer = None
             if not refresh:
                 self.__logout_timer_lock.release()
-                
+
     def __extend_session(self):
         self.__cancel_logout_timer()
 
@@ -566,10 +586,13 @@ class Client(Machine):
 
     def logout_detected(self, *args, **kwargs):
         if self.is_estop_activated() and (self.state == State.IN_TRAINING):
-            # Call estop() if exiting training and estop button is activated
+            # Call estop() if exiting training and estop button is active to trigger return to estop state
             self.estop()
+        elif self.is_bypass_detected() and (self.state == State.IN_TRAINING):
+            # Call bypass() if exiting training and bypass is detected to trigger return to bypassed state
+            self.bypass()
         else:
-            # Otherwise call logout()
+            # Otherwise call logout() to return to idle
             self.logout()
 
     #
@@ -577,11 +600,35 @@ class Client(Machine):
     #
 
     def estop_change(self, *args, **kwargs):
-        if self.is_estop_activated() and (self.state != State.IN_TRAINING):
-            # Do not call estop() from in_traning state, wait to call it upon exit.
-            self.estop()
-        else:
-            self.reset()
+        if self.is_estop_activated():
+            # E-Stop pushbutton was pressed
+            if self.state != State.IN_TRAINING:
+                # Do not call estop() from in_training state, wait to call it upon exit from state
+                self.estop()
+        elif self.state == State.ESTOP:
+            # E-Stop pushbutton was reset and in ESTOP state, wait for a potential bypass detect
+            time.sleep(0.5)
+            if self.is_bypass_detected():
+                # Bypass detected so transition to bypass mode instead
+                self.bypass()
+            else:
+                # E-Stop was reset and no bypass detected so transition to idle
+                self.idle()
+
+    #
+    # bypass_change - change in status of bypass detect input
+    #
+
+    def bypass_change(self, *args, **kwargs):
+        if self.is_bypass_detected():
+            # Bypass was detected
+            if self.state == State.IDLE:
+                # Do not call bypass() from in_training state, wait to call it upon exit from state
+                # Only trigger positive edge change of bypass detect from IDLE state
+                self.bypass()
+        elif self.state == State.BYPASSED:
+            # Bypass detect was cleared and in BYPASSED state, trigger return to IDLE
+            self.idle()
 
     #
     # wait - wait for the next edge detection event from the device.
@@ -611,6 +658,9 @@ class Client(Machine):
             (self.__opts.get(ClientOption.ESTOP_ACTIVE_HI) and self.__device.read(Channel.PIN, self.__opts.get(ClientOption.PIN_ESTOP))) or
             (not self.__opts.get(ClientOption.ESTOP_ACTIVE_HI) and not self.__device.read(Channel.PIN, self.__opts.get(ClientOption.PIN_ESTOP)))
         )
+
+    def is_bypass_detected(self):
+        return self.__opts.get(ClientOption.USE_BYPASS_DETECT) and self.__device.read(Channel.PIN, self.__opts.get(ClientOption.PIN_BYPASS_DETECT))
 
     def is_in_use(self):
         return self.status() == State.IN_USE or self.state == State.IN_TRAINING
@@ -653,10 +703,18 @@ class Client(Machine):
 
     def on_enter_estop(self, *args, **kwargs):
         self.__ensure_estop()
-        self.__logger.warning('E-STOP detected')
+        self.__logger.warning('Emergency Stop Detected')
+
+    def on_enter_bypassed(self, *args, **kwargs):
+        self.__ensure_bypass()
+        self.__logger.warning('TinkerAccess has been Bypassed')
 
     def on_enter_idle(self, *args, **kwargs):
         self.__ensure_idle()
+        # Wait to make sure bypass is not detected
+        time.sleep(0.5)
+        if self.is_bypass_detected():
+            self.bypass()
 
     def on_enter_in_use(self, *args, **kwargs):
         self.__ensure_in_use()
@@ -702,8 +760,19 @@ class Client(Machine):
                         call_back=client.estop_change
                     )
 
+                if opts.get(ClientOption.USE_BYPASS_DETECT):
+
+                    device.on(
+                        Channel.PIN,
+                        pin=opts.get(ClientOption.PIN_BYPASS_DETECT),
+                        direction=device.GPIO.BOTH,
+                        call_back=client.bypass_change
+                    )
+
                 if client.is_estop_activated():
                     client.estop()
+                elif client.is_bypass_detected():
+                    client.bypass()
                 else:
                     client.idle()
 
