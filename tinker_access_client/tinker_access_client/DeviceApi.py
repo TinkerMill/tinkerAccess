@@ -55,7 +55,12 @@ class DeviceApi(object):
         GPIO.setup(self.__opts.get(ClientOption.PIN_LED_GREEN), GPIO.OUT)
         GPIO.setup(self.__opts.get(ClientOption.PIN_POWER_RELAY), GPIO.OUT)
         GPIO.setup(self.__opts.get(ClientOption.PIN_LOGOUT), GPIO.IN, GPIO.PUD_DOWN)
-        GPIO.setup(self.__opts.get(ClientOption.PIN_CURRENT_SENSE), GPIO.IN, GPIO.PUD_DOWN)
+
+        # No pulldown for current sense pin, it will alter the RC time constant of the detect circuit
+        GPIO.setup(self.__opts.get(ClientOption.PIN_CURRENT_SENSE), GPIO.IN, GPIO.PUD_OFF)
+
+        if self.__opts.get(ClientOption.USE_ALARM):
+            GPIO.setup(self.__opts.get(ClientOption.PIN_ALARM), GPIO.OUT)
 
         if self.__opts.get(ClientOption.USE_3V3_EN):
             # Toggle the 3.3V enable to reset I2C devices
