@@ -26,6 +26,8 @@ ClientOptionDefaults = {
     ClientOption.USE_3V3_EN: False,
     ClientOption.PIN_BYPASS_DETECT: 13,
     ClientOption.USE_BYPASS_DETECT: False,
+    ClientOption.PIN_ALARM: 22,
+    ClientOption.USE_ALARM: False,
     ClientOption.LOGOUT_COAST_TIME: 0,
     ClientOption.PIN_CURRENT_SENSE: 12,
     ClientOption.REBOOT_ON_ERROR: False,
@@ -313,6 +315,15 @@ class ClientOptionParser(object):
         )
 
         self.__parser.add_option(
+            '--pin-alarm',
+            help='the alarm pin [default:%default]',
+            default=ClientOptionDefaults[ClientOption.PIN_ALARM],
+            dest=ClientOption.PIN_ALARM,
+            type='int',
+            action='store'
+        )
+
+        self.__parser.add_option(
             '--use-estop',
             help='use the e-stop pin to detect an e-stop event [default:%default]',
             default=ClientOptionDefaults[ClientOption.USE_ESTOP],
@@ -330,7 +341,7 @@ class ClientOptionParser(object):
 
         self.__parser.add_option(
             '--use-3v3-en',
-            help='use the 3.3v enable pin function [default:\'%default\']',
+            help='the PCB has a 3.3v enable pin function [default:\'%default\']',
             default=ClientOptionDefaults[ClientOption.USE_3V3_EN],
             dest=ClientOption.USE_3V3_EN,
             action='store_true'
@@ -341,6 +352,14 @@ class ClientOptionParser(object):
             help='use the bypass detect pin function [default:\'%default\']',
             default=ClientOptionDefaults[ClientOption.USE_BYPASS_DETECT],
             dest=ClientOption.USE_BYPASS_DETECT,
+            action='store_true'
+        )
+
+        self.__parser.add_option(
+            '--use-alarm',
+            help='use the alarm output pin function [default:\'%default\']',
+            default=ClientOptionDefaults[ClientOption.USE_ALARM],
+            dest=ClientOption.USE_ALARM,
             action='store_true'
         )
 

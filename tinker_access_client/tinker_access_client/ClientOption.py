@@ -7,6 +7,8 @@ class ClientOption:
     DEVICE_ID = 'device_id'
     PIN_ESTOP = 'pin_estop'
     USE_ESTOP = 'use_estop'
+    PIN_ALARM = 'pin_alarm'
+    USE_ALARM = 'use_alarm'
     PIN_LOGOUT = 'pin_logout'
     PIN_3V3_EN = 'pin_3v3_en'
     USE_3V3_EN = 'use_3v3_en'

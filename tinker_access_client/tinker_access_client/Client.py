@@ -135,6 +135,7 @@ class Client(Machine):
 
     def __show_yellow_led(self):
         self.__device.write(Channel.LED, True, True, False)
+        self.__set_alarm_output(False)
 
     def __show_bypassed(self):
         self.__device.write(
@@ -211,6 +212,11 @@ class Client(Machine):
 
     def __show_red_led(self):
         self.__device.write(Channel.LED, True, False, False)
+        self.__set_alarm_output(True)
+
+    def __set_alarm_output(self, state):
+        if self.__opts.get(ClientOption.USE_ALARM):
+            self.__device.write(Channel.PIN, self.__opts.get(ClientOption.PIN_ALARM), state)
 
     def __do_logout(self):
         self.__cancel_logout_timer()
@@ -223,6 +229,7 @@ class Client(Machine):
 
     def __show_blue_led(self):
         self.__device.write(Channel.LED, False, False, True)
+        self.__set_alarm_output(False)
 
     def __show_scan_badge(self):
         self.__device.write(
@@ -251,6 +258,7 @@ class Client(Machine):
 
     def __show_green_led(self):
         self.__device.write(Channel.LED, False, True, False)
+        self.__set_alarm_output(False)
 
     def __start_logout_timer(self, refresh=False):
         self.__cancel_logout_timer(refresh)
@@ -301,6 +309,7 @@ class Client(Machine):
     def __toggle_red_led(self):
         red_led_status = self.__device.read(Channel.PIN, self.__opts.get(ClientOption.PIN_LED_RED))
         self.__device.write(Channel.LED, not red_led_status, False, False)
+        self.__set_alarm_output(True)
 
     def __cancel_logout_timer(self, refresh=False):
         if not refresh:
@@ -368,6 +377,7 @@ class Client(Machine):
 
     def __show_magenta_led(self):
         self.__device.write(Channel.LED, True, False, True)
+        self.__set_alarm_output(False)
 
     def __show_training_mode_activated(self, delay=0):
         self.__device.write(
@@ -507,8 +517,9 @@ class Client(Machine):
         is_machine_running = False
         while time.time() - current < max_power_down_timeout and self.__device.read(Channel.PIN, current_sense_pin):
             is_machine_running = True
+            self.__show_red_led()
             self.__show_waiting_for_power_down()
-            time.sleep(0.1)
+            time.sleep(0.5)
 
         return is_machine_running
 
@@ -529,8 +540,8 @@ class Client(Machine):
     def __show_waiting_for_power_down(self, delay=0):
         self.__device.write(
             Channel.LCD,
-            'WAITING FOR'.center(maximum_lcd_characters, ' '),
-            'MACHINE TO STOP...'.center(maximum_lcd_characters, ' ')
+            'WAITING FOR ...'.center(maximum_lcd_characters, ' '),
+            'MACHINE TO STOP'.center(maximum_lcd_characters, ' ')
         )
         time.sleep(delay)
 
