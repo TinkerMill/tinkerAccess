@@ -13,6 +13,7 @@ import os
 import os.path
 import json
 import requests
+import base64
 import csv
 import re
 from collections import defaultdict, namedtuple
@@ -35,9 +36,14 @@ if configPath:
   C_password = c.get('config', 'password')
   C_database = c.get('config', 'db') 
   C_slackPostUrl = c.get('config', 'slackurl')
+  c_webcam_username = c.get('config', 'webcam_username')
+  c_webcam_password = c.get('config', 'webcam_password')
+  c_webcam_urls = dict(c.items(section='webcam_urls'))
 else:
   print("config server.cfg not found")
   sys.exit(1)
+
+######### Database functions #########
 
 def init_db():
   with app.app_context():
@@ -88,6 +94,8 @@ def addNewUser(code, deviceid):
       exec_db("insert into newuser (code,deviceID) values ('%s', %s)" % (code, deviceid) )
 
 
+######### Webserver functions #########
+
 @app.teardown_appcontext
 def close_connection(exception):
     db = getattr(g, '_database', None)
@@ -100,8 +108,16 @@ def deviceLogout(deviceid, uid):
   output = query_db("select device.name from device where id=%s" % deviceid)
   exec_db("insert into log (message) values ('logout:%s:%s')" % (deviceid,uid) )
 
-  d = json.dumps({'text': "%s is now available" % output[0][0]  })
-  requests.post(C_slackPostUrl, data=d )
+  message_content = {'text': '{} is now available'.format(output[0][0])}
+  if output[0][0] in c_webcam_urls:
+      image_url = captureImage(c_webcam_urls[output[0][0]])
+      if len(image_url) > 0:
+          message_content['attachments'] = [{
+                  'fallback': 'Webcam image of {}'.format(output[0][0]),
+                  'image_url': image_url
+                  }]
+              })
+  requests.post(C_slackPostUrl, data=json.dumps(message_content))
 
   return ""
 
@@ -117,8 +133,15 @@ def deviceCode(deviceid,code):
   else:
 
     # send the data to slack
-    d = json.dumps({'text': "%s is now in use by %s" % (output[0][2], output[0][0]) })
-    requests.post(C_slackPostUrl, data=d )
+    message_content = {'text': '{} is now in use by {}'.format(output[0][2], output[0][0])}
+    if output[0][2] in c_webcam_urls:
+        image_url = captureImage(c_webcam_urls[output[0][2]])
+        message_content['attachments'] = [{
+                'fallback': 'Webcam image of {}'.format(output[0][2]),
+                'image_url': image_url
+                }]
+            })
+    requests.post(C_slackPostUrl, data=json.dumps(message_content))
 
     # log it to the database
     exec_db("insert into log (message) values ('login:%s:%s')" % (deviceid, output[0][1]) )
@@ -474,6 +497,29 @@ def genToolSummary(start_date, end_date):
       out_sum[tool]['leaderboard'].append((s.name, s.total_time))
 
   return out_sum
+
+def captureImage(webcam_url):
+    """Capture image from webcam and upload to Imgur; returns Imgur URL"""
+    webcam_user = c['config']['webcam_username']
+    webcam_pass = c['config']['webcam_password']
+    imgur_client_id = c['config']['imgur_client_id']
+    imgur_client_key = c['config']['imgur_client_key']
+
+    # grab image from webcam
+    dl_resp = requests.get(webcam_url, auth=(webcam_user, webcam_pass))
+    if dl_resp.status_code != 200: return ""
+    img_b64 = base64.b64encode(dl_resp.content)
+
+    # upload to Imgur
+    ul_resp = requests.post(
+            'https://api.imgur.com/3/image',
+            headers = {'Authorization': 'Client-ID ' + c['config']['imgur_client_id']},
+            data = {'image': img_b64})
+    if (ul_resp.status_code != 200):
+        print("Got a bad status code:", ul_resp.status_code)
+        print(ul_resp.text)
+        return ""
+    return ul_resp.json()['data']['link']
 
 if __name__ == "__main__":
   #app.run(host='0.0.0.0')
