@@ -136,11 +136,12 @@ def deviceCode(deviceid,code):
     message_content = {'text': '{} is now in use by {}'.format(output[0][2], output[0][0])}
     if output[0][2] in c_webcam_urls:
         image_url = captureImage(c_webcam_urls[output[0][2]])
-        message_content['attachments'] = [{
-                'fallback': 'Webcam image of {}'.format(output[0][2]),
-                'image_url': image_url
-                }]
-            })
+        if len(image_url) > 0:
+            message_content['attachments'] = [{
+                    'fallback': 'Webcam image of {}'.format(output[0][2]),
+                    'image_url': image_url
+                    }]
+                })
     requests.post(C_slackPostUrl, data=json.dumps(message_content))
 
     # log it to the database
@@ -507,7 +508,10 @@ def captureImage(webcam_url):
 
     # grab image from webcam
     dl_resp = requests.get(webcam_url, auth=(webcam_user, webcam_pass))
-    if dl_resp.status_code != 200: return ""
+    if dl_resp.status_code != 200: 
+        print("Webcam download status code:", dl_resp.status_code)
+        print(dl_resp.text)
+        return ""
     img_b64 = base64.b64encode(dl_resp.content)
 
     # upload to Imgur
@@ -516,7 +520,7 @@ def captureImage(webcam_url):
             headers = {'Authorization': 'Client-ID ' + c['config']['imgur_client_id']},
             data = {'image': img_b64})
     if (ul_resp.status_code != 200):
-        print("Got a bad status code:", ul_resp.status_code)
+        print("Imgur upload status code:", ul_resp.status_code)
         print(ul_resp.text)
         return ""
     return ul_resp.json()['data']['link']
