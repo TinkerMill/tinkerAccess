@@ -36,9 +36,12 @@ if configPath:
   C_password = c.get('config', 'password')
   C_database = c.get('config', 'db') 
   C_slackPostUrl = c.get('config', 'slackurl')
-  c_webcam_username = c.get('config', 'webcam_username')
-  c_webcam_password = c.get('config', 'webcam_password')
-  c_webcam_urls = dict(c.items(section='webcam_urls'))
+  if c.has_option('config', 'webcam_username'): c_webcam_username = c.get('config', 'webcam_username')
+  if c.has_option('config', 'webcam_password'): c_webcam_password = c.get('config', 'webcam_password')
+  if c.has_section('webcam_urls'):
+    c_webcam_urls = dict(c.items(section='webcam_urls'))
+  else:
+    c_webcam_urls = dict()
 else:
   print("config server.cfg not found")
   sys.exit(1)
@@ -113,10 +116,9 @@ def deviceLogout(deviceid, uid):
       image_url = captureImage(c_webcam_urls[output[0][0]])
       if len(image_url) > 0:
           message_content['attachments'] = [{
-                  'fallback': 'Webcam image of {}'.format(output[0][0]),
-                  'image_url': image_url
-                  }]
-              })
+              'fallback': 'Webcam image of {}'.format(output[0][0]),
+              'image_url': image_url
+              }]
   requests.post(C_slackPostUrl, data=json.dumps(message_content))
 
   return ""
@@ -138,10 +140,9 @@ def deviceCode(deviceid,code):
         image_url = captureImage(c_webcam_urls[output[0][2]])
         if len(image_url) > 0:
             message_content['attachments'] = [{
-                    'fallback': 'Webcam image of {}'.format(output[0][2]),
-                    'image_url': image_url
-                    }]
-                })
+                'fallback': 'Webcam image of {}'.format(output[0][2]),
+                'image_url': image_url
+                }]
     requests.post(C_slackPostUrl, data=json.dumps(message_content))
 
     # log it to the database
