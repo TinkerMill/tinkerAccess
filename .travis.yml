@@ -23,7 +23,7 @@ install:
 
 script:
   - cd "${PYTHON_PACKAGE_SRC}"
-  - sudo pip install --upgrade --no-compile --force-reinstall --ignore-installed --no-cache-dir .
+  - sudo pip install --upgrade --no-compile --force-reinstall --ignore-installed --no-cache-dir --no-binary ${PYTHON_PACKAGE_NAME} .
   - sudo python setup.py test
 
 before_deploy:

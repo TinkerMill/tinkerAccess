@@ -17,7 +17,7 @@ class install(_install):
             self.execute(ServiceInstaller(self.install_lib).install, [], msg)
 
         except Exception as e:
-            logger.error('The % service may not have installed correctly.\n', PackageInfo.pip_package_name)
+            logger.error('The %s service may not have installed correctly.\n', PackageInfo.pip_package_name)
             logger.error('Remediation maybe required.\n')
             raise e
 
@@ -36,7 +36,7 @@ config = {
         'daemonize==2.4.7',
         'requests>=2.20.0',
         'pyserial==3.2.1',
-	'smbus2==0.1.4' ,
+        'smbus2==0.1.4',
         'retry==0.9.2'
     ],
 

@@ -6,6 +6,7 @@ LOW = 0
 BCM = 11
 IN = 0
 OUT = 1
+PUD_OFF = 0
 PUD_DOWN = 1
 PUD_UP = 2
 setmode = Mock()
