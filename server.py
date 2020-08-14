@@ -36,12 +36,21 @@ if configPath:
   C_password = c.get('config', 'password')
   C_database = c.get('config', 'db') 
   C_slackPostUrl = c.get('config', 'slackurl')
+  c_webcam_username = None
+  c_webcam_password = None
+  c_imgur_client_id = None
   if c.has_option('config', 'webcam_username'): c_webcam_username = c.get('config', 'webcam_username')
   if c.has_option('config', 'webcam_password'): c_webcam_password = c.get('config', 'webcam_password')
+  if c.has_option('config', 'imgur_client_id'): c_imgur_client_id = c.get('config', 'imgur_client_id')
+
+  c_webcam_urls = dict()
   if c.has_section('webcam_urls'):
-    c_webcam_urls = dict(c.items(section='webcam_urls'))
-  else:
-    c_webcam_urls = dict()
+    if c_webcam_username is None or c_webcam_password is None or c_imgur_client_id is None:
+        print("To post webcam images, `webcam_username`, `webcam_password`,\n" +
+              "and `imgur_client_id` must all be specified in the `config`\n" +
+              "section")
+    else: c_webcam_urls = dict(c.items(section='webcam_urls'))
+
 else:
   print("config server.cfg not found")
   sys.exit(1)
@@ -502,13 +511,9 @@ def genToolSummary(start_date, end_date):
 
 def captureImage(webcam_url):
     """Capture image from webcam and upload to Imgur; returns Imgur URL"""
-    webcam_user = c['config']['webcam_username']
-    webcam_pass = c['config']['webcam_password']
-    imgur_client_id = c['config']['imgur_client_id']
-    imgur_client_key = c['config']['imgur_client_key']
 
     # grab image from webcam
-    dl_resp = requests.get(webcam_url, auth=(webcam_user, webcam_pass))
+    dl_resp = requests.get(webcam_url, auth=(c_webcam_username, c_webcam_password))
     if dl_resp.status_code != 200: 
         print("Webcam download status code:", dl_resp.status_code)
         print(dl_resp.text)
@@ -518,7 +523,7 @@ def captureImage(webcam_url):
     # upload to Imgur
     ul_resp = requests.post(
             'https://api.imgur.com/3/image',
-            headers = {'Authorization': 'Client-ID ' + c['config']['imgur_client_id']},
+            headers = {'Authorization': 'Client-ID ' + c_imgur_client_id},
             data = {'image': img_b64})
     if (ul_resp.status_code != 200):
         print("Imgur upload status code:", ul_resp.status_code)
