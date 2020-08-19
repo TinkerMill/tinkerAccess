@@ -1,4 +1,4 @@
-#Integration Testing
+# Integration Testing
 
 These test use a custom [VirtualDevice](utils/VirtualDevice.py) fixture which replaces the GPIO library at runtime, so the pin state is stored in memory.   
 

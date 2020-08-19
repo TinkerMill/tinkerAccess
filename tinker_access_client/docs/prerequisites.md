@@ -1,31 +1,40 @@
 # Prerequisites:
-1. Build the custom [Raspberry Pi HAT](https://www.raspberrypi.org/blog/introducing-raspberry-pi-hats/) as described [here](../../docs/tinkerAccess.fzz).
+1. Build the custom tinkerAccess [Raspberry Pi HAT](https://www.raspberrypi.org/blog/introducing-raspberry-pi-hats/) as described [here](/Hardware/).
 
-1. Create a [Raspbian OS](https://www.raspberrypi.org/downloads/raspbian/) boot image as described [here](docs/bootimage.md).
+2. Create a [Raspberry Pi OS](https://www.raspberrypi.org/downloads/raspberry-pi-os/) boot image as described in detail [here](bootimage.md).
 
-1. Transfer your SD card to the Raspberry Pi and boot it up.
+3. Modify the Raspberry Pi Configuration.
 
-1. Create a remote secure shell to your Raspberry Pi. If you followed the previous setup instructions, your PI is already configured to allow SSH connections.  
-[These](https://www.raspberrypi.org/documentation/remote-access/ssh/README.md) instructions may assist you in identifying the correct IP address and creating the connection.
+   Launch the 'Raspberry Pi Configuration' as shown below:
 
-1. Complete [these](https://www.howtogeek.com/167195/how-to-change-your-raspberry-pi-or-other-linux-devices-hostname/) steps to change the hostname of your Raspberry Pi, and [these](https://www.raspberrypi.org/documentation/linux/usage/users.md) to update your the default password.
+   ![Raspberry Pi Configuration](images/launch_raspi_config.png)
 
-1. If you have not already done so already, __reboot__ the Raspberry Pi so that the changes take affect & __reconnect__ to the Raspberry Pi using your new hostname.
+   Change the Hostname of the client, and change the default password if not completed in an earlier step:
 
-1. Install the python package mamanager (a.k.a 'pip')
+   ![Pi Config System](images/raspi_config_system.png)
 
-  **IMPORTANT**: If you have just created a new image using the previous mentioned guide, or you are using an existing image...
+   Setup the Interfaces as shown below:
 
-  Ensure you have the latest version of [pip](https://pip.pypa.io/en/stable) and its related setuptools installed, if you don't complete this step, you will almost certainly __not__ have a good time. Version issues with PIP and its related setuptools can be inconsistent, confusing and difficult to resolve, it is better to just avoid it now and ensure that they are updated.
+   ![Pi Config Interfaces](images/raspi_config_interfaces.png)
 
-  You can find references to many of these issues described [here](https://pip.pypa.io/en/stable/installing/#upgrading-pip)...
+   SSH and VNC should be enabled for headless remote access to the client. 'I2C' needs to be enabled for the client to communicate to the LCD display. The 'Serial Port' needs to be enabled for the client to communicate to the RFID, but the 'Serial Console' needs to be disabled so that it does not interfere with the RFID communication.
 
-  This is what has worked for me consistently:
-  ```commandline
-  sudo apt-get update
-  sudo apt-get install python-pip
-  sudo easy_install pip
-  sudo pip install --upgrade  setuptools pip
-  ```
+   Reboot the Pi after making changes to the Raspberry Pi Configuration.
 
-1. [Continue](../README.md)
+4. Reconnect to your Pi via [SSH](https://www.raspberrypi.org/documentation/remote-access/ssh/README.md) or [VNC](https://www.raspberrypi.org/documentation/remote-access/vnc/README.md).
+
+5. Install the python package manager (a.k.a 'pip').
+
+   **IMPORTANT**: If you have just created a new image using the previous mentioned guide, or you are using an existing image...
+
+   Ensure you have the latest version of [pip](https://pip.pypa.io/en/stable) and its related setuptools installed. If you do not complete this step, you will almost certainly __not__ have a good time. Version issues with PIP and its related setuptools can be inconsistent, confusing, and difficult to resolve. It is better to just avoid it now and ensure that they are updated. 
+
+   Many references that you can find, say to upgrade pip with the command 'pip install --upgrade pip setuptools'. However, it is not advisable to upgrade the system version of pip with this method. It can create all sorts of issues if the system maintainer version is upgraded via this method. References to many of these issues are described [here](https://github.com/pypa/pip/issues/5599).
+
+   The recommended upgrade process is shown below:
+   ```
+   sudo apt update
+   sudo apt install python-pip python-setuptools
+   ```
+
+6. Continue with [client only install](/tinker_access_client/README.md) or [combined client/server install](/README.md).

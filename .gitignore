@@ -13,3 +13,8 @@ db.db
 **/build/
 .python-version
 server.cfg
+
+# Eagle PCB backup files
+*.b#?
+*.s#?
+*.l#?

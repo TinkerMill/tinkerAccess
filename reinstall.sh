@@ -14,7 +14,7 @@ if [ ! -d $dir ] ; then
 	exit
 fi
 
-# copy over the file we need
+# copy over the files we need
 cp server.py $dir
 chmod 755 $dir/server.py
 cp -r static $dir
@@ -29,4 +29,4 @@ update-rc.d tinkerserver defaults 91
 service tinkerserver start
 
 # install the Client startup service
-pip install --upgrade --force-reinstall --ignore-installed --no-cache-dir tinker-access-client
+pip install --upgrade --force-reinstall --ignore-installed --no-cache-dir tinker-access-client --no-binary tinker-access-client
