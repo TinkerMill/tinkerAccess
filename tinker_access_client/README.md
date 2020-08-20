@@ -123,7 +123,7 @@ auto_update: true
 
 - __--force-update__: By default, the update command will not do an update if the current version matches the latest version published to [PyPI - the Python Package Index ](https://pypi.python.org/pypi/tinker-access-client/). This option bypasses the version check, and will force a re-install [default:'False']
 
-- __--auto-update=[auto_update]__: If configured, the client will periodically check if a newer version has been published to [PyPI - the Python Package Index ](https://pypi.python.org/pypi/tinker-access-client/). If a new version is found, it will be install it automatically.
+- __--auto-update=[auto_update]__: If configured, the client will periodically check if a newer version has been published to [PyPI - the Python Package Index ](https://pypi.python.org/pypi/tinkear-access-client/). If a new version is found, it will be install it automatically.
 [default:'False']
 
 - __--auto-update-interval=[auto_update_interval]__: The period (specified in minutes) that the [PyPI - the Python Package Index ](https://pypi.python.org/pypi/tinker-access-client/) should be checked for a new version of the client. [default:5]
@@ -141,9 +141,9 @@ auto_update: true
 
 - __--device-id=[device_id]__: The unique identifier for this client, as configured in the [tinker-access-server](../tinker_access_server/README.md) [default:'none']
 
-- __--logout-coast-time=[logout_coast_time]__: A fixed number of seconds to wait for the physical machine to stop after power has been disabled. (i.e. a blade to stop spinning etc...) [default:0]
+- __--logout-coast-time=[logout_coast_time]__: A fixed number of seconds to wait for the physical machine to stop before disabling power, after the current sense pin goes low. (i.e., a blade to stop spinning etc...) [default:0]
 
-- __--max-power-down-timeout=[max_power_down_timeout]__: The maximum number of seconds to wait for the current sense pin to go low during logout/shutdown [default:5]
+- __--max-power-down-timeout=[max_power_down_timeout]__: The maximum number of seconds to wait for the current sense pin to go low during logout/shutdown [default:None(infinite)]
 
 - __--reboot-on-error=[reboot_on_error]__: Any unhandled errors will cause the device to reboot after the specified --reboot-delay. [default:'False']
 
@@ -198,3 +198,8 @@ auto_update: true
 - __--display-serlcd=[display_serlcd]__: Send commands for the SparkFun LCD-14072 SerLCD display if true, otherwise send commands for the original backpack style display [default:'False']
 
 - __--allow-user-override=[allow_user_override]__: Allows a new user to login and takeover the current user login session [default:'False']
+
+## Tuning the current detection threshold:
+
+Newer PCBs have a programmable current detection threshold. Details on how to tune this can be found [here](tuning/README.md).
+
