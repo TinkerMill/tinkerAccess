@@ -24,11 +24,11 @@ These parameters apply to the PCBs with a programmable current threshold
 
 - __current_detect_setting__:[integer RMS milliamps] (default: 10000)
 
-  This parameter is used to set the programmable current detection threshold. It is defined as RMS milliamps. It should be set between the measured 'idle' current and 'running' current. There is a maximum threshold current that is determined by the CT burden resistor and CT turn ratio. The tuning script will report the maximum programmable threshold. The tuning script can also be ran at both 'idle' and 'running' conditions to determine the optimal threshold setting.
+  This parameter is used to set the programmable current detection threshold. It is defined as RMS milliamps. It should be set between the measured 'idle' current and 'running' current. There is a maximum threshold current that is determined by the CT burden resistor and CT turns ratio. The tuning script will report the maximum programmable threshold. The tuning script can also be ran at both 'idle' and 'running' conditions to determine the optimal threshold setting.
 
 - __ct_burden_resistor__:[integer ohms] (default: 1000)
 
-  This parameter is used in internal calculations and should match the actual value of the current transformer burden resistor on the PCB. The PCBs are built with default burden resistor values of 1K. Should the range of the programmable threshold not be adequate, the burden resistor can be increased to decrease the range, and decreased to increase the range. If the physical resistor is changed, then this parameter should be modified to reflect that change.
+  This parameter is used in internal calculations and should match the actual value of the current transformer burden resistor on the PCB. The PCBs are built with a default burden resistor value of 1K. Should the range of the programmable threshold not be adequate, the burden resistor can be increased to decrease the range, and decreased to increase the range. If the physical resistor is changed, then this parameter should be modified to reflect that change.
 
 - __ct_turns_ratio__:[integer turns ratio] (default: 2000)
 
@@ -36,7 +36,7 @@ These parameters apply to the PCBs with a programmable current threshold
 
 ### Tuning script
 
-The `tune_current_sense.py` Python script can be used on a running client to sweep the programmable current detection threshold to 'measure' the actual machine current under different conditions. If this script is run at 'idle' then then under 'running' conditions, the optimal programmable threshold level will be somewhere between these two values.
+The `tune_current_sense.py` Python script can be used on a running client to sweep the programmable current detection threshold to 'measure' the actual machine current under different conditions. If this script is run at 'idle' and then under 'running' conditions, the optimal programmable threshold level will be somewhere between these two values.
 
 Below is the procedure for running the the tuning script:
 
