@@ -28,6 +28,11 @@ ClientOptionDefaults = {
     ClientOption.USE_BYPASS_DETECT: False,
     ClientOption.PIN_ALARM: 22,
     ClientOption.USE_ALARM: False,
+    ClientOption.PIN_CURRENT_THRESHOLD: 18,
+    ClientOption.USE_PGM_CURRENT_THRESHOLD: False,
+    ClientOption.CURRENT_DETECT_SETTING: 10000,
+    ClientOption.CT_BURDEN_RESISTOR: 1000,
+    ClientOption.CT_TURNS_RATIO: 2000,
     ClientOption.LOGOUT_COAST_TIME: 0,
     ClientOption.PIN_CURRENT_SENSE: 12,
     ClientOption.REBOOT_ON_ERROR: False,
@@ -324,6 +329,15 @@ class ClientOptionParser(object):
         )
 
         self.__parser.add_option(
+            '--pin-current-threshold',
+            help='the current threshold pin [default:%default]',
+            default=ClientOptionDefaults[ClientOption.PIN_CURRENT_THRESHOLD],
+            dest=ClientOption.PIN_CURRENT_THRESHOLD,
+            type='int',
+            action='store'
+        )
+
+        self.__parser.add_option(
             '--use-estop',
             help='use the e-stop pin to detect an e-stop event [default:%default]',
             default=ClientOptionDefaults[ClientOption.USE_ESTOP],
@@ -361,6 +375,41 @@ class ClientOptionParser(object):
             default=ClientOptionDefaults[ClientOption.USE_ALARM],
             dest=ClientOption.USE_ALARM,
             action='store_true'
+        )
+
+        self.__parser.add_option(
+            '--use-pgm-current-threshold',
+            help='the PCB has a programmable current detect threshold PWM output [default:\'%default\']',
+            default=ClientOptionDefaults[ClientOption.USE_PGM_CURRENT_THRESHOLD],
+            dest=ClientOption.USE_PGM_CURRENT_THRESHOLD,
+            action='store_true'
+        )
+
+        self.__parser.add_option(
+            '--current-detect-setting',
+            help='the RMS current detect threshold setting in milliamps [default:%default]',
+            default=ClientOptionDefaults[ClientOption.CURRENT_DETECT_SETTING],
+            dest=ClientOption.CURRENT_DETECT_SETTING,
+            type='int',
+            action='store'
+        )
+
+        self.__parser.add_option(
+            '--ct-burden-resistor',
+            help='the current transformer burden resistor value in ohms [default:%default]',
+            default=ClientOptionDefaults[ClientOption.CT_BURDEN_RESISTOR],
+            dest=ClientOption.CT_BURDEN_RESISTOR,
+            type='int',
+            action='store'
+        )
+
+        self.__parser.add_option(
+            '--ct-turns-ratio',
+            help='the current transformer turns ratio [default:%default]',
+            default=ClientOptionDefaults[ClientOption.CT_TURNS_RATIO],
+            dest=ClientOption.CT_TURNS_RATIO,
+            type='int',
+            action='store'
         )
 
         self.__parser.add_option(

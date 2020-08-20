@@ -163,6 +163,8 @@ auto_update: true
 
 - __--pin-current-sense=[pin_current_sense]__: The current sense pin [default:12]
 
+- __--pin-current-threshold=[pin_current_threshold]__: The current sense detect threshold PWM pin [default:18]
+
 - __--pin-estop=[pin_estop]__: The E-STOP input pin [default:6]
 
 - __--pin-bypass-detect=[pin_bypass_detect]__: The bypass detect input pin [default:13]
@@ -180,6 +182,14 @@ auto_update: true
 - __--use-3v3-en=[use_3v3_en]__: The PCB has a 3.3V enable output pin and will be cycled during start-up or certain errors. Feature only on newer boards [default:'False']
 
 - __--use-alarm=[use_alarm]__: The alarm output pin is enabled and will output high during an alarm condition [default:'False']
+
+- __--use-pgm-current-threshold=[use_pgm_current_threshold]__: The PCB has a programmable current detect threshold PWM output and will be set during init to set the current detect threshold [default:'False']
+
+- __--current-detect-setting=[current_detect_setting]__: The current sense detect threshold setting in RMS milliamps [default:'10000']
+
+- __--ct-burden-resistor=[ct_burden_resistor]__: The current transformer burden resistor value in ohms [default:'1000']
+
+- __--ct-turns-ratio=[ct_turns_ratio]__: The current transformer turns ratio [default:'2000']
 
 - __--serial-port-name=[serial_port_name]__: The serial port attached to the RFID reader [default:'/dev/ttyUSB0']
 
