@@ -37,4 +37,18 @@
    sudo apt install python-pip python-setuptools
    ```
 
-6. Continue with [client only install](/tinker_access_client/README.md) or [combined client/server install](/README.md).
+6. Install pigpio
+
+   For the PWM current sense level detect output, the Python code uses the PWM features of the pigpio library. Therefore, the pigpio library needs to be installed and the daemon needs to be started at bootup. The following command will ensure the pigpio library is installed and the daemon running at bootup:
+   ```
+   sudo apt install pigpio
+   sudo systemctl enable pigpiod
+   sudo reboot
+   ```
+
+   After reboot check the status of the pigpiod daemon with the following command:
+   ```
+   sudo systemctl status pigpiod
+   ```
+   
+7. Continue with [client only install](/tinker_access_client/README.md) or [combined client/server install](/README.md).
