@@ -123,7 +123,7 @@ auto_update: true
 
 - __--force-update__: By default, the update command will not do an update if the current version matches the latest version published to [PyPI - the Python Package Index ](https://pypi.python.org/pypi/tinker-access-client/). This option bypasses the version check, and will force a re-install [default:'False']
 
-- __--auto-update=[auto_update]__: If configured, the client will periodically check if a newer version has been published to [PyPI - the Python Package Index ](https://pypi.python.org/pypi/tinkear-access-client/). If a new version is found, it will be install it automatically.
+- __--auto-update=[auto_update]__: If configured, the client will periodically check if a newer version has been published to [PyPI - the Python Package Index ](https://pypi.python.org/pypi/tinker-access-client/). If a new version is found, it will be install it automatically.
 [default:'False']
 
 - __--auto-update-interval=[auto_update_interval]__: The period (specified in minutes) that the [PyPI - the Python Package Index ](https://pypi.python.org/pypi/tinker-access-client/) should be checked for a new version of the client. [default:5]
