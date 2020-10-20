@@ -141,9 +141,9 @@ auto_update: true
 
 - __--device-id=[device_id]__: The unique identifier for this client, as configured in the [tinker-access-server](../tinker_access_server/README.md) [default:'none']
 
-- __--logout-coast-time=[logout_coast_time]__: A fixed number of seconds to wait for the physical machine to stop after power has been disabled. (i.e. a blade to stop spinning etc...) [default:0]
+- __--logout-coast-time=[logout_coast_time]__: A fixed number of seconds to wait for the physical machine to stop before disabling power, after the current sense pin goes low. (i.e., a blade to stop spinning etc...) [default:0]
 
-- __--max-power-down-timeout=[max_power_down_timeout]__: The maximum number of seconds to wait for the current sense pin to go low during logout/shutdown [default:5]
+- __--max-power-down-timeout=[max_power_down_timeout]__: The maximum number of seconds to wait for the current sense pin to go low during logout/shutdown [default:None(infinite)]
 
 - __--reboot-on-error=[reboot_on_error]__: Any unhandled errors will cause the device to reboot after the specified --reboot-delay. [default:'False']
 
@@ -163,6 +163,8 @@ auto_update: true
 
 - __--pin-current-sense=[pin_current_sense]__: The current sense pin [default:12]
 
+- __--pin-current-threshold=[pin_current_threshold]__: The current sense detect threshold PWM pin [default:18]
+
 - __--pin-estop=[pin_estop]__: The E-STOP input pin [default:6]
 
 - __--pin-bypass-detect=[pin_bypass_detect]__: The bypass detect input pin [default:13]
@@ -181,6 +183,14 @@ auto_update: true
 
 - __--use-alarm=[use_alarm]__: The alarm output pin is enabled and will output high during an alarm condition [default:'False']
 
+- __--use-pgm-current-threshold=[use_pgm_current_threshold]__: The PCB has a programmable current detect threshold PWM output and will be set during init to set the current detect threshold [default:'False']
+
+- __--current-detect-setting=[current_detect_setting]__: The current sense detect threshold setting in RMS milliamps [default:'10000']
+
+- __--ct-burden-resistor=[ct_burden_resistor]__: The current transformer burden resistor value in ohms [default:'1000']
+
+- __--ct-turns-ratio=[ct_turns_ratio]__: The current transformer turns ratio [default:'2000']
+
 - __--serial-port-name=[serial_port_name]__: The serial port attached to the RFID reader [default:'/dev/ttyUSB0']
 
 - __--serial-port-speed=[serial_port_speed]__: The serial port speed to use [default:9600]
@@ -188,3 +198,8 @@ auto_update: true
 - __--display-serlcd=[display_serlcd]__: Send commands for the SparkFun LCD-14072 SerLCD display if true, otherwise send commands for the original backpack style display [default:'False']
 
 - __--allow-user-override=[allow_user_override]__: Allows a new user to login and takeover the current user login session [default:'False']
+
+## Tuning the current detection threshold:
+
+Newer PCBs have a programmable current detection threshold. Details on how to tune this can be found [here](tuning/README.md).
+

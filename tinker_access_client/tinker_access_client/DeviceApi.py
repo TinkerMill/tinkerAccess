@@ -1,4 +1,5 @@
 import time
+import math
 import json
 import serial
 import logging
@@ -61,6 +62,9 @@ class DeviceApi(object):
 
         if self.__opts.get(ClientOption.USE_ALARM):
             GPIO.setup(self.__opts.get(ClientOption.PIN_ALARM), GPIO.OUT)
+        
+        if self.__opts.get(ClientOption.USE_PGM_CURRENT_THRESHOLD):
+            GPIO.setup(self.__opts.get(ClientOption.PIN_CURRENT_THRESHOLD), GPIO.OUT, initial=GPIO.HIGH)
 
         if self.__opts.get(ClientOption.USE_3V3_EN):
             # Toggle the 3.3V enable to reset I2C devices
@@ -80,6 +84,50 @@ class DeviceApi(object):
             GPIO.setup(self.__opts.get(ClientOption.PIN_BYPASS_DETECT), GPIO.IN, GPIO.PUD_UP)
 
         self.GPIO = GPIO
+
+        self.__configure_pwm()
+
+    def __configure_pwm(self):
+
+        if self.__opts.get(ClientOption.USE_PGM_CURRENT_THRESHOLD):
+
+            # Use pigpio for the current sense threshold PWM output as the RPi.GPIO PWM jitter is not very good
+            import pigpio
+            PIGPIO = pigpio.pi()
+
+            # Set some parameters needed for PWM calcs
+            pin_current_threshold = self.__opts.get(ClientOption.PIN_CURRENT_THRESHOLD)
+            Rb = self.__opts.get(ClientOption.CT_BURDEN_RESISTOR)
+            turns = self.__opts.get(ClientOption.CT_TURNS_RATIO)
+            Vcc = 3.3
+
+            # Attempt to set the PWM frequency and duty cycle range then get the actual values and adjust duty cycle to the real value
+            PIGPIO.set_PWM_frequency(pin_current_threshold, 4000)
+            PIGPIO.set_PWM_range(pin_current_threshold, 100)
+            pwm_freq = PIGPIO.get_PWM_frequency(pin_current_threshold)
+            pwm_range = PIGPIO.get_PWM_real_range(pin_current_threshold)
+            PIGPIO.set_PWM_range(pin_current_threshold, pwm_range)
+
+            max_threshold_in_amps_rms = Vcc / math.sqrt(2) / Rb * turns
+            amps_resolution = max_threshold_in_amps_rms / pwm_range
+
+            self.__logger.info('Current sense PWM setup: Rb: %d ohms, CT: %d:1, PWM Freq: %d, PWM Steps: %d, Max threshold: %.2f Amps(RMS), Step size: %.3f Amps(RMS).',
+                               Rb, turns, pwm_freq, pwm_range, max_threshold_in_amps_rms, amps_resolution)
+
+            pwm_dutycycle_raw = min(int(round(self.__opts.get(ClientOption.CURRENT_DETECT_SETTING) / 1000.0 / max_threshold_in_amps_rms * pwm_range)), pwm_range)
+            pwm_dutycycle_pct = 100.0 * pwm_dutycycle_raw / pwm_range
+            pwm_amps = pwm_dutycycle_raw * amps_resolution
+            pwm_volts = Vcc * pwm_dutycycle_raw / pwm_range
+
+            self.__logger.info('Current sense PWM setting: PWM Duty Cycle: %d (%.1f%%), PWM Output: %.3f Volts, Current Threshold Setting: %.2f Amps(RMS)',
+                               pwm_dutycycle_raw, pwm_dutycycle_pct, pwm_volts, pwm_amps)
+
+            PIGPIO.set_PWM_dutycycle(pin_current_threshold, pwm_dutycycle_raw)
+
+            self.PIGPIO = PIGPIO
+
+        else:
+            self.PIGPIO = None
 
     def __configure_serial(self):
         serial_port_name = self.__opts.get(ClientOption.SERIAL_PORT_NAME)
@@ -104,6 +152,8 @@ class DeviceApi(object):
         except Exception:
             pass
         finally:
+            if self.PIGPIO:
+                self.PIGPIO.stop()
             self.GPIO.cleanup()
 
     def __do_callback(self, call_back, *args, **kwargs):
