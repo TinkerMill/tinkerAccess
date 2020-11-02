@@ -1,0 +1,1778 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE eagle SYSTEM "eagle.dtd">
+<eagle version="9.6.2">
+<drawing>
+<settings>
+<setting alwaysvectorfont="no"/>
+<setting keepoldvectorfont="yes"/>
+<setting verticaltext="up"/>
+</settings>
+<grid distance="5" unitdist="mil" unit="mm" style="lines" multiple="1" display="no" altdistance="5" altunitdist="mil" altunit="mm"/>
+<layers>
+<layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
+<layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
+<layer number="3" name="Route3" color="4" fill="3" visible="no" active="no"/>
+<layer number="4" name="Route4" color="1" fill="4" visible="no" active="no"/>
+<layer number="5" name="Route5" color="4" fill="4" visible="no" active="no"/>
+<layer number="6" name="Route6" color="1" fill="8" visible="no" active="no"/>
+<layer number="7" name="Route7" color="4" fill="8" visible="no" active="no"/>
+<layer number="8" name="Route8" color="1" fill="2" visible="no" active="no"/>
+<layer number="9" name="Route9" color="4" fill="2" visible="no" active="no"/>
+<layer number="10" name="Route10" color="1" fill="7" visible="no" active="no"/>
+<layer number="11" name="Route11" color="4" fill="7" visible="no" active="no"/>
+<layer number="12" name="Route12" color="1" fill="5" visible="no" active="no"/>
+<layer number="13" name="Route13" color="4" fill="5" visible="no" active="no"/>
+<layer number="14" name="Route14" color="1" fill="6" visible="no" active="no"/>
+<layer number="15" name="Route15" color="4" fill="6" visible="no" active="no"/>
+<layer number="16" name="Bottom" color="1" fill="1" visible="no" active="yes"/>
+<layer number="17" name="Pads" color="2" fill="1" visible="yes" active="yes"/>
+<layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
+<layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
+<layer number="20" name="Dimension" color="58" fill="1" visible="yes" active="yes"/>
+<layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="22" name="bPlace" color="7" fill="1" visible="no" active="yes"/>
+<layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="24" name="bOrigins" color="15" fill="1" visible="no" active="yes"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="26" name="bNames" color="7" fill="1" visible="no" active="yes"/>
+<layer number="27" name="tValues" color="7" fill="1" visible="no" active="yes"/>
+<layer number="28" name="bValues" color="7" fill="1" visible="no" active="yes"/>
+<layer number="29" name="tStop" color="7" fill="3" visible="no" active="yes"/>
+<layer number="30" name="bStop" color="7" fill="6" visible="no" active="yes"/>
+<layer number="31" name="tCream" color="7" fill="4" visible="no" active="yes"/>
+<layer number="32" name="bCream" color="7" fill="5" visible="no" active="yes"/>
+<layer number="33" name="tFinish" color="6" fill="3" visible="no" active="yes"/>
+<layer number="34" name="bFinish" color="6" fill="6" visible="no" active="yes"/>
+<layer number="35" name="tGlue" color="7" fill="4" visible="no" active="yes"/>
+<layer number="36" name="bGlue" color="7" fill="5" visible="no" active="yes"/>
+<layer number="37" name="tTest" color="7" fill="1" visible="no" active="yes"/>
+<layer number="38" name="bTest" color="7" fill="1" visible="no" active="yes"/>
+<layer number="39" name="tKeepout" color="4" fill="11" visible="yes" active="yes"/>
+<layer number="40" name="bKeepout" color="1" fill="11" visible="no" active="yes"/>
+<layer number="41" name="tRestrict" color="4" fill="10" visible="yes" active="yes"/>
+<layer number="42" name="bRestrict" color="1" fill="10" visible="no" active="yes"/>
+<layer number="43" name="vRestrict" color="2" fill="10" visible="no" active="yes"/>
+<layer number="44" name="Drills" color="7" fill="1" visible="no" active="yes"/>
+<layer number="45" name="Holes" color="7" fill="1" visible="no" active="yes"/>
+<layer number="46" name="Milling" color="3" fill="1" visible="no" active="yes"/>
+<layer number="47" name="Measures" color="7" fill="1" visible="no" active="yes"/>
+<layer number="48" name="Document" color="7" fill="1" visible="no" active="yes"/>
+<layer number="49" name="Reference" color="7" fill="1" visible="no" active="yes"/>
+<layer number="50" name="dxf" color="7" fill="1" visible="no" active="yes"/>
+<layer number="51" name="tDocu" color="14" fill="1" visible="yes" active="yes"/>
+<layer number="52" name="bDocu" color="47" fill="1" visible="no" active="yes"/>
+<layer number="53" name="tGND_GNDA" color="7" fill="9" visible="no" active="no"/>
+<layer number="54" name="bGND_GNDA" color="1" fill="9" visible="no" active="no"/>
+<layer number="56" name="wert" color="7" fill="1" visible="no" active="yes"/>
+<layer number="57" name="tCAD" color="7" fill="1" visible="no" active="no"/>
+<layer number="59" name="tCarbon" color="7" fill="1" visible="no" active="no"/>
+<layer number="60" name="bCarbon" color="7" fill="1" visible="no" active="no"/>
+<layer number="88" name="SimResults" color="9" fill="1" visible="no" active="no"/>
+<layer number="89" name="SimProbes" color="9" fill="1" visible="no" active="no"/>
+<layer number="90" name="Modules" color="5" fill="1" visible="no" active="no"/>
+<layer number="91" name="Nets" color="2" fill="1" visible="no" active="no"/>
+<layer number="92" name="Busses" color="1" fill="1" visible="no" active="no"/>
+<layer number="93" name="Pins" color="2" fill="1" visible="no" active="no"/>
+<layer number="94" name="Symbols" color="4" fill="1" visible="no" active="no"/>
+<layer number="95" name="Names" color="7" fill="1" visible="no" active="no"/>
+<layer number="96" name="Values" color="7" fill="1" visible="no" active="no"/>
+<layer number="97" name="Info" color="7" fill="1" visible="no" active="no"/>
+<layer number="98" name="Guide" color="6" fill="1" visible="no" active="no"/>
+<layer number="99" name="SpiceOrder" color="7" fill="1" visible="no" active="no"/>
+<layer number="100" name="Muster" color="7" fill="1" visible="no" active="yes"/>
+<layer number="101" name="Patch_Top" color="12" fill="4" visible="no" active="yes"/>
+<layer number="102" name="Mittellin" color="7" fill="1" visible="no" active="yes"/>
+<layer number="103" name="Stiffner" color="7" fill="1" visible="no" active="yes"/>
+<layer number="104" name="Name" color="7" fill="1" visible="no" active="yes"/>
+<layer number="105" name="Beschreib" color="7" fill="1" visible="no" active="yes"/>
+<layer number="106" name="BGA-Top" color="7" fill="1" visible="no" active="yes"/>
+<layer number="107" name="BD-Top" color="7" fill="1" visible="no" active="yes"/>
+<layer number="108" name="tBridges" color="7" fill="1" visible="no" active="yes"/>
+<layer number="109" name="tBPL" color="7" fill="1" visible="no" active="yes"/>
+<layer number="110" name="bBPL" color="7" fill="1" visible="no" active="yes"/>
+<layer number="111" name="MPL" color="7" fill="1" visible="no" active="yes"/>
+<layer number="112" name="tSilk" color="7" fill="1" visible="no" active="yes"/>
+<layer number="113" name="tPlaceBlue" color="11" fill="1" visible="no" active="yes"/>
+<layer number="114" name="tPlaceRed" color="13" fill="1" visible="no" active="yes"/>
+<layer number="115" name="ReferenceISLANDS" color="7" fill="1" visible="no" active="yes"/>
+<layer number="116" name="Patch_BOT" color="9" fill="4" visible="no" active="yes"/>
+<layer number="117" name="PM_Ref" color="7" fill="1" visible="no" active="no"/>
+<layer number="118" name="Rect_Pads" color="7" fill="1" visible="no" active="yes"/>
+<layer number="119" name="PF_Ref" color="7" fill="1" visible="no" active="no"/>
+<layer number="120" name="WFL_Ref" color="7" fill="1" visible="no" active="no"/>
+<layer number="121" name="sName" color="7" fill="1" visible="no" active="yes"/>
+<layer number="122" name="_bPlace" color="7" fill="1" visible="no" active="yes"/>
+<layer number="123" name="tTestmark" color="7" fill="1" visible="no" active="yes"/>
+<layer number="124" name="bTestmark" color="7" fill="1" visible="no" active="yes"/>
+<layer number="125" name="_tNames" color="7" fill="1" visible="no" active="yes"/>
+<layer number="126" name="_bNames" color="7" fill="1" visible="no" active="yes"/>
+<layer number="127" name="_tValues" color="7" fill="1" visible="no" active="yes"/>
+<layer number="128" name="_bValues" color="7" fill="1" visible="no" active="yes"/>
+<layer number="129" name="Mask" color="7" fill="1" visible="no" active="yes"/>
+<layer number="131" name="tAdjust" color="7" fill="1" visible="no" active="yes"/>
+<layer number="132" name="bAdjust" color="7" fill="1" visible="no" active="yes"/>
+<layer number="144" name="Drill_legend" color="7" fill="1" visible="no" active="yes"/>
+<layer number="150" name="Notes" color="7" fill="1" visible="no" active="yes"/>
+<layer number="151" name="HeatSink" color="7" fill="1" visible="no" active="yes"/>
+<layer number="152" name="_bDocu" color="7" fill="1" visible="no" active="yes"/>
+<layer number="153" name="FabDoc1" color="6" fill="1" visible="no" active="no"/>
+<layer number="154" name="FabDoc2" color="2" fill="1" visible="no" active="no"/>
+<layer number="155" name="FabDoc3" color="7" fill="15" visible="no" active="no"/>
+<layer number="199" name="Contour" color="7" fill="1" visible="no" active="yes"/>
+<layer number="200" name="200bmp" color="1" fill="10" visible="no" active="yes"/>
+<layer number="201" name="201bmp" color="7" fill="1" visible="no" active="yes"/>
+<layer number="202" name="202bmp" color="7" fill="1" visible="no" active="yes"/>
+<layer number="203" name="203bmp" color="7" fill="1" visible="no" active="yes"/>
+<layer number="204" name="204bmp" color="7" fill="1" visible="no" active="yes"/>
+<layer number="205" name="205bmp" color="7" fill="1" visible="no" active="yes"/>
+<layer number="206" name="206bmp" color="7" fill="10" visible="no" active="yes"/>
+<layer number="207" name="207bmp" color="8" fill="10" visible="no" active="yes"/>
+<layer number="208" name="208bmp" color="9" fill="10" visible="no" active="yes"/>
+<layer number="209" name="209bmp" color="7" fill="1" visible="no" active="yes"/>
+<layer number="210" name="210bmp" color="7" fill="1" visible="no" active="yes"/>
+<layer number="211" name="211bmp" color="7" fill="1" visible="no" active="yes"/>
+<layer number="212" name="212bmp" color="7" fill="1" visible="no" active="yes"/>
+<layer number="213" name="213bmp" color="7" fill="1" visible="no" active="yes"/>
+<layer number="214" name="214bmp" color="7" fill="1" visible="no" active="yes"/>
+<layer number="215" name="215bmp" color="7" fill="1" visible="no" active="yes"/>
+<layer number="216" name="216bmp" color="7" fill="1" visible="no" active="yes"/>
+<layer number="217" name="217bmp" color="18" fill="1" visible="no" active="no"/>
+<layer number="218" name="218bmp" color="19" fill="1" visible="no" active="no"/>
+<layer number="219" name="219bmp" color="20" fill="1" visible="no" active="no"/>
+<layer number="220" name="220bmp" color="21" fill="1" visible="no" active="no"/>
+<layer number="221" name="221bmp" color="22" fill="1" visible="no" active="no"/>
+<layer number="222" name="222bmp" color="23" fill="1" visible="no" active="no"/>
+<layer number="223" name="223bmp" color="24" fill="1" visible="no" active="no"/>
+<layer number="224" name="224bmp" color="25" fill="1" visible="no" active="no"/>
+<layer number="225" name="225bmp" color="7" fill="1" visible="no" active="yes"/>
+<layer number="226" name="226bmp" color="7" fill="1" visible="no" active="yes"/>
+<layer number="227" name="227bmp" color="7" fill="1" visible="no" active="yes"/>
+<layer number="228" name="228bmp" color="7" fill="1" visible="no" active="yes"/>
+<layer number="229" name="229bmp" color="7" fill="1" visible="no" active="yes"/>
+<layer number="230" name="230bmp" color="7" fill="1" visible="no" active="yes"/>
+<layer number="231" name="231bmp" color="7" fill="1" visible="no" active="yes"/>
+<layer number="232" name="Eagle3D_PG2" color="7" fill="1" visible="no" active="yes"/>
+<layer number="233" name="Eagle3D_PG3" color="7" fill="1" visible="no" active="yes"/>
+<layer number="248" name="Housing" color="7" fill="1" visible="no" active="yes"/>
+<layer number="249" name="Edge" color="7" fill="1" visible="no" active="yes"/>
+<layer number="250" name="Descript" color="7" fill="1" visible="no" active="yes"/>
+<layer number="251" name="SMDround" color="7" fill="1" visible="no" active="yes"/>
+<layer number="254" name="cooling" color="7" fill="1" visible="no" active="yes"/>
+<layer number="255" name="routoute" color="7" fill="1" visible="no" active="yes"/>
+</layers>
+<board>
+<plain>
+<text x="13.2" y="1" size="1.016" layer="21" font="vector" ratio="13" align="bottom-center">TinkerAccess RFID Adapter
+Rev 1.0</text>
+<wire x1="0" y1="0" x2="0" y2="25.3" width="0" layer="20"/>
+<wire x1="0" y1="25.3" x2="26.4" y2="25.3" width="0" layer="20"/>
+<wire x1="26.4" y1="25.3" x2="26.4" y2="0" width="0" layer="20"/>
+<wire x1="26.4" y1="0" x2="0" y2="0" width="0" layer="20"/>
+<text x="9.25" y="10.15" size="1.27" layer="21" font="vector" ratio="10" align="center-left">GND</text>
+<text x="9.25" y="15.15" size="1.27" layer="21" font="vector" ratio="10" align="center-left">RX</text>
+</plain>
+<libraries>
+<library name="SparkFun-Connectors">
+<description>&lt;h3&gt;SparkFun Connectors&lt;/h3&gt;
+This library contains electrically-functional connectors. 
+&lt;br&gt;
+&lt;br&gt;
+We've spent an enormous amount of time creating and checking these footprints and parts, but it is &lt;b&gt; the end user's responsibility&lt;/b&gt; to ensure correctness and suitablity for a given componet or application. 
+&lt;br&gt;
+&lt;br&gt;If you enjoy using this library, please buy one of our products at &lt;a href=" www.sparkfun.com"&gt;SparkFun.com&lt;/a&gt;.
+&lt;br&gt;
+&lt;br&gt;
+&lt;b&gt;Licensing:&lt;/b&gt; Creative Commons ShareAlike 4.0 International - https://creativecommons.org/licenses/by-sa/4.0/ 
+&lt;br&gt;
+&lt;br&gt;
+You are welcome to use this library for commercial purposes. For attribution, we ask that when you begin to sell your device using our footprint, you email us with a link to the product being sold. We want bragging rights that we helped (in a very small part) to create your 8th world wonder. We would like the opportunity to feature your device on our homepage.</description>
+<packages>
+<package name="SCREWTERMINAL-5MM-2">
+<description>&lt;h3&gt;Screw Terminal  5mm Pitch -2 Pin PTH&lt;/h3&gt;
+&lt;p&gt;Specifications:
+&lt;ul&gt;&lt;li&gt;Pin count: 2&lt;/li&gt;
+&lt;li&gt;Pin pitch: 5mm/197mil&lt;/li&gt;
+&lt;/ul&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=”https://www.sparkfun.com/datasheets/Prototyping/Screw-Terminal-5mm.pdf”&gt;Datasheet referenced for footprint&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Example device(s):
+&lt;ul&gt;&lt;li&gt;CONN_02&lt;/li&gt;
+&lt;/ul&gt;&lt;/p&gt;</description>
+<wire x1="-3.1" y1="4.2" x2="8.1" y2="4.2" width="0.2032" layer="21"/>
+<wire x1="8.1" y1="4.2" x2="8.1" y2="-2.3" width="0.2032" layer="21"/>
+<wire x1="8.1" y1="-2.3" x2="8.1" y2="-3.3" width="0.2032" layer="21"/>
+<wire x1="8.1" y1="-3.3" x2="-3.1" y2="-3.3" width="0.2032" layer="21"/>
+<wire x1="-3.1" y1="-3.3" x2="-3.1" y2="-2.3" width="0.2032" layer="21"/>
+<wire x1="-3.1" y1="-2.3" x2="-3.1" y2="4.2" width="0.2032" layer="21"/>
+<wire x1="8.1" y1="-2.3" x2="-3.1" y2="-2.3" width="0.2032" layer="21"/>
+<wire x1="-3.1" y1="-1.35" x2="-3.7" y2="-1.35" width="0.2032" layer="51"/>
+<wire x1="-3.7" y1="-1.35" x2="-3.7" y2="-2.35" width="0.2032" layer="51"/>
+<wire x1="-3.7" y1="-2.35" x2="-3.1" y2="-2.35" width="0.2032" layer="51"/>
+<wire x1="8.1" y1="4" x2="8.7" y2="4" width="0.2032" layer="51"/>
+<wire x1="8.7" y1="4" x2="8.7" y2="3" width="0.2032" layer="51"/>
+<wire x1="8.7" y1="3" x2="8.1" y2="3" width="0.2032" layer="51"/>
+<circle x="2.5" y="3.7" radius="0.2828" width="0.127" layer="51"/>
+<pad name="1" x="0" y="0" drill="1.3" diameter="2.032" shape="square"/>
+<pad name="2" x="5" y="0" drill="1.3" diameter="2.032"/>
+<text x="-1.27" y="2.54" size="0.6096" layer="25" font="vector" ratio="20">&gt;NAME</text>
+<text x="-1.27" y="1.27" size="0.6096" layer="27" font="vector" ratio="20">&gt;VALUE</text>
+</package>
+</packages>
+</library>
+<library name="TinkerMill">
+<packages>
+<package name="MADE_BY_TINKERMILL">
+<wire x1="19.75736875" y1="1.57536875" x2="19.757840625" y2="1.575209375" width="0.002" layer="21"/>
+<wire x1="19.757840625" y1="1.677240625" x2="19.75736875" y2="1.6774" width="0.002" layer="21"/>
+<wire x1="19.757859375" y1="1.1422" x2="19.757840625" y2="1.1422" width="0.002" layer="21"/>
+<wire x1="9.638609375" y1="11.772909375" x2="9.63025" y2="11.772909375" width="0.002" layer="21"/>
+<polygon width="0.002" layer="21">
+<vertex x="3.38923125" y="10.407709375"/>
+<vertex x="3.055459375" y="10.407709375"/>
+<vertex x="3.055459375" y="11.77295"/>
+<vertex x="3.50353125" y="11.77295"/>
+<vertex x="3.81443125" y="11.04231875"/>
+<vertex x="4.12716875" y="11.77295"/>
+<vertex x="4.57431875" y="11.77295"/>
+<vertex x="4.57431875" y="10.407709375"/>
+<vertex x="4.24146875" y="10.407709375"/>
+<vertex x="4.24146875" y="11.406259375"/>
+<vertex x="3.926909375" y="10.67015"/>
+<vertex x="3.703790625" y="10.67015"/>
+<vertex x="3.38923125" y="11.406259375"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="8.5094" y="10.407709375"/>
+<vertex x="7.539190625" y="10.407709375"/>
+<vertex x="7.539190625" y="11.77295"/>
+<vertex x="8.48928125" y="11.77295"/>
+<vertex x="8.48928125" y="11.50685"/>
+<vertex x="7.89125" y="11.50685"/>
+<vertex x="7.89125" y="11.252640625"/>
+<vertex x="8.45361875" y="11.252640625"/>
+<vertex x="8.45361875" y="10.986540625"/>
+<vertex x="7.89125" y="10.986540625"/>
+<vertex x="7.89125" y="10.673809375"/>
+<vertex x="8.5094" y="10.673809375"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="10.628009375" y="10.982890625"/>
+<vertex x="10.107709375" y="11.77295"/>
+<vertex x="10.49268125" y="11.77295"/>
+<vertex x="10.80358125" y="11.28646875"/>
+<vertex x="11.114490625" y="11.77295"/>
+<vertex x="11.50036875" y="11.77295"/>
+<vertex x="10.98006875" y="10.982890625"/>
+<vertex x="10.98006875" y="10.407709375"/>
+<vertex x="10.628009375" y="10.407709375"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="14.54823125" y="9.207859375"/>
+<vertex x="13.503190625" y="9.38366875"/>
+<vertex x="13.503190625" y="10.33186875"/>
+<vertex x="14.54823125" y="10.507640625"/>
+<vertex x="14.60633125" y="10.71263125"/>
+<vertex x="14.68023125" y="10.91253125"/>
+<vertex x="14.76945" y="11.10606875"/>
+<vertex x="14.87338125" y="11.292059375"/>
+<vertex x="14.258640625" y="12.15555"/>
+<vertex x="14.92908125" y="12.82603125"/>
+<vertex x="15.79253125" y="12.21116875"/>
+<vertex x="15.9678" y="12.30963125"/>
+<vertex x="16.14975" y="12.39498125"/>
+<vertex x="16.33753125" y="12.466759375"/>
+<vertex x="16.338590625" y="11.188890625"/>
+<vertex x="16.13355" y="11.02616875"/>
+<vertex x="15.957640625" y="10.83238125"/>
+<vertex x="15.81556875" y="10.612640625"/>
+<vertex x="15.7113" y="10.372609375"/>
+<vertex x="15.64783125" y="10.118609375"/>
+<vertex x="15.62668125" y="9.85775"/>
+<vertex x="15.64615" y="9.60741875"/>
+<vertex x="15.70456875" y="9.3632"/>
+<vertex x="15.80073125" y="9.131259375"/>
+<vertex x="15.93211875" y="8.917259375"/>
+<vertex x="16.095259375" y="8.7264"/>
+<vertex x="16.286140625" y="8.563209375"/>
+<vertex x="16.500140625" y="8.431809375"/>
+<vertex x="16.73215" y="8.335609375"/>
+<vertex x="16.97638125" y="8.277190625"/>
+<vertex x="17.22671875" y="8.25771875"/>
+<vertex x="17.477059375" y="8.277190625"/>
+<vertex x="17.721290625" y="8.335609375"/>
+<vertex x="17.95321875" y="8.43176875"/>
+<vertex x="18.16721875" y="8.56316875"/>
+<vertex x="18.358090625" y="8.72631875"/>
+<vertex x="18.52126875" y="8.9172"/>
+<vertex x="18.65266875" y="9.1312"/>
+<vertex x="18.748859375" y="9.3632"/>
+<vertex x="18.807290625" y="9.60741875"/>
+<vertex x="18.82675" y="9.85775"/>
+<vertex x="18.8058" y="10.117640625"/>
+<vertex x="18.74293125" y="10.3707"/>
+<vertex x="18.639509375" y="10.61011875"/>
+<vertex x="18.4985" y="10.82945"/>
+<vertex x="18.32381875" y="11.02303125"/>
+<vertex x="18.1201" y="11.185809375"/>
+<vertex x="18.120309375" y="12.46576875"/>
+<vertex x="18.30673125" y="12.39426875"/>
+<vertex x="18.487459375" y="12.3094"/>
+<vertex x="18.661559375" y="12.211609375"/>
+<vertex x="19.5245" y="12.82603125"/>
+<vertex x="20.194940625" y="12.155509375"/>
+<vertex x="19.58041875" y="11.292459375"/>
+<vertex x="19.684340625" y="11.106359375"/>
+<vertex x="19.77351875" y="10.91271875"/>
+<vertex x="19.84736875" y="10.71273125"/>
+<vertex x="19.90541875" y="10.507640625"/>
+<vertex x="20.950309375" y="10.33186875"/>
+<vertex x="20.950309375" y="9.38366875"/>
+<vertex x="19.905309375" y="9.207859375"/>
+<vertex x="19.847209375" y="9.0029"/>
+<vertex x="19.773309375" y="8.803009375"/>
+<vertex x="19.684090625" y="8.60948125"/>
+<vertex x="19.580159375" y="8.423490625"/>
+<vertex x="20.194940625" y="7.56003125"/>
+<vertex x="19.5245" y="6.88951875"/>
+<vertex x="18.66105" y="7.504340625"/>
+<vertex x="18.47503125" y="7.400390625"/>
+<vertex x="18.28155" y="7.3112"/>
+<vertex x="18.081640625" y="7.237290625"/>
+<vertex x="17.87663125" y="7.179190625"/>
+<vertex x="17.700790625" y="6.13415"/>
+<vertex x="16.752590625" y="6.13415"/>
+<vertex x="16.57681875" y="7.179190625"/>
+<vertex x="16.371759375" y="7.237309375"/>
+<vertex x="16.171909375" y="7.3112"/>
+<vertex x="15.978390625" y="7.400409375"/>
+<vertex x="15.79253125" y="7.504340625"/>
+<vertex x="14.92908125" y="6.88951875"/>
+<vertex x="14.258640625" y="7.56003125"/>
+<vertex x="14.87338125" y="8.423490625"/>
+<vertex x="14.76945" y="8.60948125"/>
+<vertex x="14.68023125" y="8.803009375"/>
+<vertex x="14.60633125" y="9.00288125"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="16.715709375" y="9.52751875"/>
+<vertex x="16.673740625" y="9.739240625"/>
+<vertex x="16.673740625" y="13.24551875"/>
+<vertex x="16.7157" y="13.45725"/>
+<vertex x="16.83571875" y="13.63665"/>
+<vertex x="17.01513125" y="13.75671875"/>
+<vertex x="17.22683125" y="13.79868125"/>
+<vertex x="17.43853125" y="13.75671875"/>
+<vertex x="17.61798125" y="13.636640625"/>
+<vertex x="17.738" y="13.45723125"/>
+<vertex x="17.77995" y="13.24551875"/>
+<vertex x="17.77995" y="9.739240625"/>
+<vertex x="17.737990625" y="9.527540625"/>
+<vertex x="17.617959375" y="9.348159375"/>
+<vertex x="17.43855" y="9.228109375"/>
+<vertex x="17.22683125" y="9.18615"/>
+<vertex x="17.015140625" y="9.228109375"/>
+<vertex x="16.835759375" y="9.34811875"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="2.920290625" y="6.064759375"/>
+<vertex x="1.730040625" y="6.064759375"/>
+<vertex x="1.730040625" y="6.66693125"/>
+<vertex x="4.92911875" y="6.66693125"/>
+<vertex x="4.92911875" y="6.064759375"/>
+<vertex x="3.7389" y="6.064759375"/>
+<vertex x="3.7389" y="3.38083125"/>
+<vertex x="2.920290625" y="3.38083125"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="5.114359375" y="6.175590625"/>
+<vertex x="5.08576875" y="6.323490625"/>
+<vertex x="5.114" y="6.471659375"/>
+<vertex x="5.19868125" y="6.596359375"/>
+<vertex x="5.32228125" y="6.680840625"/>
+<vertex x="5.469190625" y="6.70926875"/>
+<vertex x="5.61731875" y="6.68103125"/>
+<vertex x="5.742059375" y="6.596359375"/>
+<vertex x="5.826759375" y="6.47161875"/>
+<vertex x="5.854959375" y="6.323490625"/>
+<vertex x="5.82636875" y="6.175590625"/>
+<vertex x="5.742059375" y="6.05063125"/>
+<vertex x="5.6173" y="5.96591875"/>
+<vertex x="5.469190625" y="5.93771875"/>
+<vertex x="5.32228125" y="5.966140625"/>
+<vertex x="5.19868125" y="6.05063125"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="5.82201875" y="3.38085"/>
+<vertex x="5.12341875" y="3.38085"/>
+<vertex x="5.12341875" y="5.601359375"/>
+<vertex x="5.82201875" y="5.601359375"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="6.932759375" y="3.38085"/>
+<vertex x="6.234159375" y="3.38085"/>
+<vertex x="6.234159375" y="5.601359375"/>
+<vertex x="6.932759375" y="5.601359375"/>
+<vertex x="6.932759375" y="5.28381875"/>
+<vertex x="7.08023125" y="5.43138125"/>
+<vertex x="7.252990625" y="5.5481"/>
+<vertex x="7.447859375" y="5.621809375"/>
+<vertex x="7.6549" y="5.64606875"/>
+<vertex x="7.86436875" y="5.62341875"/>
+<vertex x="8.06146875" y="5.549540625"/>
+<vertex x="8.23121875" y="5.42493125"/>
+<vertex x="8.368959375" y="5.24053125"/>
+<vertex x="8.4431" y="5.022159375"/>
+<vertex x="8.464090625" y="4.79216875"/>
+<vertex x="8.464090625" y="3.38085"/>
+<vertex x="7.765490625" y="3.38085"/>
+<vertex x="7.765490625" y="4.73338125"/>
+<vertex x="7.73898125" y="4.94548125"/>
+<vertex x="7.622809375" y="5.12106875"/>
+<vertex x="7.41968125" y="5.177940625"/>
+<vertex x="7.21988125" y="5.1172"/>
+<vertex x="7.060290625" y="4.97955"/>
+<vertex x="6.932759375" y="4.810990625"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="8.816" y="6.66693125"/>
+<vertex x="8.816" y="3.38083125"/>
+<vertex x="9.5146" y="3.38083125"/>
+<vertex x="9.5146" y="4.47465"/>
+<vertex x="9.524009375" y="4.47465"/>
+<vertex x="10.38728125" y="3.38083125"/>
+<vertex x="11.2435" y="3.38083125"/>
+<vertex x="10.33786875" y="4.50285"/>
+<vertex x="11.205890625" y="5.601340625"/>
+<vertex x="10.38728125" y="5.601340625"/>
+<vertex x="9.524009375" y="4.50285"/>
+<vertex x="9.5146" y="4.50285"/>
+<vertex x="9.5146" y="6.66693125"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="14.353659375" y="3.38085"/>
+<vertex x="13.65505" y="3.38085"/>
+<vertex x="13.65505" y="5.601359375"/>
+<vertex x="14.353659375" y="5.601359375"/>
+<vertex x="14.353659375" y="4.96625"/>
+<vertex x="14.36306875" y="4.96625"/>
+<vertex x="14.48036875" y="5.197190625"/>
+<vertex x="14.628740625" y="5.409240625"/>
+<vertex x="14.824290625" y="5.57746875"/>
+<vertex x="15.07108125" y="5.64606875"/>
+<vertex x="15.31711875" y="5.579859375"/>
+<vertex x="15.5345" y="5.44375"/>
+<vertex x="15.3416" y="4.825109375"/>
+<vertex x="15.14421875" y="4.93358125"/>
+<vertex x="14.92763125" y="4.98978125"/>
+<vertex x="14.75633125" y="4.94738125"/>
+<vertex x="14.619090625" y="4.835290625"/>
+<vertex x="14.51833125" y="4.68868125"/>
+<vertex x="14.42736875" y="4.51831875"/>
+<vertex x="14.353659375" y="4.34055"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="16.5042" y="3.33846875"/>
+<vertex x="15.675259375" y="3.33846875"/>
+<vertex x="15.675259375" y="6.569059375"/>
+<vertex x="16.28121875" y="6.569059375"/>
+<vertex x="16.56441875" y="5.77541875"/>
+<vertex x="17.89015" y="5.77541875"/>
+<vertex x="18.17453125" y="6.569059375"/>
+<vertex x="18.77835" y="6.569059375"/>
+<vertex x="18.77835" y="3.33846875"/>
+<vertex x="17.94941875" y="3.33846875"/>
+<vertex x="17.94941875" y="4.9559"/>
+<vertex x="17.26091875" y="4.33138125"/>
+<vertex x="17.14048125" y="4.33138125"/>
+<vertex x="16.5042" y="4.9559"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="19.34031875" y="6.175590625"/>
+<vertex x="19.31173125" y="6.323490625"/>
+<vertex x="19.339959375" y="6.471659375"/>
+<vertex x="19.42463125" y="6.596359375"/>
+<vertex x="19.54823125" y="6.680840625"/>
+<vertex x="19.69515" y="6.70926875"/>
+<vertex x="19.84326875" y="6.68103125"/>
+<vertex x="19.968009375" y="6.596359375"/>
+<vertex x="20.05271875" y="6.47161875"/>
+<vertex x="20.08091875" y="6.323490625"/>
+<vertex x="20.05233125" y="6.175590625"/>
+<vertex x="19.968009375" y="6.05063125"/>
+<vertex x="19.843259375" y="5.96591875"/>
+<vertex x="19.69515" y="5.93771875"/>
+<vertex x="19.54823125" y="5.966140625"/>
+<vertex x="19.42463125" y="6.05063125"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="20.04798125" y="3.38085"/>
+<vertex x="19.34936875" y="3.38085"/>
+<vertex x="19.34936875" y="5.601359375"/>
+<vertex x="20.04798125" y="5.601359375"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="21.23305" y="3.38085"/>
+<vertex x="20.534409375" y="3.38085"/>
+<vertex x="20.534409375" y="6.66695"/>
+<vertex x="21.23305" y="6.66695"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="22.41813125" y="3.38085"/>
+<vertex x="21.719490625" y="3.38085"/>
+<vertex x="21.719490625" y="6.66695"/>
+<vertex x="22.41813125" y="6.66695"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="1.96701875" y="0.96128125"/>
+<vertex x="1.950509375" y="1.104690625"/>
+<vertex x="1.950509375" y="1.6774"/>
+<vertex x="2.066009375" y="1.6774"/>
+<vertex x="2.066009375" y="1.12005"/>
+<vertex x="2.115509375" y="0.907440625"/>
+<vertex x="2.275959375" y="0.84291875"/>
+<vertex x="2.435840625" y="0.907440625"/>
+<vertex x="2.485340625" y="1.12005"/>
+<vertex x="2.485340625" y="1.6774"/>
+<vertex x="2.600840625" y="1.6774"/>
+<vertex x="2.600840625" y="1.104690625"/>
+<vertex x="2.5842" y="0.961209375"/>
+<vertex x="2.518340625" y="0.8337"/>
+<vertex x="2.407559375" y="0.76171875"/>
+<vertex x="2.275959375" y="0.742140625"/>
+<vertex x="2.143840625" y="0.76171875"/>
+<vertex x="2.032440625" y="0.8337"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="3.09463125" y="0.759959375"/>
+<vertex x="2.9797" y="0.759959375"/>
+<vertex x="2.9797" y="1.6774"/>
+<vertex x="3.09463125" y="1.6774"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="4.024490625" y="0.759959375"/>
+<vertex x="3.495909375" y="0.759959375"/>
+<vertex x="3.495909375" y="1.6774"/>
+<vertex x="3.610840625" y="1.6774"/>
+<vertex x="3.610840625" y="0.86441875"/>
+<vertex x="4.024490625" y="0.86441875"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="4.345290625" y="1.57293125"/>
+<vertex x="4.04373125" y="1.57293125"/>
+<vertex x="4.04373125" y="1.6774"/>
+<vertex x="4.762340625" y="1.6774"/>
+<vertex x="4.762340625" y="1.57293125"/>
+<vertex x="4.460790625" y="1.57293125"/>
+<vertex x="4.460790625" y="0.759959375"/>
+<vertex x="4.345290625" y="0.759959375"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="5.576290625" y="0.759959375"/>
+<vertex x="5.461359375" y="0.759959375"/>
+<vertex x="5.461359375" y="1.6774"/>
+<vertex x="5.576290625" y="1.6774"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="6.089090625" y="0.759959375"/>
+<vertex x="5.97756875" y="0.759959375"/>
+<vertex x="5.97756875" y="1.6774"/>
+<vertex x="6.13233125" y="1.6774"/>
+<vertex x="6.508990625" y="0.9099"/>
+<vertex x="6.508990625" y="1.6774"/>
+<vertex x="6.620509375" y="1.6774"/>
+<vertex x="6.620509375" y="0.759959375"/>
+<vertex x="6.46575" y="0.759959375"/>
+<vertex x="6.089090625" y="1.527459375"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="7.9633" y="0.759959375"/>
+<vertex x="7.43471875" y="0.759959375"/>
+<vertex x="7.43471875" y="1.6774"/>
+<vertex x="7.549659375" y="1.6774"/>
+<vertex x="7.549659375" y="0.86441875"/>
+<vertex x="7.9633" y="0.86441875"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="9.293790625" y="0.759959375"/>
+<vertex x="9.18226875" y="0.759959375"/>
+<vertex x="9.18226875" y="1.6774"/>
+<vertex x="9.33703125" y="1.6774"/>
+<vertex x="9.713690625" y="0.9099"/>
+<vertex x="9.713690625" y="1.6774"/>
+<vertex x="9.825209375" y="1.6774"/>
+<vertex x="9.825209375" y="0.759959375"/>
+<vertex x="9.67045" y="0.759959375"/>
+<vertex x="9.293790625" y="1.527459375"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="10.184940625" y="1.031790625"/>
+<vertex x="10.1611" y="1.217759375"/>
+<vertex x="10.184859375" y="1.40376875"/>
+<vertex x="10.27318125" y="1.56801875"/>
+<vertex x="10.41481875" y="1.66538125"/>
+<vertex x="10.58498125" y="1.693990625"/>
+<vertex x="10.742590625" y="1.67186875"/>
+<vertex x="10.88085" y="1.60673125"/>
+<vertex x="10.88085" y="1.47461875"/>
+<vertex x="10.74543125" y="1.562490625"/>
+<vertex x="10.59465" y="1.59198125"/>
+<vertex x="10.360240625" y="1.49796875"/>
+<vertex x="10.297659375" y="1.36495"/>
+<vertex x="10.282290625" y="1.217759375"/>
+<vertex x="10.29768125" y="1.07091875"/>
+<vertex x="10.360240625" y="0.938159375"/>
+<vertex x="10.59465" y="0.84415"/>
+<vertex x="10.70333125" y="0.855209375"/>
+<vertex x="10.789240625" y="0.89085"/>
+<vertex x="10.789240625" y="1.137259375"/>
+<vertex x="10.60148125" y="1.137259375"/>
+<vertex x="10.60148125" y="1.239259375"/>
+<vertex x="10.903040625" y="1.239259375"/>
+<vertex x="10.903040625" y="0.84536875"/>
+<vertex x="10.756240625" y="0.76795"/>
+<vertex x="10.58498125" y="0.742140625"/>
+<vertex x="10.414890625" y="0.77058125"/>
+<vertex x="10.27318125" y="0.8675"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="11.33493125" y="0.759959375"/>
+<vertex x="11.223409375" y="0.759959375"/>
+<vertex x="11.223409375" y="1.6774"/>
+<vertex x="11.39466875" y="1.6774"/>
+<vertex x="11.61145" y="1.05306875"/>
+<vertex x="11.82936875" y="1.6774"/>
+<vertex x="12.00063125" y="1.6774"/>
+<vertex x="12.00063125" y="0.759959375"/>
+<vertex x="11.888540625" y="0.759959375"/>
+<vertex x="11.888540625" y="1.565559375"/>
+<vertex x="11.66948125" y="0.93631875"/>
+<vertex x="11.55398125" y="0.93631875"/>
+<vertex x="11.33493125" y="1.565559375"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="13.435709375" y="0.759959375"/>
+<vertex x="13.324190625" y="0.759959375"/>
+<vertex x="13.324190625" y="1.6774"/>
+<vertex x="13.47895" y="1.6774"/>
+<vertex x="13.855609375" y="0.9099"/>
+<vertex x="13.855609375" y="1.6774"/>
+<vertex x="13.96713125" y="1.6774"/>
+<vertex x="13.96713125" y="0.759959375"/>
+<vertex x="13.81236875" y="0.759959375"/>
+<vertex x="13.435709375" y="1.527459375"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="14.53573125" y="1.57293125"/>
+<vertex x="14.23416875" y="1.57293125"/>
+<vertex x="14.23416875" y="1.6774"/>
+<vertex x="14.952790625" y="1.6774"/>
+<vertex x="14.952790625" y="1.57293125"/>
+<vertex x="14.65123125" y="1.57293125"/>
+<vertex x="14.65123125" y="0.759959375"/>
+<vertex x="14.53573125" y="0.759959375"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="15.147109375" y="0.613709375"/>
+<vertex x="15.07371875" y="0.613709375"/>
+<vertex x="15.12036875" y="0.81035"/>
+<vertex x="15.12036875" y="0.916040625"/>
+<vertex x="15.24041875" y="0.916040625"/>
+<vertex x="15.24041875" y="0.81035"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="15.871909375" y="1.033059375"/>
+<vertex x="15.84803125" y="1.217759375"/>
+<vertex x="15.87183125" y="1.4025"/>
+<vertex x="15.958990625" y="1.56616875"/>
+<vertex x="16.096159375" y="1.664390625"/>
+<vertex x="16.26281875" y="1.693990625"/>
+<vertex x="16.4062" y="1.67186875"/>
+<vertex x="16.53308125" y="1.60673125"/>
+<vertex x="16.53308125" y="1.475840625"/>
+<vertex x="16.409040625" y="1.5631"/>
+<vertex x="16.26965" y="1.59198125"/>
+<vertex x="16.046609375" y="1.495509375"/>
+<vertex x="15.98476875" y="1.36353125"/>
+<vertex x="15.96923125" y="1.217759375"/>
+<vertex x="15.984840625" y="1.072009375"/>
+<vertex x="16.046609375" y="0.940009375"/>
+<vertex x="16.26965" y="0.84415"/>
+<vertex x="16.409040625" y="0.87303125"/>
+<vertex x="16.53308125" y="0.96028125"/>
+<vertex x="16.53308125" y="0.83063125"/>
+<vertex x="16.405059375" y="0.764259375"/>
+<vertex x="16.26281875" y="0.742140625"/>
+<vertex x="16.09623125" y="0.771559375"/>
+<vertex x="15.958990625" y="0.869340625"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="18.27948125" y="0.759959375"/>
+<vertex x="17.7509" y="0.759959375"/>
+<vertex x="17.7509" y="1.6774"/>
+<vertex x="17.86583125" y="1.6774"/>
+<vertex x="17.86583125" y="0.86441875"/>
+<vertex x="18.27948125" y="0.86441875"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="6.66618125" y="10.676790625"/>
+<vertex x="6.66618125" y="10.41213125"/>
+<vertex x="6.76738125" y="10.41551875"/>
+<vertex x="6.99633125" y="10.45156875"/>
+<vertex x="7.1373" y="10.51076875"/>
+<vertex x="7.25966875" y="10.602459375"/>
+<vertex x="7.40238125" y="10.81553125"/>
+<vertex x="7.43835" y="10.951459375"/>
+<vertex x="7.449009375" y="11.091690625"/>
+<vertex x="7.438259375" y="11.23068125"/>
+<vertex x="7.40238125" y="11.36511875"/>
+<vertex x="7.25966875" y="11.5782"/>
+<vertex x="7.13838125" y="11.669559375"/>
+<vertex x="6.99815" y="11.72818125"/>
+<vertex x="6.76836875" y="11.765059375"/>
+<vertex x="6.66618125" y="11.76853125"/>
+<vertex x="6.66618125" y="11.503859375"/>
+<vertex x="6.81815" y="11.48493125"/>
+<vertex x="6.9726" y="11.400759375"/>
+<vertex x="7.06173125" y="11.258709375"/>
+<vertex x="7.085959375" y="11.091690625"/>
+<vertex x="7.06148125" y="10.92368125"/>
+<vertex x="6.971609375" y="10.780809375"/>
+<vertex x="6.81781875" y="10.696059375"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="5.16251875" y="11.772909375"/>
+<vertex x="4.930840625" y="11.14741875"/>
+<vertex x="5.267359375" y="11.14741875"/>
+<vertex x="5.37278125" y="11.45293125"/>
+<vertex x="5.4777" y="11.14741875"/>
+<vertex x="5.813890625" y="11.14741875"/>
+<vertex x="5.582209375" y="11.772909375"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="9.63025" y="10.64726875"/>
+<vertex x="9.63025" y="10.407740625"/>
+<vertex x="9.69433125" y="10.407740625"/>
+<vertex x="9.905259375" y="10.4261"/>
+<vertex x="10.100390625" y="10.50465"/>
+<vertex x="10.2039" y="10.634540625"/>
+<vertex x="10.233840625" y="10.79908125"/>
+<vertex x="10.171659375" y="11.0167"/>
+<vertex x="9.99611875" y="11.13831875"/>
+<vertex x="10.13146875" y="11.24168125"/>
+<vertex x="10.178109375" y="11.41175"/>
+<vertex x="10.14983125" y="11.5667"/>
+<vertex x="10.05003125" y="11.687"/>
+<vertex x="9.85076875" y="11.757609375"/>
+<vertex x="9.638609375" y="11.772909375"/>
+<vertex x="9.63025" y="11.772909375"/>
+<vertex x="9.63025" y="11.53338125"/>
+<vertex x="9.65688125" y="11.53338125"/>
+<vertex x="9.78305" y="11.495840625"/>
+<vertex x="9.82605" y="11.38885"/>
+<vertex x="9.78305" y="11.28095"/>
+<vertex x="9.65688125" y="11.244409375"/>
+<vertex x="9.63025" y="11.244409375"/>
+<vertex x="9.63025" y="11.004790625"/>
+<vertex x="9.6687" y="11.004790625"/>
+<vertex x="9.82876875" y="10.960059375"/>
+<vertex x="9.88176875" y="10.827440625"/>
+<vertex x="9.82786875" y="10.692090625"/>
+<vertex x="9.6687" y="10.64726875"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="4.930840625" y="11.14741875"/>
+<vertex x="4.65683125" y="10.407740625"/>
+<vertex x="5.010709375" y="10.407740625"/>
+<vertex x="5.09753125" y="10.65645"/>
+<vertex x="5.64803125" y="10.65645"/>
+<vertex x="5.73401875" y="10.407740625"/>
+<vertex x="6.0879" y="10.407740625"/>
+<vertex x="5.813890625" y="11.14741875"/>
+<vertex x="5.4777" y="11.14741875"/>
+<vertex x="5.559390625" y="10.909709375"/>
+<vertex x="5.185340625" y="10.909709375"/>
+<vertex x="5.267359375" y="11.14741875"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="6.164209375" y="11.772909375"/>
+<vertex x="6.164209375" y="10.407740625"/>
+<vertex x="6.535459375" y="10.407740625"/>
+<vertex x="6.66618125" y="10.41211875"/>
+<vertex x="6.66618125" y="10.676790625"/>
+<vertex x="6.64245" y="10.673809375"/>
+<vertex x="6.51626875" y="10.673809375"/>
+<vertex x="6.51626875" y="11.50683125"/>
+<vertex x="6.64245" y="11.50683125"/>
+<vertex x="6.66618125" y="11.503859375"/>
+<vertex x="6.66618125" y="11.76853125"/>
+<vertex x="6.535459375" y="11.772909375"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="9.11001875" y="11.772909375"/>
+<vertex x="9.11001875" y="10.407740625"/>
+<vertex x="9.63025" y="10.407740625"/>
+<vertex x="9.63025" y="10.64726875"/>
+<vertex x="9.46208125" y="10.64726875"/>
+<vertex x="9.46208125" y="11.004790625"/>
+<vertex x="9.63025" y="11.004790625"/>
+<vertex x="9.63025" y="11.244409375"/>
+<vertex x="9.46208125" y="11.244409375"/>
+<vertex x="9.46208125" y="11.53338125"/>
+<vertex x="9.63025" y="11.53338125"/>
+<vertex x="9.63025" y="11.772909375"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="23.12963125" y="3.42141875"/>
+<vertex x="23.12963125" y="3.37388125"/>
+<vertex x="23.25208125" y="3.397690625"/>
+<vertex x="23.36453125" y="3.47416875"/>
+<vertex x="23.440590625" y="3.585790625"/>
+<vertex x="23.465809375" y="3.717840625"/>
+<vertex x="23.440590625" y="3.85086875"/>
+<vertex x="23.36453125" y="3.962909375"/>
+<vertex x="23.25208125" y="4.03946875"/>
+<vertex x="23.12963125" y="4.0632"/>
+<vertex x="23.12963125" y="4.015159375"/>
+<vertex x="23.2343" y="3.99506875"/>
+<vertex x="23.33136875" y="3.929259375"/>
+<vertex x="23.39628125" y="3.83268125"/>
+<vertex x="23.418190625" y="3.717840625"/>
+<vertex x="23.39628125" y="3.60398125"/>
+<vertex x="23.33136875" y="3.50781875"/>
+<vertex x="23.2343" y="3.441509375"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="23.12963125" y="3.7476"/>
+<vertex x="23.12963125" y="3.675090625"/>
+<vertex x="23.16758125" y="3.6273"/>
+<vertex x="23.22776875" y="3.52973125"/>
+<vertex x="23.30805" y="3.52973125"/>
+<vertex x="23.244140625" y="3.63383125"/>
+<vertex x="23.20676875" y="3.68566875"/>
+<vertex x="23.18015" y="3.70758125"/>
+<vertex x="23.24926875" y="3.74165"/>
+<vertex x="23.273990625" y="3.807959375"/>
+<vertex x="23.233390625" y="3.89196875"/>
+<vertex x="23.12963125" y="3.915609375"/>
+<vertex x="23.12963125" y="3.867240625"/>
+<vertex x="23.178740625" y="3.856909375"/>
+<vertex x="23.19933125" y="3.80696875"/>
+<vertex x="23.178740625" y="3.75751875"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="12.24871875" y="4.745159375"/>
+<vertex x="12.24871875" y="4.37821875"/>
+<vertex x="13.365259375" y="4.37821875"/>
+<vertex x="13.35683125" y="4.627840625"/>
+<vertex x="13.30696875" y="4.872409375"/>
+<vertex x="13.207340625" y="5.101109375"/>
+<vertex x="13.0571" y="5.300290625"/>
+<vertex x="12.88025" y="5.452759375"/>
+<vertex x="12.67478125" y="5.56321875"/>
+<vertex x="12.45013125" y="5.626640625"/>
+<vertex x="12.24871875" y="5.64341875"/>
+<vertex x="12.24871875" y="5.225709375"/>
+<vertex x="12.266740625" y="5.22968125"/>
+<vertex x="12.51271875" y="5.17411875"/>
+<vertex x="12.68288125" y="4.99006875"/>
+<vertex x="12.74895" y="4.745159375"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="22.799309375" y="3.85086875"/>
+<vertex x="22.774090625" y="3.717840625"/>
+<vertex x="22.799309375" y="3.585790625"/>
+<vertex x="22.87538125" y="3.47416875"/>
+<vertex x="22.987409375" y="3.397690625"/>
+<vertex x="23.11995" y="3.37198125"/>
+<vertex x="23.12963125" y="3.37388125"/>
+<vertex x="23.12963125" y="3.42141875"/>
+<vertex x="23.11995" y="3.4196"/>
+<vertex x="23.0061" y="3.441509375"/>
+<vertex x="22.909440625" y="3.50781875"/>
+<vertex x="22.84321875" y="3.6044"/>
+<vertex x="22.820809375" y="3.717840625"/>
+<vertex x="22.84321875" y="3.83176875"/>
+<vertex x="22.909440625" y="3.929259375"/>
+<vertex x="23.0061" y="3.99506875"/>
+<vertex x="23.11995" y="4.017059375"/>
+<vertex x="23.12963125" y="4.015159375"/>
+<vertex x="23.12963125" y="4.0632"/>
+<vertex x="23.11995" y="4.0651"/>
+<vertex x="22.987409375" y="4.03946875"/>
+<vertex x="22.87538125" y="3.962909375"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="23.04991875" y="3.52973125"/>
+<vertex x="22.97756875" y="3.52973125"/>
+<vertex x="22.97756875" y="3.919909375"/>
+<vertex x="23.110609375" y="3.919909375"/>
+<vertex x="23.12963125" y="3.915609375"/>
+<vertex x="23.12963125" y="3.867240625"/>
+<vertex x="23.107390625" y="3.87186875"/>
+<vertex x="23.04991875" y="3.87186875"/>
+<vertex x="23.04991875" y="3.74305"/>
+<vertex x="23.107390625" y="3.74305"/>
+<vertex x="23.12963125" y="3.7476"/>
+<vertex x="23.12963125" y="3.675090625"/>
+<vertex x="23.122759375" y="3.68376875"/>
+<vertex x="23.080759375" y="3.69593125"/>
+<vertex x="23.04991875" y="3.69593125"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="11.0676" y="4.25205"/>
+<vertex x="11.048259375" y="4.48405"/>
+<vertex x="11.066609375" y="4.713740625"/>
+<vertex x="11.12646875" y="4.936159375"/>
+<vertex x="11.2314" y="5.14113125"/>
+<vertex x="11.37758125" y="5.319059375"/>
+<vertex x="11.55716875" y="5.4645"/>
+<vertex x="11.76338125" y="5.5686"/>
+<vertex x="11.98686875" y="5.62788125"/>
+<vertex x="12.21738125" y="5.64606875"/>
+<vertex x="12.24871875" y="5.64341875"/>
+<vertex x="12.24871875" y="5.225709375"/>
+<vertex x="12.019940625" y="5.174859375"/>
+<vertex x="11.84903125" y="4.99098125"/>
+<vertex x="11.784540625" y="4.745159375"/>
+<vertex x="12.24871875" y="4.745159375"/>
+<vertex x="12.24871875" y="4.37821875"/>
+<vertex x="11.7704" y="4.37821875"/>
+<vertex x="11.829190625" y="4.123640625"/>
+<vertex x="11.98446875" y="3.914790625"/>
+<vertex x="12.14123125" y="3.81863125"/>
+<vertex x="12.31816875" y="3.76728125"/>
+<vertex x="12.50198125" y="3.75248125"/>
+<vertex x="12.72446875" y="3.77728125"/>
+<vertex x="12.937959375" y="3.84541875"/>
+<vertex x="13.1383" y="3.94611875"/>
+<vertex x="13.325240625" y="4.070059375"/>
+<vertex x="13.325240625" y="3.630190625"/>
+<vertex x="13.10001875" y="3.49608125"/>
+<vertex x="12.8542" y="3.40471875"/>
+<vertex x="12.596890625" y="3.35403125"/>
+<vertex x="12.334959375" y="3.338490625"/>
+<vertex x="12.083109375" y="3.35436875"/>
+<vertex x="11.83655" y="3.40753125"/>
+<vertex x="11.604290625" y="3.50566875"/>
+<vertex x="11.39875" y="3.651359375"/>
+<vertex x="11.243390625" y="3.824409375"/>
+<vertex x="11.13126875" y="4.02823125"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="1.23601875" y="0.861990625"/>
+<vertex x="1.23601875" y="0.759959375"/>
+<vertex x="1.36318125" y="0.759959375"/>
+<vertex x="1.58336875" y="0.82693125"/>
+<vertex x="1.660759375" y="1.01685"/>
+<vertex x="1.613459375" y="1.1723"/>
+<vertex x="1.48208125" y="1.25465"/>
+<vertex x="1.58906875" y="1.316659375"/>
+<vertex x="1.62545" y="1.450690625"/>
+<vertex x="1.554340625" y="1.61836875"/>
+<vertex x="1.35176875" y="1.6774"/>
+<vertex x="1.23601875" y="1.6774"/>
+<vertex x="1.23601875" y="1.57536875"/>
+<vertex x="1.343259375" y="1.57536875"/>
+<vertex x="1.468440625" y="1.54098125"/>
+<vertex x="1.509940625" y="1.43713125"/>
+<vertex x="1.468440625" y="1.3327"/>
+<vertex x="1.343259375" y="1.29888125"/>
+<vertex x="1.23601875" y="1.29888125"/>
+<vertex x="1.23601875" y="1.198090625"/>
+<vertex x="1.35748125" y="1.198090625"/>
+<vertex x="1.49456875" y="1.15691875"/>
+<vertex x="1.539540625" y="1.03033125"/>
+<vertex x="1.49456875" y="0.90316875"/>
+<vertex x="1.35748125" y="0.861990625"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="8.565890625" y="0.84355"/>
+<vertex x="8.565890625" y="0.74235"/>
+<vertex x="8.72265" y="0.773190625"/>
+<vertex x="8.85015" y="0.87116875"/>
+<vertex x="8.933990625" y="1.034709375"/>
+<vertex x="8.957140625" y="1.21776875"/>
+<vertex x="8.93406875" y="1.400909375"/>
+<vertex x="8.85015" y="1.564290625"/>
+<vertex x="8.72281875" y="1.662690625"/>
+<vertex x="8.565890625" y="1.69376875"/>
+<vertex x="8.565890625" y="1.59256875"/>
+<vertex x="8.762590625" y="1.492440625"/>
+<vertex x="8.820709375" y="1.361140625"/>
+<vertex x="8.83593125" y="1.21776875"/>
+<vertex x="8.82063125" y="1.07465"/>
+<vertex x="8.762590625" y="0.94368125"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="12.716290625" y="0.8476"/>
+<vertex x="12.716290625" y="0.74391875"/>
+<vertex x="12.86511875" y="0.773190625"/>
+<vertex x="12.9927" y="0.87116875"/>
+<vertex x="13.07645" y="1.034709375"/>
+<vertex x="13.099690625" y="1.21776875"/>
+<vertex x="13.07653125" y="1.400909375"/>
+<vertex x="12.9927" y="1.564290625"/>
+<vertex x="12.86528125" y="1.662690625"/>
+<vertex x="12.716290625" y="1.6922"/>
+<vertex x="12.716290625" y="1.58851875"/>
+<vertex x="12.90505" y="1.492440625"/>
+<vertex x="12.96318125" y="1.361140625"/>
+<vertex x="12.97846875" y="1.21776875"/>
+<vertex x="12.96318125" y="1.07465"/>
+<vertex x="12.90505" y="0.94368125"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="17.148309375" y="0.85058125"/>
+<vertex x="17.148309375" y="0.74508125"/>
+<vertex x="17.291259375" y="0.773190625"/>
+<vertex x="17.418840625" y="0.87116875"/>
+<vertex x="17.5026" y="1.034709375"/>
+<vertex x="17.52575" y="1.21776875"/>
+<vertex x="17.50268125" y="1.400909375"/>
+<vertex x="17.418840625" y="1.564290625"/>
+<vertex x="17.29143125" y="1.662690625"/>
+<vertex x="17.148309375" y="1.69105"/>
+<vertex x="17.148309375" y="1.585540625"/>
+<vertex x="17.3312" y="1.492440625"/>
+<vertex x="17.38933125" y="1.361140625"/>
+<vertex x="17.40461875" y="1.21776875"/>
+<vertex x="17.38933125" y="1.07465"/>
+<vertex x="17.3312" y="0.94368125"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="19.757840625" y="1.24985"/>
+<vertex x="19.757840625" y="1.1422"/>
+<vertex x="19.845490625" y="1.117559375"/>
+<vertex x="19.92741875" y="0.99526875"/>
+<vertex x="20.03606875" y="0.759959375"/>
+<vertex x="20.1596" y="0.759959375"/>
+<vertex x="20.10121875" y="0.885309375"/>
+<vertex x="20.04293125" y="1.01065"/>
+<vertex x="19.9724" y="1.132359375"/>
+<vertex x="19.90071875" y="1.19006875"/>
+<vertex x="20.00878125" y="1.26936875"/>
+<vertex x="20.04631875" y="1.41315"/>
+<vertex x="19.974640625" y="1.61166875"/>
+<vertex x="19.757840625" y="1.677240625"/>
+<vertex x="19.757840625" y="1.575209375"/>
+<vertex x="19.88245" y="1.5342"/>
+<vertex x="19.925190625" y="1.41315"/>
+<vertex x="19.88245" y="1.290859375"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="18.904559375" y="0.85505"/>
+<vertex x="18.904559375" y="0.746809375"/>
+<vertex x="19.038840625" y="0.773190625"/>
+<vertex x="19.16633125" y="0.87116875"/>
+<vertex x="19.25016875" y="1.034709375"/>
+<vertex x="19.27331875" y="1.21776875"/>
+<vertex x="19.25016875" y="1.400909375"/>
+<vertex x="19.16633125" y="1.564290625"/>
+<vertex x="19.03891875" y="1.662690625"/>
+<vertex x="18.904559375" y="1.689309375"/>
+<vertex x="18.904559375" y="1.58108125"/>
+<vertex x="19.07876875" y="1.492440625"/>
+<vertex x="19.1369" y="1.361140625"/>
+<vertex x="19.152109375" y="1.21776875"/>
+<vertex x="19.13681875" y="1.07465"/>
+<vertex x="19.07876875" y="0.94368125"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="20.6456" y="1.6774"/>
+<vertex x="20.49776875" y="1.2592"/>
+<vertex x="20.60946875" y="1.2592"/>
+<vertex x="20.710509375" y="1.55511875"/>
+<vertex x="20.81188125" y="1.2592"/>
+<vertex x="20.9235" y="1.2592"/>
+<vertex x="20.775909375" y="1.6774"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="21.70468125" y="0.86588125"/>
+<vertex x="21.70468125" y="0.76558125"/>
+<vertex x="21.847640625" y="0.781790625"/>
+<vertex x="22.01738125" y="0.87116875"/>
+<vertex x="22.11031875" y="1.032890625"/>
+<vertex x="22.13346875" y="1.219590625"/>
+<vertex x="22.1104" y="1.40538125"/>
+<vertex x="22.017959375" y="1.5662"/>
+<vertex x="21.84796875" y="1.655740625"/>
+<vertex x="21.70468125" y="1.671859375"/>
+<vertex x="21.70468125" y="1.571490625"/>
+<vertex x="21.811090625" y="1.558340625"/>
+<vertex x="21.93031875" y="1.48938125"/>
+<vertex x="21.99638125" y="1.3628"/>
+<vertex x="22.012259375" y="1.219590625"/>
+<vertex x="21.99638125" y="1.075559375"/>
+<vertex x="21.93031875" y="0.94798125"/>
+<vertex x="21.811090625" y="0.87901875"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="22.73193125" y="0.853309375"/>
+<vertex x="22.73193125" y="0.74615"/>
+<vertex x="22.869590625" y="0.773190625"/>
+<vertex x="22.99716875" y="0.87116875"/>
+<vertex x="23.08093125" y="1.034709375"/>
+<vertex x="23.104159375" y="1.21776875"/>
+<vertex x="23.081009375" y="1.400909375"/>
+<vertex x="22.99716875" y="1.564290625"/>
+<vertex x="22.869759375" y="1.662690625"/>
+<vertex x="22.73193125" y="1.68996875"/>
+<vertex x="22.73193125" y="1.582809375"/>
+<vertex x="22.90953125" y="1.492440625"/>
+<vertex x="22.96765" y="1.361140625"/>
+<vertex x="22.98295" y="1.21776875"/>
+<vertex x="22.96765" y="1.07465"/>
+<vertex x="22.90953125" y="0.94368125"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="1.05816875" y="1.6774"/>
+<vertex x="1.05816875" y="0.759959375"/>
+<vertex x="1.23601875" y="0.759959375"/>
+<vertex x="1.23601875" y="0.861990625"/>
+<vertex x="1.1731" y="0.861990625"/>
+<vertex x="1.1731" y="1.198090625"/>
+<vertex x="1.23601875" y="1.198090625"/>
+<vertex x="1.23601875" y="1.29888125"/>
+<vertex x="1.1731" y="1.29888125"/>
+<vertex x="1.1731" y="1.57536875"/>
+<vertex x="1.23601875" y="1.57536875"/>
+<vertex x="1.23601875" y="1.6774"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="8.19398125" y="1.400909375"/>
+<vertex x="8.17083125" y="1.21776875"/>
+<vertex x="8.19398125" y="1.03463125"/>
+<vertex x="8.27781875" y="0.87116875"/>
+<vertex x="8.4059" y="0.773190625"/>
+<vertex x="8.564559375" y="0.7421"/>
+<vertex x="8.565890625" y="0.74235"/>
+<vertex x="8.565890625" y="0.84355"/>
+<vertex x="8.564559375" y="0.842890625"/>
+<vertex x="8.36538125" y="0.94368125"/>
+<vertex x="8.307340625" y="1.07465"/>
+<vertex x="8.292040625" y="1.21776875"/>
+<vertex x="8.307259375" y="1.361140625"/>
+<vertex x="8.36538125" y="1.492440625"/>
+<vertex x="8.564559375" y="1.59323125"/>
+<vertex x="8.565890625" y="1.59256875"/>
+<vertex x="8.565890625" y="1.69376875"/>
+<vertex x="8.564559375" y="1.69401875"/>
+<vertex x="8.405809375" y="1.66276875"/>
+<vertex x="8.27781875" y="1.564290625"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="12.33645" y="1.400909375"/>
+<vertex x="12.313290625" y="1.21776875"/>
+<vertex x="12.33645" y="1.03463125"/>
+<vertex x="12.420290625" y="0.87116875"/>
+<vertex x="12.548440625" y="0.773190625"/>
+<vertex x="12.70703125" y="0.7421"/>
+<vertex x="12.716290625" y="0.74391875"/>
+<vertex x="12.716290625" y="0.8476"/>
+<vertex x="12.70703125" y="0.842890625"/>
+<vertex x="12.50793125" y="0.94368125"/>
+<vertex x="12.4498" y="1.07465"/>
+<vertex x="12.434509375" y="1.21776875"/>
+<vertex x="12.4498" y="1.361140625"/>
+<vertex x="12.50793125" y="1.492440625"/>
+<vertex x="12.70703125" y="1.59323125"/>
+<vertex x="12.716290625" y="1.58851875"/>
+<vertex x="12.716290625" y="1.6922"/>
+<vertex x="12.70703125" y="1.69401875"/>
+<vertex x="12.548359375" y="1.66276875"/>
+<vertex x="12.420290625" y="1.564290625"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="16.762590625" y="1.400909375"/>
+<vertex x="16.739440625" y="1.21776875"/>
+<vertex x="16.762590625" y="1.03463125"/>
+<vertex x="16.84643125" y="0.87116875"/>
+<vertex x="16.974590625" y="0.773190625"/>
+<vertex x="17.13318125" y="0.7421"/>
+<vertex x="17.148309375" y="0.74508125"/>
+<vertex x="17.148309375" y="0.85058125"/>
+<vertex x="17.13318125" y="0.842890625"/>
+<vertex x="16.93408125" y="0.94368125"/>
+<vertex x="16.87595" y="1.07465"/>
+<vertex x="16.860659375" y="1.21776875"/>
+<vertex x="16.87595" y="1.361140625"/>
+<vertex x="16.93408125" y="1.492440625"/>
+<vertex x="17.13318125" y="1.59323125"/>
+<vertex x="17.148309375" y="1.585540625"/>
+<vertex x="17.148309375" y="1.69105"/>
+<vertex x="17.13318125" y="1.69401875"/>
+<vertex x="16.974509375" y="1.66276875"/>
+<vertex x="16.84643125" y="1.564290625"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="18.51008125" y="1.400909375"/>
+<vertex x="18.48701875" y="1.21776875"/>
+<vertex x="18.51008125" y="1.03463125"/>
+<vertex x="18.594009375" y="0.87116875"/>
+<vertex x="18.72208125" y="0.773190625"/>
+<vertex x="18.88075" y="0.7421"/>
+<vertex x="18.904559375" y="0.746809375"/>
+<vertex x="18.904559375" y="0.85505"/>
+<vertex x="18.88075" y="0.842890625"/>
+<vertex x="18.68156875" y="0.94368125"/>
+<vertex x="18.62351875" y="1.07465"/>
+<vertex x="18.60823125" y="1.21776875"/>
+<vertex x="18.623440625" y="1.361140625"/>
+<vertex x="18.68156875" y="1.492440625"/>
+<vertex x="18.88075" y="1.59323125"/>
+<vertex x="18.904559375" y="1.58108125"/>
+<vertex x="18.904559375" y="1.689309375"/>
+<vertex x="18.88075" y="1.69401875"/>
+<vertex x="18.722" y="1.66276875"/>
+<vertex x="18.594009375" y="1.564290625"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="19.497909375" y="1.6774"/>
+<vertex x="19.497909375" y="0.759959375"/>
+<vertex x="19.612840625" y="0.759959375"/>
+<vertex x="19.612840625" y="1.147740625"/>
+<vertex x="19.73801875" y="1.147740625"/>
+<vertex x="19.757859375" y="1.1422"/>
+<vertex x="19.757840625" y="1.1422"/>
+<vertex x="19.757840625" y="1.24985"/>
+<vertex x="19.75736875" y="1.249690625"/>
+<vertex x="19.612840625" y="1.249690625"/>
+<vertex x="19.612840625" y="1.57536875"/>
+<vertex x="19.75736875" y="1.57536875"/>
+<vertex x="19.757840625" y="1.575209375"/>
+<vertex x="19.757840625" y="1.677240625"/>
+<vertex x="19.75736875" y="1.6774"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="20.44253125" y="0.759959375"/>
+<vertex x="20.32131875" y="0.759959375"/>
+<vertex x="20.49776875" y="1.2592"/>
+<vertex x="20.60946875" y="1.2592"/>
+<vertex x="20.55456875" y="1.098540625"/>
+<vertex x="20.866940625" y="1.098540625"/>
+<vertex x="20.81188125" y="1.2592"/>
+<vertex x="20.9235" y="1.2592"/>
+<vertex x="21.099690625" y="0.759959375"/>
+<vertex x="20.98021875" y="0.759959375"/>
+<vertex x="20.90283125" y="0.99526875"/>
+<vertex x="20.519840625" y="0.99526875"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="21.419340625" y="1.6774"/>
+<vertex x="21.419340625" y="0.759959375"/>
+<vertex x="21.65548125" y="0.759959375"/>
+<vertex x="21.70468125" y="0.76558125"/>
+<vertex x="21.70468125" y="0.86588125"/>
+<vertex x="21.6731" y="0.861990625"/>
+<vertex x="21.53426875" y="0.861990625"/>
+<vertex x="21.53426875" y="1.57536875"/>
+<vertex x="21.6731" y="1.57536875"/>
+<vertex x="21.70468125" y="1.571490625"/>
+<vertex x="21.70468125" y="1.671859375"/>
+<vertex x="21.65548125" y="1.6774"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="22.34091875" y="1.400909375"/>
+<vertex x="22.31776875" y="1.21776875"/>
+<vertex x="22.34091875" y="1.03463125"/>
+<vertex x="22.424759375" y="0.87116875"/>
+<vertex x="22.55291875" y="0.773190625"/>
+<vertex x="22.7115" y="0.7421"/>
+<vertex x="22.73193125" y="0.74615"/>
+<vertex x="22.73193125" y="0.853309375"/>
+<vertex x="22.7115" y="0.842890625"/>
+<vertex x="22.5124" y="0.94368125"/>
+<vertex x="22.45428125" y="1.07465"/>
+<vertex x="22.43898125" y="1.21776875"/>
+<vertex x="22.45428125" y="1.361140625"/>
+<vertex x="22.5124" y="1.492440625"/>
+<vertex x="22.7115" y="1.59323125"/>
+<vertex x="22.73193125" y="1.582809375"/>
+<vertex x="22.73193125" y="1.68996875"/>
+<vertex x="22.7115" y="1.69401875"/>
+<vertex x="22.552840625" y="1.66276875"/>
+<vertex x="22.424759375" y="1.564290625"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="2.24266875" y="12.42643125"/>
+<vertex x="1.33556875" y="12.42643125"/>
+<vertex x="1.33556875" y="12.79411875"/>
+<vertex x="2.24266875" y="12.79411875"/>
+<vertex x="2.24266875" y="14.669109375"/>
+<vertex x="1.33556875" y="14.669109375"/>
+<vertex x="1.33556875" y="15"/>
+<vertex x="7.498040625" y="15"/>
+<vertex x="7.498040625" y="14.669109375"/>
+<vertex x="2.57356875" y="14.669109375"/>
+<vertex x="2.57356875" y="12.79411875"/>
+<vertex x="7.498040625" y="12.79411875"/>
+<vertex x="7.498040625" y="12.42643125"/>
+<vertex x="2.57356875" y="12.42643125"/>
+<vertex x="2.57356875" y="9.70585"/>
+<vertex x="7.498040625" y="9.70585"/>
+<vertex x="7.498040625" y="9.41175"/>
+<vertex x="2.24266875" y="9.41175"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="0" y="11.29393125"/>
+<vertex x="0" y="0.00003125"/>
+<vertex x="7.498040625" y="0.00003125"/>
+<vertex x="7.498040625" y="0.36763125"/>
+<vertex x="0.330890625" y="0.36763125"/>
+<vertex x="0.330890625" y="2.095609375"/>
+<vertex x="7.498040625" y="2.095609375"/>
+<vertex x="7.498040625" y="2.46321875"/>
+<vertex x="0.330890625" y="2.46321875"/>
+<vertex x="0.330890625" y="11.29393125"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="7.498040625" y="0.36763125"/>
+<vertex x="7.498040625" y="0.00003125"/>
+<vertex x="24.080890625" y="0.00003125"/>
+<vertex x="24.080890625" y="15"/>
+<vertex x="7.498040625" y="15"/>
+<vertex x="7.498040625" y="14.669109375"/>
+<vertex x="23.749990625" y="14.669109375"/>
+<vertex x="23.749990625" y="2.46321875"/>
+<vertex x="7.498040625" y="2.46321875"/>
+<vertex x="7.498040625" y="2.095609375"/>
+<vertex x="23.749990625" y="2.095609375"/>
+<vertex x="23.749990625" y="0.36763125"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="7.498040625" y="9.70585"/>
+<vertex x="7.498040625" y="9.41175"/>
+<vertex x="12.132390625" y="9.41175"/>
+<vertex x="12.132390625" y="12.79411875"/>
+<vertex x="7.498040625" y="12.79411875"/>
+<vertex x="7.498040625" y="12.42643125"/>
+<vertex x="11.7647" y="12.42643125"/>
+<vertex x="11.7647" y="9.70585"/>
+</polygon>
+<polygon width="0.002" layer="21">
+<vertex x="0" y="15"/>
+<vertex x="0" y="11.29393125"/>
+<vertex x="0.330890625" y="11.29393125"/>
+<vertex x="0.330890625" y="12.42643125"/>
+<vertex x="1.33556875" y="12.42643125"/>
+<vertex x="1.33556875" y="12.79411875"/>
+<vertex x="0.330890625" y="12.79411875"/>
+<vertex x="0.330890625" y="14.669109375"/>
+<vertex x="1.33556875" y="14.669109375"/>
+<vertex x="1.33556875" y="15"/>
+</polygon>
+</package>
+</packages>
+</library>
+<library name="SparkFun-Capacitors" urn="urn:adsk.eagle:library:510">
+<description>&lt;h3&gt;SparkFun Capacitors&lt;/h3&gt;
+This library contains capacitors. 
+&lt;br&gt;
+&lt;br&gt;
+We've spent an enormous amount of time creating and checking these footprints and parts, but it is &lt;b&gt; the end user's responsibility&lt;/b&gt; to ensure correctness and suitablity for a given componet or application. 
+&lt;br&gt;
+&lt;br&gt;If you enjoy using this library, please buy one of our products at &lt;a href=" www.sparkfun.com"&gt;SparkFun.com&lt;/a&gt;.
+&lt;br&gt;
+&lt;br&gt;
+&lt;b&gt;Licensing:&lt;/b&gt; Creative Commons ShareAlike 4.0 International - https://creativecommons.org/licenses/by-sa/4.0/ 
+&lt;br&gt;
+&lt;br&gt;
+You are welcome to use this library for commercial purposes. For attribution, we ask that when you begin to sell your device using our footprint, you email us with a link to the product being sold. We want bragging rights that we helped (in a very small part) to create your 8th world wonder. We would like the opportunity to feature your device on our homepage.</description>
+<packages>
+<package name="0603" urn="urn:adsk.eagle:footprint:37386/1" library_version="1">
+<description>&lt;p&gt;&lt;b&gt;Generic 1608 (0603) package&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;0.2mm courtyard excess rounded to nearest 0.05mm.&lt;/p&gt;</description>
+<wire x1="-1.6" y1="0.7" x2="1.6" y2="0.7" width="0.0508" layer="39"/>
+<wire x1="1.6" y1="0.7" x2="1.6" y2="-0.7" width="0.0508" layer="39"/>
+<wire x1="1.6" y1="-0.7" x2="-1.6" y2="-0.7" width="0.0508" layer="39"/>
+<wire x1="-1.6" y1="-0.7" x2="-1.6" y2="0.7" width="0.0508" layer="39"/>
+<wire x1="-0.356" y1="0.432" x2="0.356" y2="0.432" width="0.1016" layer="51"/>
+<wire x1="-0.356" y1="-0.419" x2="0.356" y2="-0.419" width="0.1016" layer="51"/>
+<smd name="1" x="-0.85" y="0" dx="1.1" dy="1" layer="1"/>
+<smd name="2" x="0.85" y="0" dx="1.1" dy="1" layer="1"/>
+<text x="0" y="0.762" size="0.6096" layer="25" font="vector" ratio="20" align="bottom-center">&gt;NAME</text>
+<text x="0" y="-0.762" size="0.6096" layer="27" font="vector" ratio="20" align="top-center">&gt;VALUE</text>
+<rectangle x1="-0.8382" y1="-0.4699" x2="-0.3381" y2="0.4801" layer="51"/>
+<rectangle x1="0.3302" y1="-0.4699" x2="0.8303" y2="0.4801" layer="51"/>
+<rectangle x1="-0.1999" y1="-0.3" x2="0.1999" y2="0.3" layer="35"/>
+</package>
+</packages>
+<packages3d>
+<package3d name="0603" urn="urn:adsk.eagle:package:37414/1" type="box" library_version="1">
+<description>Generic 1608 (0603) package
+0.2mm courtyard excess rounded to nearest 0.05mm.</description>
+<packageinstances>
+<packageinstance name="0603"/>
+</packageinstances>
+</package3d>
+</packages3d>
+</library>
+<library name="SparkFun-RF">
+<description>&lt;h3&gt;SparkFun Electronics' preferred foot prints&lt;/h3&gt;
+In this library you'll find things that send or receive RF- GPS, cellular modules, Bluetooth, WiFi, etc.&lt;br&gt;&lt;br&gt;
+We've spent an enormous amount of time creating and checking these footprints and parts, but it is the end user's responsibility to ensure correctness and suitablity for a given componet or application. If you enjoy using this library, please buy one of our products at www.sparkfun.com.
+&lt;br&gt;&lt;br&gt;
+&lt;b&gt;Licensing:&lt;/b&gt; Creative Commons ShareAlike 4.0 International - https://creativecommons.org/licenses/by-sa/4.0/ 
+&lt;br&gt;&lt;br&gt;
+You are welcome to use this library for commercial purposes. For attribution, we ask that when you begin to sell your device using our footprint, you email us with a link to the product being sold. We want bragging rights that we helped (in a very small part) to create your 8th world wonder. We would like the opportunity to feature your device on our homepage.</description>
+<packages>
+<package name="ID-12">
+<description>ID12 Footprint (works with ID2, ID12, and ID20)</description>
+<wire x1="-0.045" y1="0.02" x2="26.355" y2="0.02" width="0.127" layer="51"/>
+<wire x1="26.355" y1="0.02" x2="26.355" y2="25.32" width="0.127" layer="51"/>
+<wire x1="26.355" y1="25.32" x2="-0.045" y2="25.32" width="0.127" layer="51"/>
+<wire x1="-0.045" y1="25.32" x2="-0.045" y2="0.02" width="0.127" layer="51"/>
+<pad name="1" x="16.255" y="5.32" drill="0.8" shape="square" rot="R180"/>
+<pad name="2" x="14.255" y="5.32" drill="0.8" rot="R180"/>
+<pad name="3" x="12.255" y="5.32" drill="0.8" rot="R180"/>
+<pad name="4" x="10.255" y="5.32" drill="0.8" rot="R180"/>
+<pad name="5" x="8.255" y="5.32" drill="0.8" rot="R180"/>
+<pad name="6" x="8.255" y="20.32" drill="0.8" rot="R180"/>
+<pad name="7" x="10.255" y="20.32" drill="0.8" rot="R180"/>
+<pad name="8" x="12.255" y="20.32" drill="0.8" rot="R180"/>
+<pad name="9" x="14.255" y="20.32" drill="0.8" rot="R180"/>
+<pad name="10" x="16.255" y="20.32" drill="0.8" rot="R180"/>
+<pad name="11" x="20.255" y="20.32" drill="0.8" rot="R180"/>
+<text x="1.905" y="24.13" size="0.4064" layer="25">&gt;NAME</text>
+<text x="3.81" y="1.27" size="0.4064" layer="27" rot="R180">&gt;VALUE</text>
+</package>
+</packages>
+</library>
+<library name="TMF_ICs">
+<packages>
+<package name="SOT23-5">
+<wire x1="1.5" y1="-0.8" x2="-1.5" y2="-0.8" width="0.127" layer="51"/>
+<wire x1="-1.8" y1="-0.8" x2="-1.8" y2="0.8" width="0.127" layer="21"/>
+<wire x1="-1.5" y1="0.8" x2="1.5" y2="0.8" width="0.127" layer="51"/>
+<wire x1="1.8" y1="0.8" x2="1.8" y2="-0.8" width="0.127" layer="21"/>
+<circle x="-1.7" y="-1.3" radius="0.0635" width="0.127" layer="21"/>
+<smd name="1" x="-0.95" y="-1.15" dx="0.6" dy="0.9" layer="1"/>
+<smd name="2" x="0" y="-1.15" dx="0.6" dy="0.9" layer="1"/>
+<smd name="3" x="0.95" y="-1.15" dx="0.6" dy="0.9" layer="1"/>
+<smd name="4" x="0.95" y="1.15" dx="0.6" dy="0.9" layer="1"/>
+<smd name="5" x="-0.95" y="1.15" dx="0.6" dy="0.9" layer="1"/>
+<text x="-2.54" y="-2.54" size="1.27" layer="27" font="vector" ratio="10" align="center-right">&gt;VALUE</text>
+<text x="-2.54" y="0" size="1.27" layer="25" font="vector" ratio="10" align="center-right">&gt;NAME</text>
+<rectangle x1="-1.14" y1="-1.4" x2="-0.76" y2="-0.8" layer="51"/>
+<rectangle x1="-0.19" y1="-1.4" x2="0.19" y2="-0.8" layer="51"/>
+<rectangle x1="0.76" y1="-1.4" x2="1.14" y2="-0.8" layer="51"/>
+<rectangle x1="0.76" y1="0.8" x2="1.14" y2="1.4" layer="51"/>
+<rectangle x1="-1.14" y1="0.8" x2="-0.76" y2="1.4" layer="51"/>
+<wire x1="1.5" y1="0.8" x2="1.5" y2="-0.8" width="0.127" layer="51"/>
+<wire x1="-1.5" y1="-0.8" x2="-1.5" y2="0.8" width="0.127" layer="51"/>
+<wire x1="-2.5" y1="2.5" x2="2.5" y2="2.5" width="0.127" layer="39"/>
+<wire x1="2.5" y1="2.5" x2="2.5" y2="-2.5" width="0.127" layer="39"/>
+<wire x1="2.5" y1="-2.5" x2="-2.5" y2="-2.5" width="0.127" layer="39"/>
+<wire x1="-2.5" y1="-2.5" x2="-2.5" y2="2.5" width="0.127" layer="39"/>
+<circle x="-1.1" y="-0.4" radius="0.0635" width="0.127" layer="51"/>
+</package>
+</packages>
+</library>
+</libraries>
+<attributes>
+<attribute name="REV" value="A"/>
+</attributes>
+<variantdefs>
+</variantdefs>
+<classes>
+<class number="0" name="default" width="0" drill="0">
+</class>
+</classes>
+<designrules name="oshpark-2layer">
+<description language="en">&lt;b&gt;OSH Park Design Rules&lt;/b&gt;
+&lt;p&gt;
+Please make sure your boards conform to these design rules.
+&lt;/p&gt;
+&lt;p&gt;
+Note, that not all DRC settings must be set by the manufacturer. Several can be adjusted for the design, including those listed on our docs page here. 
+&lt;a href=&quot;http://docs.oshpark.com/design-tools/eagle/design-rules-files/&quot;&gt;Adjustable Settings&lt;/a&gt;
+&lt;/p&gt;</description>
+<param name="layerSetup" value="(1*16)"/>
+<param name="mtCopper" value="0.035559375mm 0.0356mm 0.0356mm 0.0356mm 0.0356mm 0.0356mm 0.0356mm 0.0356mm 0.0356mm 0.0356mm 0.0356mm 0.0356mm 0.0356mm 0.0356mm 0.0356mm 0.035559375mm"/>
+<param name="mtIsolate" value="1.6mm 0.1499mm 0.2007mm 0.1499mm 0.2007mm 0.1499mm 0.2007mm 0.1499mm 0.2007mm 0.1499mm 0.2007mm 0.1499mm 0.2007mm 0.1499mm 0.2007mm"/>
+<param name="mdWireWire" value="6mil"/>
+<param name="mdWirePad" value="6mil"/>
+<param name="mdWireVia" value="6mil"/>
+<param name="mdPadPad" value="6mil"/>
+<param name="mdPadVia" value="6mil"/>
+<param name="mdViaVia" value="6mil"/>
+<param name="mdSmdPad" value="6mil"/>
+<param name="mdSmdVia" value="6mil"/>
+<param name="mdSmdSmd" value="6mil"/>
+<param name="mdViaViaSameLayer" value="8mil"/>
+<param name="mnLayersViaInSmd" value="2"/>
+<param name="mdCopperDimension" value="15mil"/>
+<param name="mdDrill" value="6mil"/>
+<param name="mdSmdStop" value="0mil"/>
+<param name="msWidth" value="6mil"/>
+<param name="msDrill" value="10mil"/>
+<param name="msMicroVia" value="10mil"/>
+<param name="msBlindViaRatio" value="0.5"/>
+<param name="rvPadTop" value="0.25"/>
+<param name="rvPadInner" value="0.25"/>
+<param name="rvPadBottom" value="0.25"/>
+<param name="rvViaOuter" value="0.25"/>
+<param name="rvViaInner" value="0.25"/>
+<param name="rvMicroViaOuter" value="0.25"/>
+<param name="rvMicroViaInner" value="0.25"/>
+<param name="rlMinPadTop" value="5mil"/>
+<param name="rlMaxPadTop" value="20mil"/>
+<param name="rlMinPadInner" value="5mil"/>
+<param name="rlMaxPadInner" value="20mil"/>
+<param name="rlMinPadBottom" value="5mil"/>
+<param name="rlMaxPadBottom" value="20mil"/>
+<param name="rlMinViaOuter" value="5mil"/>
+<param name="rlMaxViaOuter" value="20mil"/>
+<param name="rlMinViaInner" value="5mil"/>
+<param name="rlMaxViaInner" value="20mil"/>
+<param name="rlMinMicroViaOuter" value="5mil"/>
+<param name="rlMaxMicroViaOuter" value="20mil"/>
+<param name="rlMinMicroViaInner" value="5mil"/>
+<param name="rlMaxMicroViaInner" value="20mil"/>
+<param name="psTop" value="-1"/>
+<param name="psBottom" value="-1"/>
+<param name="psFirst" value="-1"/>
+<param name="psElongationLong" value="100"/>
+<param name="psElongationOffset" value="100"/>
+<param name="mvStopFrame" value="1"/>
+<param name="mvCreamFrame" value="0"/>
+<param name="mlMinStopFrame" value="2.5mil"/>
+<param name="mlMaxStopFrame" value="2.5mil"/>
+<param name="mlMinCreamFrame" value="0mil"/>
+<param name="mlMaxCreamFrame" value="0mil"/>
+<param name="mlViaStopLimit" value="0mil"/>
+<param name="srRoundness" value="0"/>
+<param name="srMinRoundness" value="0mil"/>
+<param name="srMaxRoundness" value="0mil"/>
+<param name="slThermalIsolate" value="10mil"/>
+<param name="slThermalsForVias" value="0"/>
+<param name="dpMaxLengthDifference" value="10mm"/>
+<param name="dpGapFactor" value="2.5"/>
+<param name="checkAngle" value="0"/>
+<param name="checkFont" value="1"/>
+<param name="checkRestrict" value="1"/>
+<param name="checkStop" value="0"/>
+<param name="checkValues" value="0"/>
+<param name="checkNames" value="1"/>
+<param name="checkWireStubs" value="1"/>
+<param name="checkPolygonWidth" value="0"/>
+<param name="useDiameter" value="13"/>
+<param name="maxErrors" value="50"/>
+</designrules>
+<autorouter>
+<pass name="Default">
+<param name="RoutingGrid" value="50mil"/>
+<param name="AutoGrid" value="1"/>
+<param name="Efforts" value="0"/>
+<param name="TopRouterVariant" value="1"/>
+<param name="tpViaShape" value="round"/>
+<param name="PrefDir.1" value="|"/>
+<param name="PrefDir.2" value="0"/>
+<param name="PrefDir.3" value="0"/>
+<param name="PrefDir.4" value="0"/>
+<param name="PrefDir.5" value="0"/>
+<param name="PrefDir.6" value="0"/>
+<param name="PrefDir.7" value="0"/>
+<param name="PrefDir.8" value="0"/>
+<param name="PrefDir.9" value="0"/>
+<param name="PrefDir.10" value="0"/>
+<param name="PrefDir.11" value="0"/>
+<param name="PrefDir.12" value="0"/>
+<param name="PrefDir.13" value="0"/>
+<param name="PrefDir.14" value="0"/>
+<param name="PrefDir.15" value="0"/>
+<param name="PrefDir.16" value="-"/>
+<param name="cfVia" value="8"/>
+<param name="cfNonPref" value="5"/>
+<param name="cfChangeDir" value="2"/>
+<param name="cfOrthStep" value="2"/>
+<param name="cfDiagStep" value="3"/>
+<param name="cfExtdStep" value="0"/>
+<param name="cfBonusStep" value="1"/>
+<param name="cfMalusStep" value="1"/>
+<param name="cfPadImpact" value="4"/>
+<param name="cfSmdImpact" value="4"/>
+<param name="cfBusImpact" value="0"/>
+<param name="cfHugging" value="3"/>
+<param name="cfAvoid" value="4"/>
+<param name="cfPolygon" value="10"/>
+<param name="cfBase.1" value="0"/>
+<param name="cfBase.2" value="1"/>
+<param name="cfBase.3" value="1"/>
+<param name="cfBase.4" value="1"/>
+<param name="cfBase.5" value="1"/>
+<param name="cfBase.6" value="1"/>
+<param name="cfBase.7" value="1"/>
+<param name="cfBase.8" value="1"/>
+<param name="cfBase.9" value="1"/>
+<param name="cfBase.10" value="1"/>
+<param name="cfBase.11" value="1"/>
+<param name="cfBase.12" value="1"/>
+<param name="cfBase.13" value="1"/>
+<param name="cfBase.14" value="1"/>
+<param name="cfBase.15" value="1"/>
+<param name="cfBase.16" value="0"/>
+<param name="mnVias" value="20"/>
+<param name="mnSegments" value="9999"/>
+<param name="mnExtdSteps" value="9999"/>
+<param name="mnRipupLevel" value="10"/>
+<param name="mnRipupSteps" value="100"/>
+<param name="mnRipupTotal" value="100"/>
+</pass>
+<pass name="Follow-me" refer="Default" active="yes">
+</pass>
+<pass name="Busses" refer="Default" active="yes">
+<param name="cfNonPref" value="4"/>
+<param name="cfBusImpact" value="4"/>
+<param name="cfHugging" value="0"/>
+<param name="mnVias" value="0"/>
+</pass>
+<pass name="Route" refer="Default" active="yes">
+</pass>
+<pass name="Optimize1" refer="Default" active="yes">
+<param name="cfVia" value="99"/>
+<param name="cfExtdStep" value="10"/>
+<param name="cfHugging" value="1"/>
+<param name="mnExtdSteps" value="1"/>
+<param name="mnRipupLevel" value="0"/>
+</pass>
+<pass name="Optimize2" refer="Optimize1" active="yes">
+<param name="cfNonPref" value="0"/>
+<param name="cfChangeDir" value="6"/>
+<param name="cfExtdStep" value="0"/>
+<param name="cfBonusStep" value="2"/>
+<param name="cfMalusStep" value="2"/>
+<param name="cfPadImpact" value="2"/>
+<param name="cfSmdImpact" value="2"/>
+<param name="cfHugging" value="0"/>
+</pass>
+<pass name="Optimize3" refer="Optimize2" active="yes">
+<param name="cfChangeDir" value="8"/>
+<param name="cfPadImpact" value="0"/>
+<param name="cfSmdImpact" value="0"/>
+</pass>
+<pass name="Optimize4" refer="Optimize3" active="yes">
+<param name="cfChangeDir" value="25"/>
+</pass>
+</autorouter>
+<elements>
+<element name="C2" library="SparkFun-Capacitors" library_urn="urn:adsk.eagle:library:510" package="0603" package3d_urn="urn:adsk.eagle:package:37414/1" value="0.1uF" x="18.923" y="12.65" smashed="yes" rot="R270">
+<attribute name="NAME" x="18.923" y="10.5" size="1.27" layer="25" font="vector" ratio="10" align="top-center"/>
+<attribute name="PROD_ID" value="CAP-00810" x="18.923" y="12.65" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="SPICEPREFIX" value="C" x="18.923" y="12.65" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="VALUE" x="18.161" y="12.65" size="0.6096" layer="27" font="vector" ratio="20" rot="R270" align="top-center"/>
+</element>
+<element name="J1" library="SparkFun-Connectors" package="SCREWTERMINAL-5MM-2" value="" x="5.603" y="10.15" smashed="yes" rot="R90">
+<attribute name="NAME" x="5.603" y="18.7" size="1.27" layer="25" font="vector" ratio="10" align="bottom-center"/>
+<attribute name="SF_SKU" value="PRT-08432" x="5.603" y="10.15" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="VALUE" x="4.333" y="8.88" size="0.6096" layer="27" font="vector" ratio="20" rot="R90"/>
+</element>
+<element name="LOGO1" library="TinkerMill" package="MADE_BY_TINKERMILL" value="MADE_BY_TINKERMILL" x="25.273" y="6.35" smashed="yes" rot="MR0"/>
+<element name="C1" library="SparkFun-Capacitors" library_urn="urn:adsk.eagle:library:510" package="0603" package3d_urn="urn:adsk.eagle:package:37414/1" value="1uF" x="19.431" y="17.272" smashed="yes" rot="R180">
+<attribute name="NAME" x="17.7" y="17.272" size="1.27" layer="25" font="vector" ratio="10" align="center-right"/>
+<attribute name="PROD_ID" value="CAP-11015" x="19.431" y="17.272" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="VALUE" x="19.431" y="18.034" size="0.6096" layer="27" font="vector" ratio="20" rot="R180" align="top-center"/>
+</element>
+<element name="U1" library="SparkFun-RF" package="ID-12" value="ID-12/20" x="0.045" y="-0.17" smashed="yes">
+<attribute name="NAME" x="12.3" y="3.3" size="1.27" layer="26" font="vector" ratio="10" rot="MR0" align="center"/>
+<attribute name="VALUE" x="3.855" y="1.1" size="0.4064" layer="27" rot="R180"/>
+</element>
+<element name="U2" library="TMF_ICs" package="SOT23-5" value="MAX3181E" x="14.732" y="12.65" smashed="yes" rot="R90">
+<attribute name="NAME" x="14.732" y="10.11" size="1.27" layer="25" font="vector" ratio="10" align="top-center"/>
+<attribute name="SPICEPREFIX" value="X" x="14.732" y="12.65" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="VALUE" x="17.272" y="10.11" size="1.27" layer="27" font="vector" ratio="10" rot="R90" align="center-right"/>
+</element>
+</elements>
+<signals>
+<signal name="3.3V">
+<contactref element="C1" pad="1"/>
+<contactref element="U1" pad="2"/>
+<contactref element="U1" pad="11"/>
+<contactref element="U2" pad="5"/>
+<contactref element="C2" pad="2"/>
+<polygon width="0.127" layer="1" isolate="0.254">
+<vertex x="0" y="0"/>
+<vertex x="0" y="25.3"/>
+<vertex x="26.4" y="25.3"/>
+<vertex x="26.4" y="0"/>
+</polygon>
+</signal>
+<signal name="GND">
+<via x="22.619" y="12.706" extent="1-16" drill="0.5" diameter="0.55" shape="square"/>
+<contactref element="C1" pad="2"/>
+<contactref element="U1" pad="1"/>
+<contactref element="U1" pad="7"/>
+<contactref element="J1" pad="1"/>
+<contactref element="U2" pad="2"/>
+<contactref element="C2" pad="1"/>
+<polygon width="0.127" layer="16">
+<vertex x="0" y="0"/>
+<vertex x="0" y="25.3"/>
+<vertex x="26.4" y="25.3"/>
+<vertex x="26.4" y="0"/>
+</polygon>
+<via x="17.272" y="12.65" extent="1-16" drill="0.35"/>
+<wire x1="15.882" y1="12.65" x2="17.272" y2="12.65" width="0.3048" layer="1"/>
+<wire x1="18.923" y1="13.5" x2="18.122" y2="13.5" width="0.3048" layer="1"/>
+<wire x1="18.122" y1="13.5" x2="17.272" y2="12.65" width="0.3048" layer="1"/>
+<via x="18.581" y="16.002" extent="1-16" drill="0.35"/>
+<wire x1="18.581" y1="17.272" x2="18.581" y2="16.002" width="0.3048" layer="1"/>
+</signal>
+<signal name="RXD">
+<contactref element="U1" pad="9"/>
+<contactref element="U2" pad="3"/>
+<wire x1="15.882" y1="13.6" x2="15.882" y2="15.487" width="0.3048" layer="1"/>
+<wire x1="14.3" y1="17.069" x2="14.3" y2="20.15" width="0.3048" layer="1"/>
+<wire x1="15.882" y1="15.487" x2="14.3" y2="17.069" width="0.3048" layer="1"/>
+</signal>
+<signal name="N$4">
+<via x="18.3" y="20.15" extent="1-16" drill="0.8" alwaysstop="yes" locked="yes"/>
+</signal>
+<signal name="RX232">
+<contactref element="J1" pad="2"/>
+<contactref element="U2" pad="4"/>
+<wire x1="11.165" y1="13.6" x2="13.582" y2="13.6" width="0.3048" layer="1"/>
+<wire x1="5.603" y1="15.15" x2="9.615" y2="15.15" width="0.3048" layer="1"/>
+<wire x1="9.615" y1="15.15" x2="11.165" y2="13.6" width="0.3048" layer="1"/>
+</signal>
+<signal name="!INVALID">
+<contactref element="U2" pad="1"/>
+<via x="16.764" y="8.382" extent="1-16" drill="0.35"/>
+<wire x1="15.882" y1="11.7" x2="15.882" y2="9.264" width="0.3048" layer="1"/>
+<wire x1="15.882" y1="9.264" x2="16.764" y2="8.382" width="0.3048" layer="1"/>
+</signal>
+</signals>
+<mfgpreviewcolors>
+<mfgpreviewcolor name="soldermaskcolor" color="0xC8008000"/>
+<mfgpreviewcolor name="silkscreencolor" color="0xFFFEFEFE"/>
+<mfgpreviewcolor name="backgroundcolor" color="0xFF282828"/>
+<mfgpreviewcolor name="coppercolor" color="0xFFFFBF00"/>
+<mfgpreviewcolor name="substratecolor" color="0xFF786E46"/>
+</mfgpreviewcolors>
+</board>
+</drawing>
+<compatibility>
+<note version="6.3" minversion="6.2.2" severity="warning">
+Since Version 6.2.2 text objects can contain more than one line,
+which will not be processed correctly with this version.
+</note>
+<note version="8.2" severity="warning">
+Since Version 8.2, EAGLE supports online libraries. The ids
+of those online libraries will not be understood (or retained)
+with this version.
+</note>
+<note version="8.3" severity="warning">
+Since Version 8.3, EAGLE supports URNs for individual library
+assets (packages, symbols, and devices). The URNs of those assets
+will not be understood (or retained) with this version.
+</note>
+<note version="8.3" severity="warning">
+Since Version 8.3, EAGLE supports the association of 3D packages
+with devices in libraries, schematics, and board files. Those 3D
+packages will not be understood (or retained) with this version.
+</note>
+<note version="8.5" severity="warning">
+Since Version 8.5, EAGLE supports locking for holes, vias, wires and polygons. 
+The locking property on all objects of these types will not be understood in this version. 
+</note>
+</compatibility>
+</eagle>
