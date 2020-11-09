@@ -117,6 +117,10 @@ def close_connection(exception):
 # logout
 @app.route("/device/<deviceid>/logout/<uid>")
 def deviceLogout(deviceid, uid):
+  if deviceid=="door":
+    exec_db("insert into log (mssage) values ('doorlock:%s')" % uid)
+    return ""
+
   output = query_db("select device.name from device where id=%s" % deviceid)
   exec_db("insert into log (message) values ('logout:%s:%s')" % (deviceid,uid) )
 
@@ -136,6 +140,15 @@ def deviceLogout(deviceid, uid):
 # this is the login
 @app.route("/device/<deviceid>/code/<code>")
 def deviceCode(deviceid,code):
+  if deviceid=="door":
+    output = query_db("select user.name, user.id from user where user.code='%s'" % (code))
+    if len(output) == 0:
+      return json.dumps( {'devicename': 'none', 'username': 'none', 'userid': -1, 'time': 0 } )
+    else:
+      # log to the database
+      exec_db("insert into log (message) values ('dooropen:%s:%s')" % (output[0][0], output[0][1]))
+      return json.dumps( {'devicename': 'Door', 'username': output[0][0], 'userid': output[0][1], 'time': 100} )
+
   output = query_db("select user.name, user.id, device.name, deviceAccess.time from deviceAccess join device on device.id=deviceAccess.device join user on user.id = deviceAccess.user where user.code='%s' and device.id=%s" % (code,deviceid))
   #print output
   if len(output) == 0:
