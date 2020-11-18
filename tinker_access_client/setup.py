@@ -25,10 +25,10 @@ class install(_install):
 config = {
     'name': PackageInfo.pip_package_name,
     'description': PackageInfo.pip_package_name,
-    'author': 'Erick McQueen',
+    'author': 'TinkerMill',
     'url': 'http://github.com/tinkerMill/tinkerAccess',
     'download_url': 'https://github.com/tinkerAccess/archive/v{0}.tar.gz'.format(PackageInfo.version),
-    'author_email': 'ronn.mcqueen@tinkermill.org',
+    'author_email': 'devteam@tinkermill.org',
     'version': PackageInfo.version,
     'zip_safe': False,
     'install_requires': [
