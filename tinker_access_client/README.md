@@ -179,11 +179,11 @@ auto_update: true
 
 - __--use-bypass-detect=[use_bypass_detect]__: The bypass detect input pin will be monitored to log a tamper or bypass event [default:'False']
 
-- __--use-3v3-en=[use_3v3_en]__: The PCB has a 3.3V enable output pin and will be cycled during start-up or certain errors. Feature only on newer boards [default:'False']
+- __--use-3v3-en=[use_3v3_en]__: The PCB has a 3.3V enable output pin and will be cycled during start-up or certain errors. This feature should be set for PCB rev 1.4 or higher [default:'False']
 
 - __--use-alarm=[use_alarm]__: The alarm output pin is enabled and will output high during an alarm condition [default:'False']
 
-- __--use-pgm-current-threshold=[use_pgm_current_threshold]__: The PCB has a programmable current detect threshold PWM output and will be set during init to set the current detect threshold [default:'False']
+- __--use-pgm-current-threshold=[use_pgm_current_threshold]__: The PCB has a programmable current detect threshold PWM output and will be set during init to set the current detect threshold. This feature must be set to True for PCB rev 1.4 or higher. If current detection is not desired with this feature set, the current-detect-setting can be left at the default high value of 10 Amps to effectively disable the current detection. Setting max-power-down-timeout to 0 will also effectively disable the current detection [default:'False']
 
 - __--current-detect-setting=[current_detect_setting]__: The current sense detect threshold setting in RMS milliamps [default:'10000']
 
@@ -201,5 +201,5 @@ auto_update: true
 
 ## Tuning the current detection threshold:
 
-Newer PCBs have a programmable current detection threshold. Details on how to tune this can be found [here](tuning/README.md).
+Newer PCBs (rev 1.4) have a programmable current detection threshold. Details on how to tune this can be found [here](tuning/README.md).
 
