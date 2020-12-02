@@ -183,7 +183,7 @@ auto_update: true
 
 - __--use-alarm=[use_alarm]__: The alarm output pin is enabled and will output high during an alarm condition [default:'False']
 
-- __--use-pgm-current-threshold=[use_pgm_current_threshold]__: The PCB has a programmable current detect threshold PWM output and will be set during init to set the current detect threshold. This feature must be set to True for PCB rev 1.4 or higher. If current detection is not desired with this feature set, the current-detect-setting can be left at the default high value of 10 Amps to effectively disable the current detection. Setting max-power-down-timeout to 0 will also effectively disable the current detection [default:'False']
+- __--use-pgm-current-threshold=[use_pgm_current_threshold]__: The PCB has a programmable current detect threshold PWM output and will be set during init to set the current detect threshold. This feature is available on PCB rev 1.4 or higher. If current detection is desired on rev 1.4 PCBs, this feature must be set True. If it is not desired, it can be left set to False [default:'False']
 
 - __--current-detect-setting=[current_detect_setting]__: The current sense detect threshold setting in RMS milliamps [default:'10000']
 
