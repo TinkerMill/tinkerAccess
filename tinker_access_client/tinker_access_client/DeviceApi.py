@@ -62,9 +62,14 @@ class DeviceApi(object):
 
         if self.__opts.get(ClientOption.USE_ALARM):
             GPIO.setup(self.__opts.get(ClientOption.PIN_ALARM), GPIO.OUT)
-        
+
+        # If using programmable current threshold, set the pin as output high initially before PWM is enabled. If not using
+        # the programmable threshold, set the pin to an input so it does not potentially contend with previous PCB revisions,
+        # but enable the weak pullup so the threshold will float high, which will prevent the detection from triggering. 
         if self.__opts.get(ClientOption.USE_PGM_CURRENT_THRESHOLD):
             GPIO.setup(self.__opts.get(ClientOption.PIN_CURRENT_THRESHOLD), GPIO.OUT, initial=GPIO.HIGH)
+        else:
+            GPIO.setup(self.__opts.get(ClientOption.PIN_CURRENT_THRESHOLD), GPIO.IN, GPIO.PUD_UP)
 
         if self.__opts.get(ClientOption.USE_3V3_EN):
             # Toggle the 3.3V enable to reset I2C devices
