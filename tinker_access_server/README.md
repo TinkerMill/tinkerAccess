@@ -20,23 +20,39 @@ is located in the cli program devicemanager.py.  This program will allow
 you to add, delete, and rename a device.
 
 #### Add a new device 
-```sh
+```
 cd /opt/tinkeraccess
-./devicemanager.py -a -n "<new device name>"
+sudo ./devicemanager.py -a -n "<new device name>"
 ```
 #### Delete a device
 This will delete the device from the database, and it will also delete
 all user access records from the database. (not user accounts, but
 the fact they have access to the device you just deleted.)
-```sh
+```
 cd /opt/tinkeraccess
 ./devicemanager.py -l
-./devicemanager.py -d -i <device ID to be deleted>
+sudo ./devicemanager.py -d -i <device ID to be deleted>
 ```
 #### Rename a device
-```sh
+```
 /opt/tinkeraccess
-./devicemanager.py -r -i <device ID for name change> -n "<new device name>"
+sudo ./devicemanager.py -r -i <device ID for name change> -n "<new device name>"
+```
+#### Grant all users access to a device
+This command will grant all users access to the device. Any user in the database will be authenicated to use the device. This command
+sets the all users column of the device table
+```
+/opt/tinkeraccess
+./devicemanager.py -l
+sudo ./devicemanager.py -u -i <device ID to grant all user access>
+```
+#### Remove all users access to a device
+This command sets up the device access level on a per user basis. Users will need to be specifically granted access to be authenicated to use the device. This command
+clears the all users column of the device table
+```
+/opt/tinkeraccess
+./devicemanager.py -l
+sudo ./devicemanager.py -c -i <device ID to remove all user access>
 ```
 
 ### User Administration
