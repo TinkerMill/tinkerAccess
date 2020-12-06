@@ -381,6 +381,24 @@ def userAccessInterface(userid):
   username   = query_db("select user.name from user where id=%s" % userid)[0][0]
   return render_template('admin_userAccess.html', devices=allDevices, access=userAccess, alluserdevices=allUserDevices, userid=userid, username=username)
 
+@app.route("/admin/interface/devices")
+def deviceInterface():
+  if request.cookies.get('password') != C_password:
+    return redirect("/")
+
+  devices = query_db("select id,name,allUsers from device")
+  return render_template('admin_devices.html', devices=devices)
+
+@app.route("/admin/interface/deviceAccess/<deviceid>")
+def deviceAccessInterface(deviceid):
+  if request.cookies.get('password') != C_password:
+    return redirect("/")
+
+  devicename = query_db("select device.name from device where id=%s" % deviceid)[0][0]
+  userAccess = query_db("select user.id, user.name, user.code, deviceAccess.trainer from deviceAccess join device on device.id=deviceAccess.device join user on user.id = deviceAccess.user where deviceAccess.device=%s and device.allUsers=0" % deviceid)
+  
+  return render_template('admin_deviceAccess.html', access=userAccess, deviceid=deviceid, devicename=devicename)
+
 @app.route("/toolSummary")
 @app.route("/toolSummary/<start_date>")
 @app.route("/toolSummary/<start_date>/<end_date>")
