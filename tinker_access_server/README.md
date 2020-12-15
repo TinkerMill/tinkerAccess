@@ -22,7 +22,7 @@ you to add, delete, and rename a device.
 #### Add a new device 
 ```sh
 cd /opt/tinkeraccess
-./devicemanager.py -a -n "<new device name>"
+sudo ./devicemanager.py -a -n "<new device name>"
 ```
 #### Delete a device
 This will delete the device from the database, and it will also delete
@@ -31,12 +31,12 @@ the fact they have access to the device you just deleted.)
 ```sh
 cd /opt/tinkeraccess
 ./devicemanager.py -l
-./devicemanager.py -d -i <device ID to be deleted>
+sudo ./devicemanager.py -d -i <device ID to be deleted>
 ```
 #### Rename a device
 ```sh
 /opt/tinkeraccess
-./devicemanager.py -r -i <device ID for name change> -n "<new device name>"
+sudo ./devicemanager.py -r -i <device ID for name change> -n "<new device name>"
 ```
 
 ### User Administration

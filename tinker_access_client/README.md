@@ -191,6 +191,14 @@ auto_update: true
 
 - __--ct-turns-ratio=[ct_turns_ratio]__: The current transformer turns ratio [default:'2000']
 
+- __--is-a-door=[is_a_door]__: The device is a door. If defined, it changes the default behavior of the device and enables the remaining door parameters below [default:'False']
+
+- __--door-unlock-time=[door_unlock_time]__: The amount of time the door unlocks in seconds. Only used if the is-a-door parameter is also enabled [default:'10']
+
+- __--door-continuous-unlock=[door_continuous_unlock]__: The door is defined as being able to be held in a continuously unlocked state. Only used if is-a-door parameter is also enabled. This parameter should only be used on door locks that can be left permanently energized. It should not be enabled on non-continuous duty solenoid style locks. The logout button will be used to toggle between the locked and unlocked state. Therefore, the training mode will be disabled if this parameter is set [default:'False']
+
+- __--disable-training-mode=[disable_training_mode]__: Disables entering training mode at the device if the logout button is held down for 3 seconds [default:'False']
+
 - __--serial-port-name=[serial_port_name]__: The serial port attached to the RFID reader [default:'/dev/ttyUSB0']
 
 - __--serial-port-speed=[serial_port_speed]__: The serial port speed to use [default:9600]

@@ -35,6 +35,10 @@ ClientOptionDefaults = {
     ClientOption.CT_TURNS_RATIO: 2000,
     ClientOption.LOGOUT_COAST_TIME: 0,
     ClientOption.PIN_CURRENT_SENSE: 12,
+    ClientOption.IS_A_DOOR: False,
+    ClientOption.DOOR_UNLOCK_TIME: 10,
+    ClientOption.DOOR_CONTINUOUS_UNLOCK: False,
+    ClientOption.DISABLE_TRAINING_MODE: False,
     ClientOption.REBOOT_ON_ERROR: False,
     ClientOption.DISPLAY_SERLCD: False,    
     ClientOption.SERIAL_PORT_SPEED: 9600,
@@ -412,6 +416,39 @@ class ClientOptionParser(object):
             action='store'
         )
 
+        self.__parser.add_option(
+            '--is-a-door',
+            help='the client is a door lock [default:\'%default\']',
+            default=ClientOptionDefaults[ClientOption.IS_A_DOOR],
+            dest=ClientOption.IS_A_DOOR,
+            action='store_true'
+        )
+
+        self.__parser.add_option(
+            '--door-unlock-time',
+            help='the amount of time to unlock the door in seconds [default:%default]',
+            default=ClientOptionDefaults[ClientOption.DOOR_UNLOCK_TIME],
+            dest=ClientOption.DOOR_UNLOCK_TIME,
+            type='int',
+            action='store'
+        )
+
+        self.__parser.add_option(
+            '--door-continuous-unlock',
+            help='the door lock is rated for continuous duty and can be held unlocked indefinitely [default:\'%default\']',
+            default=ClientOptionDefaults[ClientOption.DOOR_CONTINUOUS_UNLOCK],
+            dest=ClientOption.DOOR_CONTINUOUS_UNLOCK,
+            action='store_true'
+        )
+
+        self.__parser.add_option(
+            '--disable-training-mode',
+            help='the training mode is disabled [default:\'%default\']',
+            default=ClientOptionDefaults[ClientOption.DISABLE_TRAINING_MODE],
+            dest=ClientOption.DISABLE_TRAINING_MODE,
+            action='store_true'
+        )
+        
         self.__parser.add_option(
             '--serial-port-name',
             help='the serial port name to use [default:\'%default\']',

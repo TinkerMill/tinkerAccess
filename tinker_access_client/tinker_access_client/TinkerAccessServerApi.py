@@ -11,6 +11,8 @@ class TinkerAccessServerApi(object):
         self.__logger = logging.getLogger(__name__)
         self.__device_id = opts.get(ClientOption.DEVICE_ID)
         self.__server_address = opts.get(ClientOption.SERVER_ADDRESS)
+        self.__is_a_door = opts.get(ClientOption.IS_A_DOOR)
+        self.__door_unlock_time = opts.get(ClientOption.DOOR_UNLOCK_TIME)
 
     def login(self, user_badge_code):
         try:
@@ -23,6 +25,16 @@ class TinkerAccessServerApi(object):
 
         data = response.json()
         session_seconds = data.get('time', 0) * 60
+
+        # Returns 0 for an unauthorized user, so only reset door timeout if non-zero
+        if self.__is_a_door and session_seconds > 0:
+            session_seconds = self.__door_unlock_time
+
+        if self.__is_a_door:
+            remaining_extensions = 0
+        else:
+            remaining_extensions = data.get('extensions', float('inf'))
+        
         login_response = {
             'user_name': data.get('username'),
             'device_name': data.get('devicename'),
@@ -30,7 +42,7 @@ class TinkerAccessServerApi(object):
             'badge_code': user_badge_code,
             'session_seconds': session_seconds,
             'remaining_seconds': session_seconds,
-            'remaining_extensions': data.get('extensions', float('inf')),
+            'remaining_extensions': remaining_extensions
         }
 
         if login_response.get('remaining_seconds') > 0:
