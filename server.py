@@ -136,34 +136,80 @@ def deviceLogout(deviceid, uid):
 # this is the login
 @app.route("/device/<deviceid>/code/<code>")
 def deviceCode(deviceid,code):
-  output = query_db("select user.name, user.id, device.name, deviceAccess.time from deviceAccess join device on device.id=deviceAccess.device join user on user.id = deviceAccess.user where user.code='%s' and device.id=%s" % (code,deviceid))
-  #print output
-  if len(output) == 0:
-    addNewUser(code, deviceid)
+  allusers = query_db("select allUsers from device where id=%s" % deviceid)
+    
+  if len(allusers) == 0:
+    # Device ID not found, so deny access
     return json.dumps( {'devicename': 'none', 'username': 'none', 'userid': -1, 'time': 0 } )
-  else:
 
-    # send the data to slack
-    message_content = {'text': '{} is now in use by {}'.format(output[0][2], output[0][0])}
-    if output[0][2] in c_webcam_urls:
+  if allusers[0][0]:
+    # Device grants all users access
+    output = query_db("select user.name, user.id from user where user.code='%s'" % (code))
+    devicename = query_db("select device.name from device where device.id='%s'" % (deviceid))
+    
+    if len(output) == 0:
+      # User badge code not found, so deny access
+      addNewUser(code, deviceid)
+      return json.dumps( {'devicename': 'none', 'username': 'none', 'userid': -1, 'time': 0 } )
+    
+    else:
+      # User badge code found, grant access
+
+      # send the data to slack
+      message_content = {'text': '{} is now in use by {}'.format(devicename[0][0], output[0][0])}
+      if devicename[0][0] in c_webcam_urls:
+        image_url = captureImage(c_webcam_urls[devicename[0][0]])
+        if len(image_url) > 0:
+          message_content['attachments'] = [{
+            'fallback': 'Webcam image of {}'.format(devicename[0][0]),
+            'image_url': image_url
+          }]
+      requests.post(C_slackPostUrl, data=json.dumps(message_content))
+
+      # log it to the database
+      exec_db("insert into log (message) values ('login:%s:%s')" % (deviceid, output[0][1]) )
+
+      return json.dumps(
+        {
+          'devicename': devicename[0][0],
+          'username': output[0][0],
+          'userid': output[0][1],
+          'time': 100
+        }
+      )
+    
+  else:
+    # Device access is granted at an individual user level
+  
+    output = query_db("select user.name, user.id, device.name, deviceAccess.time from deviceAccess join device on device.id=deviceAccess.device join user on user.id = deviceAccess.user where user.code='%s' and device.id=%s" % (code,deviceid))
+    #print output
+    if len(output) == 0:
+      addNewUser(code, deviceid)
+      return json.dumps( {'devicename': 'none', 'username': 'none', 'userid': -1, 'time': 0 } )
+    else:
+
+      # send the data to slack
+      message_content = {'text': '{} is now in use by {}'.format(output[0][2], output[0][0])}
+      if output[0][2] in c_webcam_urls:
         image_url = captureImage(c_webcam_urls[output[0][2]])
         if len(image_url) > 0:
-            message_content['attachments'] = [{
-                'fallback': 'Webcam image of {}'.format(output[0][2]),
-                'image_url': image_url
-                }]
-    requests.post(C_slackPostUrl, data=json.dumps(message_content))
+          message_content['attachments'] = [{
+            'fallback': 'Webcam image of {}'.format(output[0][2]),
+            'image_url': image_url
+          }]
+      requests.post(C_slackPostUrl, data=json.dumps(message_content))
 
-    # log it to the database
-    exec_db("insert into log (message) values ('login:%s:%s')" % (deviceid, output[0][1]) )
+      # log it to the database
+      exec_db("insert into log (message) values ('login:%s:%s')" % (deviceid, output[0][1]) )
 
-    return json.dumps(
-      {'devicename': output[0][2],
-       'username': output[0][0],
-       'userid': output[0][1],
-       'time': output[0][3],
-      }
-    )
+      return json.dumps(
+        {
+          'devicename': output[0][2],
+          'username': output[0][0],
+          'userid': output[0][1],
+          'time': output[0][3]
+        }
+      )
 
 
 @app.route("/")
@@ -323,13 +369,35 @@ def userAccessInterface(userid):
   if request.cookies.get('password') != C_password:
     return redirect("/")
 
-  # list of all the devices
-  allDevices = query_db("select id,name from device")
+  # list of all the devices the user could have access to
+  allDevices = query_db("select id, name from device where allUsers=0 except select device.id, device.name from deviceAccess join device on device.id=deviceAccess.device join user on user.id = deviceAccess.user where deviceAccess.user=%s and device.allUsers=0" % userid)
 
+  # list of devices with all user access
+  allUserDevices = query_db("select name from device where allUsers=1")
+  
   # list of devices user has access to
-  userAccess = query_db("select user.name, user.id, device.id, device.name, deviceAccess.time, deviceAccess.trainer from deviceAccess join device on device.id=deviceAccess.device join user on user.id = deviceAccess.user where deviceAccess.user=%s" % userid)
+  userAccess = query_db("select user.name, user.id, device.id, device.name, deviceAccess.time, deviceAccess.trainer from deviceAccess join device on device.id=deviceAccess.device join user on user.id = deviceAccess.user where deviceAccess.user=%s and device.allUsers=0" % userid)
+  
   username   = query_db("select user.name from user where id=%s" % userid)[0][0]
-  return render_template('admin_userAccess.html', devices=allDevices, access=userAccess, userid=userid, username=username)
+  return render_template('admin_userAccess.html', devices=allDevices, access=userAccess, alluserdevices=allUserDevices, userid=userid, username=username)
+
+@app.route("/admin/interface/devices")
+def deviceInterface():
+  if request.cookies.get('password') != C_password:
+    return redirect("/")
+
+  devices = query_db("select id,name,allUsers from device")
+  return render_template('admin_devices.html', devices=devices)
+
+@app.route("/admin/interface/deviceAccess/<deviceid>")
+def deviceAccessInterface(deviceid):
+  if request.cookies.get('password') != C_password:
+    return redirect("/")
+
+  devicename = query_db("select device.name from device where id=%s" % deviceid)[0][0]
+  userAccess = query_db("select user.id, user.name, user.code, deviceAccess.trainer from deviceAccess join device on device.id=deviceAccess.device join user on user.id = deviceAccess.user where deviceAccess.device=%s and device.allUsers=0" % deviceid)
+  
+  return render_template('admin_deviceAccess.html', access=userAccess, deviceid=deviceid, devicename=devicename)
 
 @app.route("/toolSummary")
 @app.route("/toolSummary/<start_date>")

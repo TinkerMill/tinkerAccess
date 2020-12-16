@@ -27,7 +27,8 @@
 			<ul class="nav nav-pills">
 				<li role="presentation"><a href="/admin/interface/user">Users</a></li>
 				<li role="presentation" ><a href="/admin/interface/newuser">New Inactive Users</a></li>
-				<li role="presentation" class="active"><a href="/admin/interface/newuser">User Access</a></li>
+				<li role="presentation" ><a href="/admin/interface/devices">Devices</a></li>
+				<li role="presentation" class="active"><a href="/admin/interface/userAccess/{{ userid }}">User Access</a></li>
 				<li role="presentation" ><a href="/toolSummary">Tool Usage Summary</a></li>
 			</ul>
 
@@ -75,6 +76,24 @@
 					<tr>
 						<td> {{ item[1] }} </td>
 						<td> <button type="button" class="btn btn-default" onclick="location.href='/admin/addUserAccess/{{ userid}}/{{item[0]}}'"><span class="glyphicon glyphicon-plus" aria-hidden="true" ></span> Add Access</button></td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+
+
+			<br>
+			<h3>All User Access</h3>
+			<table class="table  table-hover">
+				<thead>
+					<tr>
+						<th>Device</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for item in alluserdevices %}
+					<tr>
+						<td> {{ item[0] }} </td>
 					</tr>
 					{% endfor %}
 				</tbody>
