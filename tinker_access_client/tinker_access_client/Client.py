@@ -1,4 +1,5 @@
 import time
+import datetime
 import threading
 from transitions import Machine
 
@@ -22,6 +23,7 @@ class Trigger(object):
     IDLE = 'idle'
     ESTOP = 'estop'
     BYPASS = 'bypass'
+    UNLOCK = 'unlock'
     LOGIN = 'login'
     LOGOUT = 'logout'
     TERMINATE = 'terminate'
@@ -33,6 +35,7 @@ class Client(Machine):
         self.__opts = opts
         self.__device = device
         self.__user_info = None
+        self.__relock_timer = None
         self.__logout_timer = None
         self.__logout_timer_lock = threading.Lock()        
         self.__logger = ClientLogger.setup(opts)
@@ -61,6 +64,13 @@ class Client(Machine):
                 'trigger': Trigger.BYPASS,
                 'dest': State.BYPASSED
             },
+            
+            {
+                'source': [State.IDLE, State.IN_USE],
+                'trigger': Trigger.UNLOCK,
+                'dest': State.UNLOCKED,
+                'conditions': ['is_normal_hours']
+            },
 
             {
                 'source': [State.IDLE],
@@ -77,7 +87,7 @@ class Client(Machine):
             },
 
             {
-                'source': [State.IN_USE, State.IN_TRAINING],
+                'source': [State.UNLOCKED, State.IN_USE, State.IN_TRAINING],
                 'trigger': Trigger.LOGOUT,
                 'dest': State.IDLE
             },
@@ -220,6 +230,7 @@ class Client(Machine):
 
     def __do_logout(self):
         self.__cancel_logout_timer()
+        self.__cancel_relock_timer()
 
         if self.__user_info:
             badge_code = self.__user_info.get('badge_code')
@@ -237,6 +248,52 @@ class Client(Machine):
             'SCAN BADGE'.center(maximum_lcd_characters, ' '),
             'TO LOGIN'.center(maximum_lcd_characters, ' ')
         )
+
+    #
+    # unlocked -- The door is held manually in a continuous unlocked state
+    #
+
+    def __ensure_unlocked(self):
+        self.__do_logout()
+        self.__enable_power()
+        self.__show_green_led()
+        self.__show_unlocked()
+
+    def __show_unlocked(self):
+        self.__device.write(
+            Channel.LCD,
+            'TINKERACCESS'.center(maximum_lcd_characters, ' '),
+            'IS UNLOCKED'.center(maximum_lcd_characters, ' ')
+        )
+        
+    def __start_relock_timer(self):
+        self.__cancel_relock_timer()
+        self.__relock_timer = threading.Timer(
+            60,
+            self.__relock_timer_tick
+        )
+        self.__relock_timer.start()
+
+    def __relock_timer_tick(self):
+        try:
+            if not self.is_terminated() and self.__relock_timer:
+                if not self.is_normal_hours():
+                    # Outside of normal hours, relock the door
+                    self.logout()
+                    return
+
+                self.__start_relock_timer()
+        except Exception as e:
+            raise e
+
+    def __cancel_relock_timer(self):
+        try:
+            if self.__relock_timer:
+                self.__relock_timer.cancel()
+        except Exception as e:
+            raise e
+        finally:
+            self.__relock_timer = None
 
     #
     # in_use -- The machine is currently in use and the logout timer is ticking...
@@ -490,6 +547,7 @@ class Client(Machine):
             'USER...'.center(maximum_lcd_characters, ' ')
         )
         time.sleep(delay)
+        
     #
     # logout/terminated - the user has logged out, or the client is shutting down
     #
@@ -573,6 +631,7 @@ class Client(Machine):
             'TRY AGAIN...'.center(maximum_lcd_characters, ' ')
         )
         time.sleep(delay)
+        
     #
     # a badge code has been detected on the serial input
     #
@@ -602,6 +661,10 @@ class Client(Machine):
         elif self.is_bypass_detected() and (self.state == State.IN_TRAINING):
             # Call bypass() if exiting training and bypass is detected to trigger return to bypassed state
             self.bypass()
+        elif (self.__opts.get(ClientOption.IS_A_DOOR) and self.__opts.get(ClientOption.DOOR_CONTINUOUS_UNLOCK) and
+              ((self.state == State.IDLE) or (self.state == State.IN_USE))):
+            # Call unlock() if continuous unlock is enabled and in idle or in_use state
+            self.unlock()
         else:
             # Otherwise call logout() to return to idle
             self.logout()
@@ -676,6 +739,12 @@ class Client(Machine):
     def is_in_use(self):
         return self.status() == State.IN_USE or self.state == State.IN_TRAINING
 
+    def is_normal_hours(self):
+        now = datetime.datetime.now().time()
+        start = datetime.time(7, 30)
+        end = datetime.time(22, 00)
+        return (start <= now <= end)
+    
     def is_terminated(self):
         return self.status() == State.TERMINATED
 
@@ -683,12 +752,17 @@ class Client(Machine):
         return self.__do_login(False, *args, **kwargs)
 
     def is_waiting_for_training(self, *args, **kwargs):
-        current = time.time()
-        while not self.is_terminated() and time.time() - current < training_mode_delay_seconds \
-                and self.__device.read(Channel.PIN, self.__opts.get(ClientOption.PIN_LOGOUT)):
-            time.sleep(0.1)
+        # Do not enter training mode if it is disabled in the config file, or a continuous unlock mode door is defined
+        if ((self.__opts.get(ClientOption.IS_A_DOOR) and self.__opts.get(ClientOption.DOOR_CONTINUOUS_UNLOCK)) or
+            self.__opts.get(ClientOption.DISABLE_TRAINING_MODE)):
+            return False
+        else:
+            current = time.time()
+            while (not self.is_terminated() and time.time() - current < training_mode_delay_seconds and
+                   self.__device.read(Channel.PIN, self.__opts.get(ClientOption.PIN_LOGOUT))):
+                time.sleep(0.1)
 
-        return self.__device.read(Channel.PIN, self.__opts.get(ClientOption.PIN_LOGOUT))
+            return self.__device.read(Channel.PIN, self.__opts.get(ClientOption.PIN_LOGOUT))
 
     def should_extend_current_session(self, *args, **kwargs):
         if self.__is_current_badge_code(*args, **kwargs):
@@ -726,6 +800,11 @@ class Client(Machine):
         time.sleep(0.5)
         if self.is_bypass_detected():
             self.bypass()
+
+    def on_enter_unlocked(self, *args, **kwargs):
+        self.__ensure_unlocked()
+        self.__start_relock_timer()
+        self.__logger.info('TinkerAccess has been Unlocked')
 
     def on_enter_in_use(self, *args, **kwargs):
         self.__ensure_in_use()

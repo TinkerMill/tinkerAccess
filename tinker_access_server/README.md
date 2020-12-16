@@ -35,14 +35,14 @@ sudo ./devicemanager.py -d -i <device ID to be deleted>
 ```
 #### Rename a device
 ```
-/opt/tinkeraccess
+cd /opt/tinkeraccess
 sudo ./devicemanager.py -r -i <device ID for name change> -n "<new device name>"
 ```
 #### Grant all users access to a device
 This command will grant all users access to the device. Any user in the database will be authenicated to use the device. This command
 sets the all users column of the device table
 ```
-/opt/tinkeraccess
+cd /opt/tinkeraccess
 ./devicemanager.py -l
 sudo ./devicemanager.py -u -i <device ID to grant all user access>
 ```
@@ -50,7 +50,7 @@ sudo ./devicemanager.py -u -i <device ID to grant all user access>
 This command sets up the device access level on a per user basis. Users will need to be specifically granted access to be authenicated to use the device. This command
 clears the all users column of the device table
 ```
-/opt/tinkeraccess
+cd /opt/tinkeraccess
 ./devicemanager.py -l
 sudo ./devicemanager.py -c -i <device ID to remove all user access>
 ```
