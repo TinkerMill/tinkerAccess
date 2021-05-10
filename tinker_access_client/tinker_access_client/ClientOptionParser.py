@@ -38,6 +38,8 @@ ClientOptionDefaults = {
     ClientOption.IS_A_DOOR: False,
     ClientOption.DOOR_UNLOCK_TIME: 10,
     ClientOption.DOOR_CONTINUOUS_UNLOCK: False,
+    ClientOption.DOOR_NORMAL_HR_START: 730,
+    ClientOption.DOOR_NORMAL_HR_END: 2200,
     ClientOption.DISABLE_TRAINING_MODE: False,
     ClientOption.REBOOT_ON_ERROR: False,
     ClientOption.DISPLAY_SERLCD: False,    
@@ -439,6 +441,24 @@ class ClientOptionParser(object):
             default=ClientOptionDefaults[ClientOption.DOOR_CONTINUOUS_UNLOCK],
             dest=ClientOption.DOOR_CONTINUOUS_UNLOCK,
             action='store_true'
+        )
+
+        self.__parser.add_option(
+            '--door-normal-hr-start',
+            help='the start time of normal hours for door unlock in 24hr mode [default:%default]',
+            default=ClientOptionDefaults[ClientOption.DOOR_NORMAL_HR_START],
+            dest=ClientOption.DOOR_NORMAL_HR_START,
+            type='int',
+            action='store'
+        )
+
+        self.__parser.add_option(
+            '--door-normal-hr-end',
+            help='the end time of normal hours for door unlock in 24hr mode [default:%default]',
+            default=ClientOptionDefaults[ClientOption.DOOR_NORMAL_HR_END],
+            dest=ClientOption.DOOR_NORMAL_HR_END,
+            type='int',
+            action='store'
         )
 
         self.__parser.add_option(
