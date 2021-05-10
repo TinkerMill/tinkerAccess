@@ -741,8 +741,29 @@ class Client(Machine):
 
     def is_normal_hours(self):
         now = datetime.datetime.now().time()
-        start = datetime.time(7, 30)
-        end = datetime.time(22, 00)
+
+        start_time = self.__opts.get(ClientOption.DOOR_NORMAL_HR_START)
+        if start_time < 0:
+            start_time = 0
+        elif start_time > 2359:
+            start_time = 2359
+        start_hr = start_time / 100
+        start_min = start_time % 100
+        if start_min > 59:
+            start_min = 59
+        
+        end_time = self.__opts.get(ClientOption.DOOR_NORMAL_HR_END)
+        if end_time < 0:
+            end_time = 0
+        elif end_time > 2359:
+            end_time = 2359
+        end_hr = end_time / 100
+        end_min = end_time % 100
+        if end_min > 59:
+            end_min = 59
+        
+        start = datetime.time(start_hr, start_min)
+        end = datetime.time(end_hr, end_min)
         return (start <= now <= end)
     
     def is_terminated(self):
