@@ -2539,8 +2539,8 @@ FROM CONTACTOR ENCLOSURE</text>
 <text x="81.28" y="78.74" size="1.778" layer="97">GRN</text>
 <text x="137.16" y="59.69" size="1.778" layer="97" rot="R90" align="bottom-right">BRN</text>
 <text x="139.7" y="59.69" size="1.778" layer="97" rot="R90" align="bottom-right">BLU</text>
-<text x="187.96" y="81.28" size="1.778" layer="97">GRN</text>
-<text x="187.96" y="78.74" size="1.778" layer="97">WHT</text>
+<text x="187.96" y="81.28" size="1.778" layer="97">WHT</text>
+<text x="187.96" y="78.74" size="1.778" layer="97">GRN</text>
 <text x="160.02" y="59.69" size="1.778" layer="97" rot="R90" align="bottom-right">BLK</text>
 <text x="157.48" y="59.69" size="1.778" layer="97" rot="R90" align="bottom-right">RED</text>
 <text x="33.02" y="48.26" size="1.778" layer="97">ALARM</text>
@@ -2649,10 +2649,10 @@ FROM CONTACTOR ENCLOSURE</text>
 </net>
 <net name="WHT2" class="0">
 <segment>
-<wire x1="27.94" y1="40.64" x2="195.58" y2="40.64" width="0.1524" layer="91"/>
-<pinref part="J1" gate="G$1" pin="2"/>
-<wire x1="195.58" y1="40.64" x2="195.58" y2="78.74" width="0.1524" layer="91"/>
-<wire x1="195.58" y1="78.74" x2="185.42" y2="78.74" width="0.1524" layer="91"/>
+<wire x1="27.94" y1="43.18" x2="198.12" y2="43.18" width="0.1524" layer="91"/>
+<pinref part="J1" gate="G$1" pin="1"/>
+<wire x1="198.12" y1="43.18" x2="198.12" y2="81.28" width="0.1524" layer="91"/>
+<wire x1="198.12" y1="81.28" x2="185.42" y2="81.28" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$3" class="0">
@@ -2711,14 +2711,6 @@ FROM CONTACTOR ENCLOSURE</text>
 <wire x1="167.64" y1="162.56" x2="182.88" y2="162.56" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="GRN2" class="0">
-<segment>
-<wire x1="27.94" y1="43.18" x2="198.12" y2="43.18" width="0.1524" layer="91"/>
-<pinref part="J1" gate="G$1" pin="1"/>
-<wire x1="198.12" y1="43.18" x2="198.12" y2="81.28" width="0.1524" layer="91"/>
-<wire x1="198.12" y1="81.28" x2="185.42" y2="81.28" width="0.1524" layer="91"/>
-</segment>
-</net>
 <net name="BLU1" class="0">
 <segment>
 <wire x1="139.7" y1="50.8" x2="71.12" y2="50.8" width="0.1524" layer="91"/>
@@ -2750,6 +2742,14 @@ FROM CONTACTOR ENCLOSURE</text>
 <net name="BLU2" class="0">
 <segment>
 <wire x1="27.94" y1="35.56" x2="111.76" y2="35.56" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="GRN2" class="0">
+<segment>
+<wire x1="27.94" y1="40.64" x2="195.58" y2="40.64" width="0.1524" layer="91"/>
+<pinref part="J1" gate="G$1" pin="2"/>
+<wire x1="195.58" y1="40.64" x2="195.58" y2="78.74" width="0.1524" layer="91"/>
+<wire x1="195.58" y1="78.74" x2="185.42" y2="78.74" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
