@@ -19,6 +19,7 @@ import re
 from collections import defaultdict, namedtuple
 import datetime
 from calendar import monthrange
+import logging
 
 app = Flask("simpleServer")
 
@@ -128,7 +129,10 @@ def deviceLogout(deviceid, uid):
               'fallback': 'Webcam image of {}'.format(output[0][0]),
               'image_url': image_url
               }]
-  requests.post(C_slackPostUrl, data=json.dumps(message_content))
+  try:
+    requests.post(C_slackPostUrl, data=json.dumps(message_content))
+  except Exception as e:
+    logging.exception(e)
 
   return ""
 
@@ -164,7 +168,11 @@ def deviceCode(deviceid,code):
             'fallback': 'Webcam image of {}'.format(devicename[0][0]),
             'image_url': image_url
           }]
-      requests.post(C_slackPostUrl, data=json.dumps(message_content))
+
+      try:
+        requests.post(C_slackPostUrl, data=json.dumps(message_content))
+      except Exception as e:
+        logging.exception(e)
 
       # log it to the database
       exec_db("insert into log (message) values ('login:%s:%s')" % (deviceid, output[0][1]) )
@@ -197,7 +205,10 @@ def deviceCode(deviceid,code):
             'fallback': 'Webcam image of {}'.format(output[0][2]),
             'image_url': image_url
           }]
-      requests.post(C_slackPostUrl, data=json.dumps(message_content))
+      try:
+        requests.post(C_slackPostUrl, data=json.dumps(message_content))
+      except Exception as e:
+        logging.exception(e)
 
       # log it to the database
       exec_db("insert into log (message) values ('login:%s:%s')" % (deviceid, output[0][1]) )
