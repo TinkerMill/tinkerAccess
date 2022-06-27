@@ -20,6 +20,7 @@ from collections import defaultdict, namedtuple
 import datetime
 from calendar import monthrange
 import logging
+from threading import Thread
 
 app = Flask("simpleServer")
 
@@ -55,6 +56,15 @@ if configPath:
 else:
   print("config server.cfg not found")
   sys.exit(1)
+
+
+######### Slack function #############
+
+def post_to_slack(message):
+  try:
+    requests.post(C_slackPostUrl, data=json.dumps(message))
+  except Exception as e:
+    logging.exception(e)
 
 ######### Database functions #########
 
@@ -129,10 +139,9 @@ def deviceLogout(deviceid, uid):
               'fallback': 'Webcam image of {}'.format(output[0][0]),
               'image_url': image_url
               }]
-  try:
-    requests.post(C_slackPostUrl, data=json.dumps(message_content))
-  except Exception as e:
-    logging.exception(e)
+
+  t = Thread(target=post_to_slack, args=(message_content,))
+  t.start()
 
   return ""
 
@@ -169,10 +178,8 @@ def deviceCode(deviceid,code):
             'image_url': image_url
           }]
 
-      try:
-        requests.post(C_slackPostUrl, data=json.dumps(message_content))
-      except Exception as e:
-        logging.exception(e)
+      t = Thread(target=post_to_slack, args=(message_content,))
+      t.start()
 
       # log it to the database
       exec_db("insert into log (message) values ('login:%s:%s')" % (deviceid, output[0][1]) )
@@ -205,10 +212,9 @@ def deviceCode(deviceid,code):
             'fallback': 'Webcam image of {}'.format(output[0][2]),
             'image_url': image_url
           }]
-      try:
-        requests.post(C_slackPostUrl, data=json.dumps(message_content))
-      except Exception as e:
-        logging.exception(e)
+
+      t = Thread(target=post_to_slack, args=(message_content,))
+      t.start()
 
       # log it to the database
       exec_db("insert into log (message) values ('login:%s:%s')" % (deviceid, output[0][1]) )
