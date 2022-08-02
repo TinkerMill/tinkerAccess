@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>User Interface</title>
+    <title>User Access Interface</title>
 
     <!-- Bootstrap -->
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
@@ -15,94 +16,121 @@
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-				 <![endif]-->
-
+    <![endif]-->
 
   </head>
+
   <body>
 
-		<div class="container">
-			<br>
+    <div class="container">
+      <br>
 
-			<ul class="nav nav-pills">
-				<li role="presentation"><a href="/admin/interface/user">Users</a></li>
-				<li role="presentation" ><a href="/admin/interface/newuser">New Inactive Users</a></li>
-				<li role="presentation" ><a href="/admin/interface/devices">Devices</a></li>
-				<li role="presentation" class="active"><a href="/admin/interface/userAccess/{{ userid }}">User Access</a></li>
-				<li role="presentation" ><a href="/toolSummary">Tool Usage Summary</a></li>
-			</ul>
+      <ul class="nav nav-pills">
+        <li role="presentation"><a href="/admin/interface/user">Users</a></li>
+        <li role="presentation"><a href="/admin/interface/inactiveuser">Inactive Users</a></li>
+        <li role="presentation"><a href="/admin/interface/newuser">New Users</a></li>
+        <li role="presentation"><a href="/admin/interface/devices">Devices</a></li>
+        <li role="presentation" class="active"><a href="/admin/interface/userAccess/{{ userid }}">User Access</a></li>
+        <li role="presentation"><a href="/toolSummary">Tool Usage Summary</a></li>
+      </ul>
 
-			<div class="page-header">
-				<h1>Tinker Access Admin Interface</h1>
-				<p class="lead">Modify user access for <b>{{ username }}</b></p>
-			</div>
-
-			<br>
-			<h3>Current Access</h3>
-			<table class="table  table-hover">
-				<thead>
-					<tr>
-						<th>Device</th><th>Options</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for item in access %}
-					<tr>
-						<td> {{ item[3] }} </td>
-						<td>  <button type="button" class="btn btn-default" onclick="location.href='/admin/delUserAccess/{{item[1]}}/{{item[2]}}'"><span class="glyphicon glyphicon-remove" aria-hidden="true" ></span> Remove Access</button> 
-						
-						{% if item[5] == 1 %}
-							<button type="button" class="btn btn-default" onclick="location.href='/admin/removeTrainer/{{item[1]}}/{{item[2]}}'"><span class="glyphicon glyphicon-remove" aria-hidden="true" ></span> Remove as Trainer</button> 
-						{% else %}
-							<button type="button" class="btn btn-default" onclick="location.href='/admin/addTrainer/{{item[1]}}/{{item[2]}}'"><span class="glyphicon glyphicon-plus" aria-hidden="true" ></span> Add as Trainer</button> 
-						{% endif %} 
-						</td>
-					</tr>
-					{% endfor %}
-				</tbody>
-			</table>
+      <div class="page-header">
+        <h1>TinkerAccess User Access Admin Interface</h1>
+        <p class="lead">Device access list for <b>{{ username }} ({{ userstatus }})</b></p>
 
 
-			<br>
-			<h3>Available Access</h3>
-			<table class="table  table-hover">
-				<thead>
-					<tr>
-						<th>Device</th><th>Options</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for item in devices %}
-					<tr>
-						<td> {{ item[1] }} </td>
-						<td> <button type="button" class="btn btn-default" onclick="location.href='/admin/addUserAccess/{{ userid}}/{{item[0]}}'"><span class="glyphicon glyphicon-plus" aria-hidden="true" ></span> Add Access</button></td>
-					</tr>
-					{% endfor %}
-				</tbody>
-			</table>
+	{% if ustatus != 'I' %}
+	<div class="custom-control custom-checkbox">
+	  <input class="custom-control-input" type="checkbox" id="check24hr" onclick="location.href='/admin/toggle24Hr/user/{{ userid }}'"
+		 {% if ustatus == 'S' %} checked {% endif %}>
+	  <label class="custom-control-label" for="check24hr">24 Hr Access</label>
+	</div>
+	{% endif %}
+	
+	
+      </div>
+
+      <br>
+      <h3>Current Access</h3>
+      <table class="table  table-hover">
+        <thead>
+          <tr>
+            <th>Device</th>
+            <th>Options</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in access %}
+          <tr>
+            <td> {{ item[3] }} </td>
+            <td>
+              <button type="button" class="btn btn-default" onclick="location.href='/admin/delUserAccess/{{item[1]}}/{{item[2]}}'">
+		<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove Access
+	      </button>
+
+              {% if item[5] == 1 %}
+              <button type="button" class="btn btn-default" onclick="location.href='/admin/removeTrainer/{{item[1]}}/{{item[2]}}'">
+		<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove as Trainer
+	      </button>
+	      
+              {% else %}
+              <button type="button" class="btn btn-default" onclick="location.href='/admin/addTrainer/{{item[1]}}/{{item[2]}}'">
+		<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add as Trainer
+	      </button>
+	      
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
 
 
-			<br>
-			<h3>All User Access</h3>
-			<table class="table  table-hover">
-				<thead>
-					<tr>
-						<th>Device</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for item in alluserdevices %}
-					<tr>
-						<td> {{ item[0] }} </td>
-					</tr>
-					{% endfor %}
-				</tbody>
-			</table>
+      <br>
+      <h3>Available Access</h3>
+      <table class="table  table-hover">
+        <thead>
+          <tr>
+            <th>Device</th>
+            <th>Options</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in devices %}
+          <tr>
+            <td> {{ item[1] }} </td>
+            <td>
+              <button type="button" class="btn btn-default" onclick="location.href='/admin/addUserAccess/{{userid}}/{{item[0]}}'">
+		<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Access</button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
 
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="/static/js/bootstrap.min.js"></script>
+      <br>
+      <h3>All User Access</h3>
+      <table class="table  table-hover">
+        <thead>
+          <tr>
+            <th>Device</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in alluserdevices %}
+          <tr>
+            <td> {{ item[0] }} </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+
+      <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+      <!-- Include all compiled plugins (below), or include individual files as needed -->
+      <script src="/static/js/bootstrap.min.js"></script>
   </body>
+
 </html>

@@ -1,0 +1,32 @@
+{% extends 'admin_inactiveuser.html' %}
+{% block modal %}
+
+<!-- Modal -->
+<div class="modal fade" id="delUserModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="delUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="delUserModalLabel">Delete User</h4>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete user <b>{{name}} : {{badge}}</b> ? <br><br>
+	If this entry is deleted, a user name cannot be correlated to a badge number in the log, if the badge has been used.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="location.href='/admin/interface/inactiveuser'">Cancel</button>
+        <button type="button" class="btn btn-primary" onclick="location.href='/admin/delUser/{{userid}}'">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+  $(document).ready(function(){
+      console.log("window is loaded")
+      $("#delUserModal").modal("show")
+  })
+</script>
+{% endblock %}
