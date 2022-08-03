@@ -169,12 +169,12 @@ class Client(Machine):
 
         # noinspection PyBroadException
         try:
-            self.__show_attempting_login(1)
+            self.__show_attempting_login(0.1 if self.__opts.get(ClientOption.IS_A_DOOR) else 1)
             self.__update_user_context(
                 self.__tinkerAccessServerApi.login(badge_code)
             )
             remaining_seconds = self.__user_info.get('remaining_seconds')
-            self.__show_access_granted(1)
+            self.__show_access_granted(0.1 if self.__opts.get(ClientOption.IS_A_DOOR) else 1)
 
         except UnauthorizedAccessException as e:
             self.__handle_unauthorized_access_exception()
