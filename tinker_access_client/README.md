@@ -197,9 +197,9 @@ auto_update: true
 
 - __--door-continuous-unlock=[door_continuous_unlock]__: The door is defined as being able to be held in a continuously unlocked state. Only used if is-a-door parameter is also enabled. This parameter should only be used on door locks that can be left permanently energized. It should not be enabled on non-continuous duty solenoid style locks. The logout button will be used to toggle between the locked and unlocked state. Therefore, the training mode will be disabled if this parameter is set [default:'False']
 
-- __--door-normal-hr-start=[door_normal_hr_start]__: The start of normal hours, when a door can be held in a continuously unlocked state. Only used if is-a-door and door-continuous-unlock parameters are also enabled. The time is defined in 24hr format. The door cannot be held in an unlocked state before this time [default:'False']
+- __--door-normal-hr-start=[door_normal_hr_start]__: The start of normal hours, when a door can be held in a continuously unlocked state. Only used if is-a-door and door-continuous-unlock parameters are also enabled. The time is defined in 24hr format. The door cannot be held in an unlocked state before this time [default:'730']
 
-- __--door-normal-hr-end=[door_normal_hr_end]__: The end of normal hours, when a door can be held in a continuously unlocked state. Only used if is-a-door and door-continuous-unlock parameters are also enabled. The time is defined in 24hr format. The door will lock if currently unlocked at this time and cannot be held in an unlocked state after this time [default:'False']
+- __--door-normal-hr-end=[door_normal_hr_end]__: The end of normal hours, when a door can be held in a continuously unlocked state. Only used if is-a-door and door-continuous-unlock parameters are also enabled. The time is defined in 24hr format. The door will lock if currently unlocked at this time and cannot be held in an unlocked state after this time [default:'2200']
 
 - __--disable-training-mode=[disable_training_mode]__: Disables entering training mode at the device if the logout button is held down for 3 seconds [default:'False']
 
