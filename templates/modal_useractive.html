@@ -1,0 +1,31 @@
+{% extends 'admin_inactiveuser.html' %}
+{% block modal %}
+
+<!-- Modal -->
+<div class="modal fade" id="userActiveModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="userActiveModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="userActiveModalLabel">Activate User</h4>
+      </div>
+      <div class="modal-body">
+        User <b>{{name}}</b> is already active with a badge id of <b>{{badge}}</b>. <br><br>
+	Deactivate that name/badge entry first, then <b>{{name}}</b> can be activated with badge id <b>{{newbadge}}</b>.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" onclick="location.href='/admin/interface/inactiveuser'">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+  $(document).ready(function(){
+      console.log("window is loaded")
+      $("#userActiveModal").modal("show")
+  })
+</script>
+{% endblock %}

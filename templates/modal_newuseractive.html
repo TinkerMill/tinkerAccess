@@ -1,0 +1,31 @@
+{% extends 'admin_newuser.html' %}
+{% block modal %}
+
+<!-- Modal -->
+<div class="modal fade" id="newuserActiveModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="newuserActiveModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="newuserActiveModalLabel">Add New User</h4>
+      </div>
+      <div class="modal-body">
+        A user with the name <b>{{name}}</b> is already active with a badge id of <b>{{badge}}</b>. <br><br>
+	Deactivate that name/badge entry first, so that <b>{{name}}</b> can be added with badge id <b>{{newbadge}}</b>, or choose a different name.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" onclick="location.href='/admin/interface/newuser'">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+  $(document).ready(function(){
+      console.log("window is loaded")
+      $("#newuserActiveModal").modal("show")
+  })
+</script>
+{% endblock %}

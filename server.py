@@ -149,89 +149,119 @@ def deviceLogout(deviceid, uid):
 # this is the login
 @app.route("/device/<deviceid>/code/<code>")
 def deviceCode(deviceid,code):
-  allusers = query_db("select allUsers from device where id=%s" % deviceid)
-    
-  if len(allusers) == 0:
+
+  deviceinfo = query_db("select name,allUsers,lockout,lockout_start,lockout_end from device where id=%s" % deviceid)
+  
+  if len(deviceinfo) == 0:
     # Device ID not found, so deny access
     return json.dumps( {'devicename': 'none', 'username': 'none', 'userid': -1, 'time': 0 } )
 
-  if allusers[0][0]:
-    # Device grants all users access
-    output = query_db("select user.name, user.id from user where user.code='%s'" % (code))
-    devicename = query_db("select device.name from device where device.id='%s'" % (deviceid))
-    
-    if len(output) == 0:
-      # User badge code not found, so deny access
-      addNewUser(code, deviceid)
-      return json.dumps( {'devicename': 'none', 'username': 'none', 'userid': -1, 'time': 0 } )
-    
+  devicename    = deviceinfo[0][0]
+  allusers      = deviceinfo[0][1]
+  lockout       = deviceinfo[0][2]
+  lockout_start = deviceinfo[0][3]
+  lockout_end   = deviceinfo[0][4]
+
+  if lockout == 2:
+    # Device is locked out, so deny access
+    return json.dumps( {'devicename': 'none', 'username': 'none', 'userid': -1, 'time': 0 } )
+
+  # Customize the query based upon the device settings
+  if lockout == 0:
+    # Device access is not time limited
+
+    if allusers:
+      # Device access is granted to all users and is not time limited
+      output = query_db("select user.name, user.id from user where user.code='%s' and user.status IN ('A','S')" % (code))
+      
     else:
-      # User badge code found, grant access
+      # Device access is granted at an individual user level and is not time limited
+      output = query_db("select user.name, user.id, deviceAccess.time from deviceAccess join device on device.id=deviceAccess.device join user on user.id = deviceAccess.user \
+                         where user.code='%s' and user.status IN ('A','S') and device.id=%s" % (code,deviceid))
 
-      # send the data to slack
-      message_content = {'text': '{} is now in use by {}'.format(devicename[0][0], output[0][0])}
-      if devicename[0][0] in c_webcam_urls:
-        image_url = captureImage(c_webcam_urls[devicename[0][0]])
-        if len(image_url) > 0:
-          message_content['attachments'] = [{
-            'fallback': 'Webcam image of {}'.format(devicename[0][0]),
-            'image_url': image_url
-          }]
+  elif lockout == 1:
+    # Device access is time limited
 
-      t = Thread(target=post_to_slack, args=(message_content,))
-      t.start()
+    now = datetime.datetime.now()
+    now = 100 * now.hour + now.minute
 
-      # log it to the database
-      exec_db("insert into log (message) values ('login:%s:%s')" % (deviceid, output[0][1]) )
+    x = re.split(':| ',lockout_start)
+    start_time = 100*((int(x[0]) % 12) + (12 if x[2]=="PM" else 0)) + int(x[1])
 
-      return json.dumps(
-        {
-          'devicename': devicename[0][0],
-          'username': output[0][0],
-          'userid': output[0][1],
-          'time': 100
-        }
-      )
+    x = re.split(':| ',lockout_end)
+    end_time = 100*((int(x[0]) % 12) + (12 if x[2]=="PM" else 0)) + int(x[1])
     
+    if start_time <= end_time:
+      during_time_limit = start_time <= now < end_time
+    else:
+      during_time_limit = now >= start_time or now < end_time
+
+    if during_time_limit:
+      # Current time is during the time limited range, only select those with 24hr access
+
+      if allusers:
+        # Device access is granted to all users only with 24 hr access during time limited range
+        output = query_db("select user.name, user.id from user where user.code='%s' and user.status='S'" % (code))
+
+      else:
+        # Device access is granted at an individual user level only with 24 hr access during time limited range
+        output = query_db("select user.name, user.id, deviceAccess.time from deviceAccess join device on device.id=deviceAccess.device join user on user.id = deviceAccess.user \
+                          where user.code='%s' and user.status='S' and device.id=%s" % (code,deviceid))
+
+    else:
+      # Device access is time limited but current time is not within the range
+
+      if allusers:
+        # Device access is granted to all users, outside the time limited range
+        output = query_db("select user.name, user.id from user where user.code='%s' and user.status IN ('A','S')" % (code))
+
+      else:
+        #  Device access is granted at an individual user level, outside the time limited range
+        output = query_db("select user.name, user.id, deviceAccess.time from deviceAccess join device on device.id=deviceAccess.device join user on user.id = deviceAccess.user \
+                          where user.code='%s' and user.status IN ('A','S') and device.id=%s" % (code,deviceid))
+
   else:
-    # Device access is granted at an individual user level
+    # Unknown lockout status, deny access
+    return json.dumps( {'devicename': 'none', 'username': 'none', 'userid': -1, 'time': 0 } )
+    
+  if len(output) == 0:
+    # User badge code not found, or is inactive, or does not have 24hr access, so deny access
+    addNewUser(code, deviceid)
+    return json.dumps( {'devicename': 'none', 'username': 'none', 'userid': -1, 'time': 0 } )
+      
+  # User badge code found, so grant access
+
+  username = output[0][0]
+  userid   = output[0][1]
+  accesstime = 100 if allusers else output[0][2]
   
-    output = query_db("select user.name, user.id, device.name, deviceAccess.time from deviceAccess join device on device.id=deviceAccess.device join user on user.id = deviceAccess.user where user.code='%s' and device.id=%s" % (code,deviceid))
-    #print output
-    if len(output) == 0:
-      addNewUser(code, deviceid)
-      return json.dumps( {'devicename': 'none', 'username': 'none', 'userid': -1, 'time': 0 } )
-    else:
+  # Send the data to slack
+  message_content = {'text': '{} is now in use by {}'.format(devicename, username)}
+  if devicename in c_webcam_urls:
+    image_url = captureImage(c_webcam_urls[devicename])
+    if len(image_url) > 0:
+      message_content['attachments'] = [{
+        'fallback': 'Webcam image of {}'.format(devicename),
+        'image_url': image_url
+      }]
 
-      # send the data to slack
-      message_content = {'text': '{} is now in use by {}'.format(output[0][2], output[0][0])}
-      if output[0][2] in c_webcam_urls:
-        image_url = captureImage(c_webcam_urls[output[0][2]])
-        if len(image_url) > 0:
-          message_content['attachments'] = [{
-            'fallback': 'Webcam image of {}'.format(output[0][2]),
-            'image_url': image_url
-          }]
+  t = Thread(target=post_to_slack, args=(message_content,))
+  t.start()
 
-      t = Thread(target=post_to_slack, args=(message_content,))
-      t.start()
+  # log it to the database
+  exec_db("insert into log (message) values ('login:%s:%s')" % (deviceid, userid) )
 
-      # log it to the database
-      exec_db("insert into log (message) values ('login:%s:%s')" % (deviceid, output[0][1]) )
-
-      return json.dumps(
-        {
-          'devicename': output[0][2],
-          'username': output[0][0],
-          'userid': output[0][1],
-          'time': output[0][3]
-        }
-      )
-
+  return json.dumps(
+    {
+      'devicename': devicename,
+      'username': username,
+      'userid': userid,
+      'time': accesstime
+    }
+  )
 
 @app.route("/")
 def defaultRoute():
-  #return redirect("/admin/interface/newuser")
   return render_template('admin_login.html')
 
 @app.route("/checkLogin/<user>/<password>" )
@@ -256,20 +286,28 @@ def addUser(userid, name):
   if request.cookies.get('password') != C_password:
     return False
 
-  a = query_db("select code from newuser where id=%s" % userid)
-  badgeCode = a[0][0]
-  userAdd(name,badgeCode)
-  exec_db("delete from newuser where id=%s" % userid)
+  name = name.strip()
+  output = query_db("select code from newuser where id=%s" % userid)
+  badgeCode = output[0][0]
 
-  return redirect("/admin/interface/user")
-
-
+  output = query_db("select code from user where name='%s' and status IN ('A','S')" % name)
+  
+  if len(output) == 0:
+    # No active user with same name, go ahead and add this user id
+    userAdd(name,badgeCode)
+    exec_db("delete from newuser where id=%s" % userid)
+    return redirect("/admin/interface/user")
+  else:
+    # User with same name already active, popup error window
+    existingBadge = output[0][0]
+    return redirect("/admin/interface/newuser/modal/useractive/%s/%s/%s" % (name, existingBadge, badgeCode))
+  
 @app.route("/admin/loadcsv", methods=['POST'])
 def loadCSV():
   if request.cookies.get('password') != C_password:
     return False
 
-  data = request.form['csv'] 
+  data = request.form['csv']
 
   # stip leading , if it is there
   data = map(lambda x: re.sub('^,', '', x), data.split("\n"))
@@ -278,17 +316,18 @@ def loadCSV():
     if len(row) == 0:
       continue
 
-    name = row[0]
-    code = row[1]
+    name = row[0].strip()
+    code = row[1].strip()
 
-    # print("Loading", name, code)
-    a = query_db("select code from user where code='%s'" % code)
-    if len(a) == 0:
-      userAdd(name, code)
-
+    output = query_db("select code from user where code='%s'" % code)
+    if len(output) == 0:
+      # Badge does not already exist in database
+      output = query_db("select name from user where name='%s' and status IN ('A','S')" % name)
+      if len(output) == 0:
+        # Name does not exist in database of an active user
+        userAdd(name, code)
+        
   return redirect("/admin/interface/user")
-
-
 
 
 """
@@ -296,11 +335,11 @@ when a trainer logs in, he can register anyone on this device as a user
 http://localhost:5000/admin/marioStar/1/150060E726B4/0/2
 """
 @app.route("/admin/marioStar/<trainerid>/<trainerBadge>/<deviceid>/<userBadge>")
-def marioStarMode(trainerid,trainerBadge, deviceid, userBadge):  
-  trainer = query_db("select user.id from user join deviceAccess on deviceAccess.user=user.id  where user.id=%s and user.code='%s' and deviceAccess.trainer=1 and deviceAccess.device=%s" % (trainerid, trainerBadge,deviceid))
+def marioStarMode(trainerid,trainerBadge, deviceid, userBadge):
+  trainer = query_db("select user.id from user join deviceAccess on deviceAccess.user=user.id where user.id=%s and user.code='%s' and user.status IN ('A','S') and deviceAccess.trainer=1 and deviceAccess.device=%s" % (trainerid, trainerBadge, deviceid))
   
   # the user must already exist in the system
-  userid = query_db("select id from user where code='%s'" % (userBadge) )
+  userid = query_db("select id from user where code='%s' and status IN ('A','S')" % (userBadge) )
 
   #print("userId", userid)
   #print("lenUserId=1", len(userid))
@@ -324,6 +363,19 @@ def addUserAccess(userid, deviceid):
   exec_db("insert into deviceAccess (user,device,time) values (%s, %s, 100)" % (userid, deviceid))
   return redirect("/admin/interface/userAccess/%s" % userid)
 
+@app.route("/admin/toggle24Hr/user/<userid>")
+def toggle24HrAccess(userid):
+  if request.cookies.get('password') != C_password:
+    return False
+
+  output = query_db("select status from user where id=%s" % userid)
+
+  if output[0][0] == 'A':
+    exec_db("update user set status='S' where id=%s" % userid)
+  elif output[0][0] == 'S':
+    exec_db("update user set status='A' where id=%s" % userid)
+  
+  return redirect("/admin/interface/userAccess/%s" % userid)
 
 @app.route("/admin/removeTrainer/<userid>/<deviceid>")
 def delUserTrainerAccess(userid, deviceid):
@@ -355,7 +407,7 @@ def delNewUser(userid):
     return False
 
   exec_db("delete from newuser where id=%s" % userid)
-  return redirect("/admin/interface/user")
+  return redirect("/admin/interface/newuser")
 
 @app.route("/admin/delUser/<userid>")
 def delUser(userid):
@@ -363,22 +415,117 @@ def delUser(userid):
     return False
 
   exec_db("delete from user where id=%s" % userid)
+  return redirect("/admin/interface/inactiveuser")
+
+@app.route("/admin/activateUser/<userid>")
+def activateUser(userid):
+  if request.cookies.get('password') != C_password:
+    return False
+
+  # Get the name and badge code to be activated
+  output = query_db("select name,code from user where id=%s" % userid)
+
+  name = output[0][0]
+  newbadge = output[0][1]
+
+  output = query_db("select code from user where name='%s' and status IN ('A','S')" % name)
+  
+  if len(output) == 0:
+    # No active user with same name, make this user id active
+    exec_db("update user set status='A' where id=%s" % userid)
+    return redirect("/admin/interface/inactiveuser")
+  else:
+    # User with same name already active, popup error window
+    badge = output[0][0]
+    return redirect("/admin/interface/inactiveuser/modal/useractive/%s/%s/%s" % (name, badge, newbadge))
+
+@app.route("/admin/deactivateUser/<userid>")
+def deactivateUser(userid):
+  if request.cookies.get('password') != C_password:
+    return False
+
+  exec_db("update user set status='I' where id=%s" % userid)
   return redirect("/admin/interface/user")
+
+@app.route("/admin/deviceUnlimitedHr/<deviceid>")
+def deviceUnlimitedHr(deviceid):
+  if request.cookies.get('password') != C_password:
+    return False
+
+  exec_db("update device set lockout=0 where id=%s" % deviceid)
+  return redirect("/admin/interface/devices")
+
+@app.route("/admin/deviceLimitedHr/<deviceid>")
+def deviceLimitedHr(deviceid):
+  if request.cookies.get('password') != C_password:
+    return False
+
+  exec_db("update device set lockout=1 where id=%s" % deviceid)
+  return redirect("/admin/interface/devices")
+
+@app.route("/admin/deviceLockout/<deviceid>")
+def deviceLockout(deviceid):
+  if request.cookies.get('password') != C_password:
+    return False
+
+  exec_db("update device set lockout=2 where id=%s" % deviceid)
+  return redirect("/admin/interface/devices")
+
+@app.route("/admin/deviceLockoutTimes/<deviceid>/time/<start>/<end>")
+def deviceLockoutTimes(deviceid, start, end):
+  if request.cookies.get('password') != C_password:
+    return False
+
+  exec_db("update device set lockout_start='%s', lockout_end='%s' where id=%s" % (start, end, deviceid))
+  return redirect("/admin/interface/devices")
 
 @app.route("/admin/interface/newuser")
 def newUserInterface():
   if request.cookies.get('password') != C_password:
     return redirect("/")
 
-  users = query_db("select id,code,deviceID from newuser")
+  users = query_db("select newuser.id,newuser.code,device.name from newuser left join device on newuser.deviceID = device.id")
+  #users = query_db("select id,code,deviceID from newuser")
   return render_template('admin_newuser.html', users=users)
+
+@app.route("/admin/interface/inactiveuser")
+def inactiveUserInterface():
+  if request.cookies.get('password') != C_password:
+    return redirect("/")
+
+  users = query_db("select name,code,id from user where status='I' order by name")
+  return render_template('admin_inactiveuser.html', users=users)
+
+@app.route("/admin/interface/inactiveuser/modal/deluser/<userid>/<name>/<badge>")
+def delUserModal(userid, name, badge):
+  if request.cookies.get('password') != C_password:
+    return redirect("/")
+
+  users = query_db("select name,code,id from user where status='I' order by name")
+  return render_template('modal_deluser.html', users=users, userid=userid, name=name, badge=badge)
+
+@app.route("/admin/interface/inactiveuser/modal/useractive/<name>/<badge>/<newbadge>")
+def userActiveModal(name, badge, newbadge):
+  if request.cookies.get('password') != C_password:
+    return redirect("/")
+
+  users = query_db("select name,code,id from user where status='I' order by name")
+  return render_template('modal_useractive.html', users=users, name=name, badge=badge, newbadge=newbadge)
+
+@app.route("/admin/interface/newuser/modal/useractive/<name>/<badge>/<newbadge>")
+def newuserActiveModal(name, badge, newbadge):
+  if request.cookies.get('password') != C_password:
+    return redirect("/")
+
+  users = query_db("select id,code,deviceID from newuser")
+  return render_template('modal_newuseractive.html', users=users, name=name, badge=badge, newbadge=newbadge)
 
 @app.route("/admin/interface/user")
 def adminInterface():
   if request.cookies.get('password') != C_password:
     return redirect("/")
 
-  users = query_db("select name,code,id from user")
+  users = query_db("select name,code,id,status from user where status IN ('A','S') order by status desc")
   return render_template('admin_user.html', users=users)
 
 @app.route("/admin/interface/userAccess/<userid>")
@@ -392,18 +539,29 @@ def userAccessInterface(userid):
   # list of devices with all user access
   allUserDevices = query_db("select name from device where allUsers=1")
   
-  # list of devices user has access to
+  # list of devices the user currently has access to
   userAccess = query_db("select user.name, user.id, device.id, device.name, deviceAccess.time, deviceAccess.trainer from deviceAccess join device on device.id=deviceAccess.device join user on user.id = deviceAccess.user where deviceAccess.user=%s and device.allUsers=0" % userid)
   
   username   = query_db("select user.name from user where id=%s" % userid)[0][0]
-  return render_template('admin_userAccess.html', devices=allDevices, access=userAccess, alluserdevices=allUserDevices, userid=userid, username=username)
+
+  s = query_db("select user.status from user where id=%s" % userid)[0][0]
+  if s=='A':
+    userstatus = "Active"
+  elif s=='S':
+    userstatus = "Active - 24 Hr"
+  elif s=='I':
+    userstatus = "Inactive"
+  else:
+    userstatus = "Unknown"
+    
+  return render_template('admin_userAccess.html', devices=allDevices, access=userAccess, alluserdevices=allUserDevices, userid=userid, username=username, userstatus=userstatus, ustatus=s)
 
 @app.route("/admin/interface/devices")
 def deviceInterface():
   if request.cookies.get('password') != C_password:
     return redirect("/")
 
-  devices = query_db("select id,name,allUsers from device")
+  devices = query_db("select id,name,allUsers,lockout,lockout_start,lockout_end from device")
   return render_template('admin_devices.html', devices=devices)
 
 @app.route("/admin/interface/deviceAccess/<deviceid>")
@@ -412,7 +570,7 @@ def deviceAccessInterface(deviceid):
     return redirect("/")
 
   devicename = query_db("select device.name from device where id=%s" % deviceid)[0][0]
-  userAccess = query_db("select user.id, user.name, user.code, deviceAccess.trainer from deviceAccess join device on device.id=deviceAccess.device join user on user.id = deviceAccess.user where deviceAccess.device=%s and device.allUsers=0" % deviceid)
+  userAccess = query_db("select user.id, user.name, user.code, deviceAccess.trainer from deviceAccess join device on device.id=deviceAccess.device join user on user.id = deviceAccess.user where deviceAccess.device=%s and device.allUsers=0 and user.status IN ('A','S') order by deviceAccess.trainer desc" % deviceid)
   
   return render_template('admin_deviceAccess.html', access=userAccess, deviceid=deviceid, devicename=devicename)
 
