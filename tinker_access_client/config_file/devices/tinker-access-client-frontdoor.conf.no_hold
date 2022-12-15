@@ -13,7 +13,7 @@ auto_update:False
 auto_update_interval:30
 
 # Set the device ID of the node as assigned on the server
-device_id:12
+device_id:10
 
 # Server address and port, leave commented out to use the localhost
 server_address:http://taccess:5000
@@ -31,7 +31,7 @@ display_serlcd:True
 #estop_active_hi:True
 
 # Uncomment to enable use of the bypass detect pin
-#use_bypass_detect:True
+use_bypass_detect:True
 
 # Uncomment if the PCB has a 3.3V enable
 use_3v3_en:True
@@ -67,4 +67,3 @@ disable_training_mode:True
 pin_led_red:6
 pin_led_green:22
 pin_led_blue:5
-
