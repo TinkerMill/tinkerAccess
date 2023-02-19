@@ -235,18 +235,19 @@ def deviceCode(deviceid,code):
   userid   = output[0][1]
   accesstime = 100 if allusers else output[0][2]
   
-  # Send the data to slack
-  message_content = {'text': '{} is now in use by {}'.format(devicename, username)}
-  if devicename in c_webcam_urls:
-    image_url = captureImage(c_webcam_urls[devicename])
-    if len(image_url) > 0:
-      message_content['attachments'] = [{
-        'fallback': 'Webcam image of {}'.format(devicename),
-        'image_url': image_url
-      }]
+  if lockout == 1:
+    # post to slack only if device access is time limited
+    message_content = {'text': '{} is now in use by {}'.format(devicename, username)}
+    if devicename in c_webcam_urls:
+      image_url = captureImage(c_webcam_urls[devicename])
+      if len(image_url) > 0:
+        message_content['attachments'] = [{
+          'fallback': 'Webcam image of {}'.format(devicename),
+          'image_url': image_url
+        }]
 
-  t = Thread(target=post_to_slack, args=(message_content,))
-  t.start()
+    t = Thread(target=post_to_slack, args=(message_content,))
+    t.start()
 
   # log it to the database
   exec_db("insert into log (message) values ('login:%s:%s')" % (deviceid, userid) )
