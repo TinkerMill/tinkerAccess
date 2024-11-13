@@ -578,21 +578,22 @@ def deviceAccessInterface(deviceid):
 @app.route("/toolSummary/<start_date>")
 @app.route("/toolSummary/<start_date>/<end_date>")
 def toolSummaryInterface(start_date=None, end_date=None):
-  #if request.cookies.get('password') != C_password:
-  #  return redirect("/")
-
   # calculate default start and end dates
   if start_date is None:
     today = datetime.datetime.now()
-    start_date = datetime.datetime(today.year - (today.month==1), ((today.month - 2)%12)+1, 1)
+    # Fix for December - properly handle year rollover for previous month
+    prev_month = (today.month - 1) or 12  # If month is 1, prev_month becomes 12
+    prev_year = today.year - (today.month == 1)  # Subtract 1 from year if current month is January
+    start_date = datetime.datetime(prev_year, prev_month, 1)
   else:
     start_date = datetime.datetime.strptime(start_date, "%Y-%m-%d")
 
   if end_date is None:
-    end_year = start_date.year + (start_date.month==12)
-    end_month = ((start_date.month+1)%12)
-    end_day = min(start_date.day, monthrange(end_year, end_month)[1])
-    end_date = datetime.datetime(end_year, end_month, end_day)
+    # Fix for December - properly handle year rollover for next month
+    next_month = (start_date.month % 12) + 1  # If month is 12, next_month becomes 1
+    next_year = start_date.year + (start_date.month == 12)  # Add 1 to year if current month is December
+    end_day = min(start_date.day, monthrange(next_year, next_month)[1])
+    end_date = datetime.datetime(next_year, next_month, end_day)
   else:
     end_date = datetime.datetime.strptime(end_date, "%Y-%m-%d")
 
@@ -778,3 +779,4 @@ if __name__ == "__main__":
   #app.run(host='0.0.0.0')
   use_reload = not (len(sys.argv) > 1 and sys.argv[1] == '--noreload')
   app.run(host='0.0.0.0', debug=True, use_reloader=use_reload)
+

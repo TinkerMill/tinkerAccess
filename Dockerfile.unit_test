@@ -1,0 +1,26 @@
+# Use Python 2.7 base image
+FROM python:2.7-slim
+
+# Set working directory
+WORKDIR /app
+
+# Copy requirements files
+COPY requirements.txt .
+COPY tests/requirements-test.txt ./tests/
+
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r tests/requirements-test.txt
+
+# Copy source code and tests
+COPY server.py .
+COPY tests/ tests/
+
+# Copy test config file
+COPY tests/server.cfg .
+
+COPY tests/run_tests.sh .
+RUN chmod +x run_tests.sh
+
+# Run unit tests
+CMD ["./run_tests.sh"]
