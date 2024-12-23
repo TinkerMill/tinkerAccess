@@ -1,4 +1,4 @@
-flask==1.1.4
+flask==2.2.5
 freezegun
 itsdangerous==1.1.0
 jinja2==2.11.3
