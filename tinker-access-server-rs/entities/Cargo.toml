@@ -1,0 +1,8 @@
+[package]
+name = "entities"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+sea-orm = { version = "1.1.11", optional = false, features = ["proxy"]}
+serde = "1.0.219"
