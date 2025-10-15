@@ -11,12 +11,12 @@ members = ["entities","migration"]
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-leptos = { version = "0.7.0", features = ["nightly"] }
-leptos_router = { version = "0.7.0", features = ["nightly"] }
-axum = { version = "0.7", optional = true }
-console_error_panic_hook = { version = "0.1", optional = true}
-leptos_axum = { version = "0.7.0", optional = true }
-leptos_meta = { version = "0.7.0" }
+leptos = { version = "0.8.2", features = ["nightly"] }
+leptos_router = { version = "0.8.2", features = ["nightly"] }
+axum = { version = "0.8", optional = true }
+console_error_panic_hook = { version = "0.1", optional = true }
+leptos_axum = { version = "0.8.2", optional = true }
+leptos_meta = { version = "0.8.2" }
 tokio = { version = "1", features = ["rt-multi-thread"], optional = true }
 wasm-bindgen = { version = "=0.2.100", optional = true }
 sea-orm = { version = "1.1.11", optional = true, features = ["sqlx-sqlite", "runtime-tokio", "proxy"]}
@@ -59,12 +59,13 @@ site-root = "target/site"
 site-pkg-dir = "pkg"
 
 # [Optional] The source CSS file. If it ends with .sass or .scss then it will be compiled by dart-sass into CSS. The CSS is optimized by Lightning CSS before being written to <site-root>/<site-pkg>/app.css
-style-file = "style/main.scss"
+# style-file = "style/main.scss"
+style-file = "../static/css/bootstrap.min.css"
 # Assets source dir. All files found here will be copied and synchronized to site-root.
 # The assets-dir cannot have a sub directory with the same name/path as site-pkg-dir.
 #
 # Optional. Env: LEPTOS_ASSETS_DIR.
-assets-dir = "public"
+assets-dir = "../static"
 
 # The IP and port (ex: 127.0.0.1:3000) where the server serves the content. Use it in your server setup.
 site-addr = "127.0.0.1:3000"

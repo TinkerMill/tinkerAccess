@@ -6,7 +6,7 @@ use sea_orm::entity::prelude::*;
 #[sea_orm(table_name = "newuser")]
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
-    pub id: Option<i32>,
+    pub id: i64,
     #[sea_orm(column_type = "Text", nullable)]
     pub code: Option<String>,
     #[sea_orm(column_name = "deviceID")]

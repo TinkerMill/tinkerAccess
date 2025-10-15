@@ -1,8 +1,10 @@
+use crate::devices::*;
 use crate::users::*;
 use leptos::prelude::*;
 use leptos_meta::{provide_meta_context, MetaTags, Stylesheet, Title};
 use leptos_router::{
     components::{Route, Router, Routes},
+    hooks::use_location,
     path, StaticSegment,
 };
 
@@ -28,12 +30,20 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
 pub fn NavBar() -> impl IntoView {
     view! {
       <ul class="nav nav-pills">
-        <li role="presentation" class="active"><a href="/admin/interface/user">Users</a></li>
-        <li role="presentation"><a href="/admin/interface/inactiveuser">Inactive Users</a></li>
-        <li role="presentation"><a href="/admin/interface/newuser">New Users</a></li>
-        <li role="presentation"><a href="/admin/interface/devices">Devices</a></li>
-        <li role="presentation"><a href="/toolSummary">Tool Usage Summary</a></li>
+        <NavBarLink path="/admin/interface/user".to_string() title="Users".to_string() />
+        <NavBarLink path="/admin/interface/inactiveuser".to_string() title="Inactive Users".to_string() />
+        <NavBarLink path="/admin/interface/newuser".to_string() title="New Users".to_string() />
+        <NavBarLink path="/admin/interface/devices".to_string() title="Devices".to_string() />
+        <NavBarLink path="/admin/interface/toolSummary".to_string() title="Tool Usage Summary".to_string() />
       </ul>
+    }
+}
+
+#[component]
+pub fn NavBarLink(path: String, title: String) -> impl IntoView {
+    let current_path = use_location().pathname.get();
+    view! {
+        <li role="presentation" class:active=move || current_path.clone() == path.clone() ><a href={path.clone()}>{title}</a></li>
     }
 }
 
@@ -47,13 +57,14 @@ pub fn App() -> impl IntoView {
         // id=leptos means cargo-leptos will hot-reload this stylesheet
         <Stylesheet id="leptos" href="/pkg/tinker-access-server-rs.css"/>
 
-        <NavBar />
 
         // content for this welcome page
         <Router>
             <main>
                 <Routes fallback=|| "Page not found.".into_view()>
-                    <Route path=path!("/admin/interface/user") view=ShowUsers/>
+                    <Route path=path!("/admin/interface/user") view=move || {let active_filter = Some(vec!["A".to_string(), "S".to_string()]);  view!{<NavBar /><ShowUsers status_filter=active_filter />} } />
+                    <Route path=path!("/admin/interface/inactiveuser") view=move || { let inactive_filter = Some(vec!["I".to_string()]); view!{<NavBar /><ShowUsers status_filter=inactive_filter />} }/>
+                    <Route path=path!("/admin/interface/devices") view=move || { view! { <NavBar /><ShowDevices /> } } />
                     <Route path=StaticSegment("") view=HomePage/>
                 </Routes>
             </main>

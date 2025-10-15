@@ -41,6 +41,7 @@ async fn main() -> Result<()> {
 
 #[cfg(not(feature = "ssr"))]
 pub fn main() {
+    console_error_panic_hook::set_once();
     // no client-side main function
     // unless we want this to work with e.g., Trunk for pure client-side testing
     // see lib.rs for hydration function instead

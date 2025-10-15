@@ -6,7 +6,7 @@ use sea_orm::entity::prelude::*;
 #[sea_orm(table_name = "deviceAccess")]
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
-    pub id: Option<i32>,
+    pub id: i64,
     pub user: Option<i32>,
     pub device: Option<i32>,
     pub time: Option<i32>,
