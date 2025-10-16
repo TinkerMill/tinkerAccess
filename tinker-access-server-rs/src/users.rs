@@ -84,7 +84,7 @@ pub fn ShowUsers(status_filter: Option<Vec<String>>) -> impl IntoView {
             let (users, _set_users) = signal(users.clone().unwrap());
             view! {
               <For each=move || users.get() key=|user| user.id.clone() let:user>
-                <UserRow this_user=user />;
+                <UserRow this_user=user />
               </For>
             }
           }/>
@@ -101,8 +101,7 @@ pub fn UserRow(this_user: user::Model) -> impl IntoView {
           <tr>
             <td><span class="glyphicon glyphicon-user" aria-hidden="true"></span> { move || this_user.get().name.clone() }</td>
             <td>{ move || this_user.get().code.clone() }</td>
-                <td inner_html=move || { if this_user.get().status.unwrap() == "S" { r#"<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>"#.to_string() } else {"".to_string()} } > </td>
-            <td></td>
+            <td inner_html=move || { if this_user.get().status.unwrap() == "S" { r#"<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>"#.to_string() } else {"".to_string()} } > </td>
             <td>
               <div class="btn-group" role="group" aria-label="...">
                 <UserStatusButtons this_user=this_user set_user=set_user />
@@ -146,7 +145,7 @@ pub fn UserStatusButtons(
         <button type="button" class="btn btn-default" style:display=move || if this_user.get().status.unwrap() == "I".to_string() { "none" } else { "" }  on:click=toggle_24h >
           <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
         </button>
-        <button type="button" class="btn btn-default" on:click=toggle_status >
+        <button type="button" class="btn btn-default" on:click=toggle_status>
           <span class="glyphicon" class:glyphicon-play=move || this_user.get().status.unwrap() == "I".to_string()  class:glyphicon-pause=move || this_user.get().status.unwrap() != "I".to_string() aria-hidden="true"></span>
         </button>
     }

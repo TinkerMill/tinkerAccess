@@ -11,12 +11,12 @@ members = ["entities","migration"]
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-leptos = { version = "0.8.2", features = ["nightly"] }
-leptos_router = { version = "0.8.2", features = ["nightly"] }
+leptos = { version = "0.8.9", features = ["nightly"] }
+leptos_router = { version = "0.8.6", features = ["nightly"] }
 axum = { version = "0.8", optional = true }
 console_error_panic_hook = { version = "0.1", optional = true }
-leptos_axum = { version = "0.8.2", optional = true }
-leptos_meta = { version = "0.8.2" }
+leptos_axum = { version = "0.8.6", optional = true }
+leptos_meta = { version = "0.8.5" }
 tokio = { version = "1", features = ["rt-multi-thread"], optional = true }
 wasm-bindgen = { version = "=0.2.100", optional = true }
 sea-orm = { version = "1.1.11", optional = true, features = ["sqlx-sqlite", "runtime-tokio", "proxy"]}
