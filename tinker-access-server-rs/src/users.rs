@@ -107,7 +107,6 @@ pub fn UserRow(this_user: user::Model) -> impl IntoView {
                 <UserStatusButtons this_user=this_user set_user=set_user />
                 <button type="button" class="btn btn-default" onclick="location.href='/admin/interface/userAccess/{ user.id }'"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
               </div>
-
             </td>
           </tr>
     }

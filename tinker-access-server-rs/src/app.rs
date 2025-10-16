@@ -41,9 +41,9 @@ pub fn NavBar() -> impl IntoView {
 
 #[component]
 pub fn NavBarLink(path: String, title: String) -> impl IntoView {
-    let current_path = use_location().pathname.get();
+    let current_path = || use_location().pathname.get();
     view! {
-        <li role="presentation" class:active=move || current_path.clone() == path.clone() ><a href={path.clone()}>{title}</a></li>
+        <li role="presentation" class:active=move || current_path().clone() == path.clone() ><a href={path.clone()}>{title}</a></li>
     }
 }
 

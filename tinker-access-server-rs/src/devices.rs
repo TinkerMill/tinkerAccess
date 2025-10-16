@@ -112,7 +112,7 @@ pub fn DeviceRow(this_device: device::Model) -> impl IntoView {
     //
     view! {
       <tr>
-        <td style:text-decoration=move || if this_device.get().lockout.unwrap() == 2 { "line-through" } else { "" } >{ this_device.get().name.unwrap_or("Unnamed".to_string()) }</td>
+        <td style:text-decoration=move || if this_device.get().lockout.unwrap() == 2 { "line-through" } else { "" } >{ move || this_device.get().name.unwrap_or("Unnamed".to_string()) }</td>
         <Show when=move || this_device.get().all_users.unwrap() == false fallback=|| view! {
             <td><span class="glyphicon glyphicon-user" aria-hidden="true"></span> All</td>
         }>
