@@ -19,9 +19,11 @@ leptos_axum = { version = "0.8.6", optional = true }
 leptos_meta = { version = "0.8.5" }
 tokio = { version = "1", features = ["rt-multi-thread"], optional = true }
 wasm-bindgen = { version = "=0.2.100", optional = true }
-sea-orm = { version = "1.1.11", optional = true, features = ["sqlx-sqlite", "runtime-tokio", "proxy"]}
+sea-orm = { version = "1.1.17", optional = true, features = ["sqlx-sqlite", "runtime-tokio", "proxy"]}
 entities = {path = "./entities"}
 anyhow = "1.0.98"
+chrono = "0.4.42"
+serde = "1.0.219"
 
 [features]
 hydrate = [

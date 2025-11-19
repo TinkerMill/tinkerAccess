@@ -1,4 +1,5 @@
 use crate::devices::*;
+use crate::newusers::*;
 use crate::users::*;
 use leptos::prelude::*;
 use leptos_meta::{provide_meta_context, MetaTags, Stylesheet, Title};
@@ -64,7 +65,9 @@ pub fn App() -> impl IntoView {
                 <Routes fallback=|| "Page not found.".into_view()>
                     <Route path=path!("/admin/interface/user") view=move || {let active_filter = Some(vec!["A".to_string(), "S".to_string()]);  view!{<NavBar /><ShowUsers status_filter=active_filter />} } />
                     <Route path=path!("/admin/interface/inactiveuser") view=move || { let inactive_filter = Some(vec!["I".to_string()]); view!{<NavBar /><ShowUsers status_filter=inactive_filter />} }/>
+                    <Route path=path!("/admin/interface/newuser") view=move || { view! { <NavBar /><ShowNewUsers /> } } />
                     <Route path=path!("/admin/interface/devices") view=move || { view! { <NavBar /><ShowDevices /> } } />
+                    <Route path=path!("/admin/interface/deviceAccess/:id") view=move || { view! { <NavBar /><ShowDeviceAccess /> } } />
                     <Route path=StaticSegment("") view=HomePage/>
                 </Routes>
             </main>

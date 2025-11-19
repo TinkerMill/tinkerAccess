@@ -1,4 +1,5 @@
 use crate::components::*;
+use entities::newuser;
 use entities::user;
 use leptos::prelude::*;
 use leptos::IntoView;

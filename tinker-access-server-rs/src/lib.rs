@@ -1,6 +1,7 @@
 pub mod app;
 pub mod components;
 pub mod devices;
+pub mod newusers;
 pub mod setup;
 pub mod users;
 
