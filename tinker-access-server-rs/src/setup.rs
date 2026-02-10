@@ -1,11 +1,11 @@
 #[cfg(feature = "ssr")]
-use sea_orm::{ConnectionTrait, Database, DatabaseConnection, DbBackend, DbErr, Statement};
+use sea_orm::{ConnectionTrait, Database, DatabaseConnection, DbBackend, DbErr};
 
 #[cfg(feature = "ssr")]
 pub async fn db_setup() -> Result<DatabaseConnection, DbErr> {
-    let DATABASE_URL =
+    const DATABASE_URL : &str =
         "sqlite:/home/craisis/Projects/tinkerAccess/tinker-access-server-rs/db.sqlite";
-    let DB_NAME = "";
+    const DB_NAME : &str = "";
     let db = Database::connect(DATABASE_URL).await?;
 
     let db = match db.get_database_backend() {

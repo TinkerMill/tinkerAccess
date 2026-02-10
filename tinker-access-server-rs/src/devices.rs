@@ -1,8 +1,4 @@
-use std::collections::HashMap;
 use std::time::Duration;
-
-use crate::components::*;
-use chrono::prelude::*;
 use entities::device;
 use entities::device_access;
 use entities::user;
@@ -14,7 +10,6 @@ use serde::{Deserialize, Serialize};
 #[server]
 pub async fn get_devices() -> Result<Vec<device::Model>, ServerFnError> {
     use entities::device::Entity as Device;
-    use sea_orm::prelude::*;
     use sea_orm::{DatabaseConnection, EntityTrait};
     let conn_pool = expect_context::<DatabaseConnection>();
     match Device::find().all(&conn_pool).await {
@@ -28,9 +23,8 @@ pub async fn set_lockout_status(
     device_id: i64,
     new_lockout: i32,
 ) -> Result<device::Model, ServerFnError> {
-    use sea_orm::entity::prelude::*;
-    use sea_orm::ActiveValue::{NotSet, Set, Unchanged};
-    use sea_orm::{DatabaseConnection, EntityTrait, QueryOrder};
+    use sea_orm::ActiveValue::Set;
+    use sea_orm::{ActiveModelTrait, DatabaseConnection, EntityTrait};
     let conn_pool = expect_context::<DatabaseConnection>();
     match device::Entity::find_by_id(device_id).one(&conn_pool).await {
         Ok(Some(device)) => {
@@ -62,7 +56,7 @@ pub fn ShowDevices() -> impl IntoView {
           </thead>
           <tbody>
           <Await future=get_devices() children=|devices| {
-            let (devices, set_device) = signal(devices.clone().unwrap());
+            let (devices, _set_device) = signal(devices.clone().unwrap());
             view! {
                 <For each=move || devices.get() key=|device| device.id.clone() let:device>
                 <DeviceRow this_device=device />
@@ -205,10 +199,7 @@ pub async fn get_users_for_device(
     ServerFnError,
 > {
     use entities::device::Entity as Device;
-    use entities::links::DeviceToUser;
-    use entities::user::Entity as User;
-    use sea_orm::prelude::*;
-    use sea_orm::{DatabaseConnection, DbBackend, EntityTrait, QueryTrait};
+    use sea_orm::{DatabaseConnection, EntityTrait};
     let conn_pool = expect_context::<DatabaseConnection>();
     let sql_query = Device::find_by_id(device_id)
         .find_also_related(device_access::Entity)
@@ -226,7 +217,7 @@ pub fn ShowDeviceAccess() -> impl IntoView {
 
     view! {
       <Await future=get_users_for_device(device_id) children=|users| {
-        let (users, set_users) = signal(users.clone().unwrap());
+        let (users, _set_users) = signal(users.clone().unwrap());
         view! {
           <div class="page-header">
             <h1>TinkerAccess Device Access Interface</h1>
@@ -304,19 +295,18 @@ pub struct Summary {
     total_time: Duration,
 }
 impl Summary {
-    fn add_logout(&mut self, time: Duration) {
-        self.logins += 1;
-        self.total_time += time;
-    }
+    // fn add_logout(&mut self, time: Duration) {
+    //     self.logins += 1;
+    //     self.total_time += time;
+    // }
 }
 
 #[server]
 pub async fn get_device_usage_summary(
 ) -> Result<Vec<(entities::device::Model, DeviceUsageData)>, ServerFnError> {
-    use sea_orm::prelude::*;
-    use sea_orm::ColumnTrait;
-    use sea_orm::Condition;
-    use sea_orm::{DatabaseConnection, EntityTrait};
+    use sea_orm::{ColumnTrait, Condition, DatabaseConnection, EntityTrait, QueryFilter};
+    use chrono::{NaiveDateTime, Utc};
+    use std::collections::HashMap;
     let conn_pool = expect_context::<DatabaseConnection>();
     let params = use_params_map();
     let start_time: Result<NaiveDateTime, chrono::ParseError> =
@@ -328,7 +318,7 @@ pub async fn get_device_usage_summary(
         Some(date_str) => date_str.parse::<NaiveDateTime>(),
         None => Ok((Utc::now() + chrono::Duration::days(30)).naive_local()),
     };
-    let logs = match entities::log::Entity::find()
+    let _logs = match entities::log::Entity::find()
         .filter(
             Condition::all()
                 .add(entities::log::Column::Timestamp.gt(start_time.unwrap()))
@@ -338,12 +328,12 @@ pub async fn get_device_usage_summary(
         .await
     {
         Ok(user_list) => Ok(user_list),
-        Err(e) => Err(ServerFnError::ServerError(e.to_string())),
+        Err(e) => Err(ServerFnError::new(e.to_string())),
     };
-    let mut open_logins = HashMap::<(u32, u32), entities::log::Model>::new();
+    let _open_logins = HashMap::<(u32, u32), entities::log::Model>::new();
     // let tool_summary = HashMap::<u32, ToolSummary>::new();
     // let user_summary = HashMap::<(u32, u32), ToolSummary>::new();
-    Ok(())
+    Err(ServerFnError::new("Not implemented".to_string()))
 }
 
 #[component]
