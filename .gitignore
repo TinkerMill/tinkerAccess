@@ -18,3 +18,6 @@ server.cfg
 *.b#?
 *.s#?
 *.l#?
+
+tinker-access-server-rs/Cargo.lock
+tinker-access-server-rs/target/*
