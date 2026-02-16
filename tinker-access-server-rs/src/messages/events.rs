@@ -1,14 +1,18 @@
 use chrono::{DateTime, Utc};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
+use serde_json;
+use std::collections::HashMap;
 use ulid::Ulid;
 
 #[derive(Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub enum Context {
     ToHost,
     FromHost,
 }
 
 #[derive(Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub enum BootState {
     Running,
     Unknown,
@@ -18,32 +22,45 @@ pub enum BootState {
 }
 
 #[derive(Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub enum TriggerType {
+    IO,
+    BootUp,
+    FatalError,
+}
+
+#[derive(Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct LedState {
-    red: Byte,
-    green: Byte,
-    blue: Byte,
+    red: u8,
+    green: u8,
+    blue: u8,
     remaining: Option<u8>,
 }
 
 #[derive(Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct OutputState {
     state: bool,
     remaining: Option<u8>,
 }
 
 #[derive(Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct DisplayState {
     state: String,
     #[serde(flatten)]
     next_state: Option<DisplayTransition>,
 }
 #[derive(Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct DisplayTransition {
     state: String,
     remaining: u8,
 }
 
 #[derive(Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub enum IoState {
     LedState(LedState),
     OutputState(OutputState),
@@ -51,6 +68,7 @@ pub enum IoState {
 }
 
 #[derive(Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct BinaryEventTrigger {
     trig_type: TriggerType,
     io_name: String,
@@ -59,6 +77,7 @@ pub struct BinaryEventTrigger {
 }
 
 #[derive(Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct DisplayEventTrigger {
     trig_type: TriggerType,
     io_name: String,
@@ -67,6 +86,7 @@ pub struct DisplayEventTrigger {
 }
 
 #[derive(Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct LedEventTrigger {
     trig_type: TriggerType,
     io_name: String,
@@ -75,6 +95,7 @@ pub struct LedEventTrigger {
 }
 
 #[derive(Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct CardEventTrigger {
     trig_type: TriggerType,
     io_name: String,
@@ -82,6 +103,7 @@ pub struct CardEventTrigger {
 }
 
 #[derive(Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Header {
     api_version: String,
     context: Context,
@@ -89,6 +111,7 @@ pub struct Header {
 }
 
 #[derive(Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct DeviceConfig {
     role: String,
     location: String,
@@ -97,12 +120,14 @@ pub struct DeviceConfig {
 }
 
 #[derive(Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct IoOptions {
     count: Option<u8>,
     exists: bool,
 }
 
 #[derive(Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct PlatformInfo {
     device: String,
     chip_rev: String,
@@ -111,6 +136,7 @@ pub struct PlatformInfo {
 }
 
 #[derive(Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct ApplicationInfo {
     name: String,
     version: String,
@@ -120,6 +146,7 @@ pub struct ApplicationInfo {
 }
 
 #[derive(Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct DeviceInfo {
     platform: PlatformInfo,
     application_info: ApplicationInfo,
@@ -127,6 +154,7 @@ pub struct DeviceInfo {
 
 #[derive(Serialize, Deserialize)]
 #[serde(tag = "msgType")]
+#[serde(rename_all = "camelCase")]
 pub enum Events {
     EventReportBinary {
         #[serde(flatten)]
@@ -196,4 +224,20 @@ pub enum Events {
         config: DeviceConfig,
         device_info: Option<DeviceInfo>,
     },
+}
+
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_get_state_cmd_json() {
+        let cmd = Events::GetStateCmd {
+            header: Header {
+                api_version: "v1alpha1".to_string(),
+                context: Context::ToHost,
+                ulid: Ulid::new(),
+            },
+        };
+        println!("{}", serde_json::to_string_pretty(&cmd).unwrap().as_str());
+    }
 }
