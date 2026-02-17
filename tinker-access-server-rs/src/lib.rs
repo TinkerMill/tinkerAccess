@@ -5,6 +5,12 @@ pub mod newusers;
 pub mod setup;
 pub mod users;
 
+#[cfg(feature = "ssr")]
+pub mod websocket_dispatcher;
+
+#[cfg(feature = "ssr")]
+pub mod messages;
+
 #[cfg(feature = "hydrate")]
 #[wasm_bindgen::prelude::wasm_bindgen]
 pub fn hydrate() {

@@ -313,37 +313,38 @@ impl Summary {
 #[server]
 pub async fn get_device_usage_summary(
 ) -> Result<Vec<(entities::device::Model, DeviceUsageData)>, ServerFnError> {
-    use sea_orm::prelude::*;
-    use sea_orm::ColumnTrait;
-    use sea_orm::Condition;
-    use sea_orm::{DatabaseConnection, EntityTrait};
-    let conn_pool = expect_context::<DatabaseConnection>();
-    let params = use_params_map();
-    let start_time: Result<NaiveDateTime, chrono::ParseError> =
-        match params.read().get("start_time") {
-            Some(date_str) => date_str.parse::<NaiveDateTime>(),
-            None => Ok(Utc::now().naive_local()),
-        };
-    let end_time: Result<NaiveDateTime, chrono::ParseError> = match params.read().get("end_time") {
-        Some(date_str) => date_str.parse::<NaiveDateTime>(),
-        None => Ok((Utc::now() + chrono::Duration::days(30)).naive_local()),
-    };
-    let logs = match entities::log::Entity::find()
-        .filter(
-            Condition::all()
-                .add(entities::log::Column::Timestamp.gt(start_time.unwrap()))
-                .add(entities::log::Column::Timestamp.lt(end_time.unwrap())),
-        )
-        .all(&conn_pool)
-        .await
-    {
-        Ok(user_list) => Ok(user_list),
-        Err(e) => Err(ServerFnError::ServerError(e.to_string())),
-    };
-    let mut open_logins = HashMap::<(u32, u32), entities::log::Model>::new();
-    // let tool_summary = HashMap::<u32, ToolSummary>::new();
-    // let user_summary = HashMap::<(u32, u32), ToolSummary>::new();
-    Ok(())
+    Ok(vec![])
+    // use sea_orm::prelude::*;
+    // use sea_orm::ColumnTrait;
+    // use sea_orm::Condition;
+    // use sea_orm::{DatabaseConnection, EntityTrait};
+    // let conn_pool = expect_context::<DatabaseConnection>();
+    // let params = use_params_map();
+    // let start_time: Result<NaiveDateTime, chrono::ParseError> =
+    //     match params.read().get("start_time") {
+    //         Some(date_str) => date_str.parse::<NaiveDateTime>(),
+    //         None => Ok(Utc::now().naive_local()),
+    //     };
+    // let end_time: Result<NaiveDateTime, chrono::ParseError> = match params.read().get("end_time") {
+    //     Some(date_str) => date_str.parse::<NaiveDateTime>(),
+    //     None => Ok((Utc::now() + chrono::Duration::days(30)).naive_local()),
+    // };
+    // let logs = match entities::log::Entity::find()
+    //     .filter(
+    //         Condition::all()
+    //             .add(entities::log::Column::Timestamp.gt(start_time.unwrap()))
+    //             .add(entities::log::Column::Timestamp.lt(end_time.unwrap())),
+    //     )
+    //     .all(&conn_pool)
+    //     .await
+    // {
+    //     Ok(user_list) => Ok(user_list),
+    //     Err(e) => Err(ServerFnError::ServerError(e.to_string())),
+    // };
+    // let mut open_logins = HashMap::<(u32, u32), entities::log::Model>::new();
+    // // let tool_summary = HashMap::<u32, ToolSummary>::new();
+    // // let user_summary = HashMap::<(u32, u32), ToolSummary>::new();
+    // // Ok(vec![])
 }
 
 #[component]

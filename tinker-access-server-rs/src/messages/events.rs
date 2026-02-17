@@ -155,7 +155,7 @@ pub struct DeviceInfo {
 #[derive(Serialize, Deserialize)]
 #[serde(tag = "msgType")]
 #[serde(rename_all = "camelCase")]
-pub enum Events {
+pub enum TAEvent {
     EventReportBinary {
         #[serde(flatten)]
         header: Header,
@@ -231,7 +231,7 @@ mod tests {
 
     #[test]
     fn test_get_state_cmd_json() {
-        let cmd = Events::GetStateCmd {
+        let cmd = TAEvent::GetStateCmd {
             header: Header {
                 api_version: "v1alpha1".to_string(),
                 context: Context::ToHost,
