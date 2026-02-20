@@ -1,13 +1,14 @@
 use anyhow::Result;
+
 #[cfg(feature = "ssr")]
 #[tokio::main]
 async fn main() -> Result<()> {
-    use axum::Router;
     use leptos::logging::log;
     use leptos::prelude::*;
-    use leptos_axum::{generate_route_list, LeptosRoutes};
+    use leptos_axum::generate_route_list;
     use tinker_access_server_rs::app::*;
     use tinker_access_server_rs::setup::*;
+    use tinker_access_server_rs::build_app;
 
     let conf = get_configuration(None).unwrap();
     let addr = conf.leptos_options.site_addr;
@@ -16,18 +17,7 @@ async fn main() -> Result<()> {
     let routes = generate_route_list(App);
     let orm_handle = db_setup().await?;
 
-    let app = Router::new()
-        .leptos_routes_with_context(
-            &leptos_options,
-            routes,
-            move || provide_context(orm_handle.clone()),
-            {
-                let leptos_options = leptos_options.clone();
-                move || shell(leptos_options.clone())
-            },
-        )
-        .fallback(leptos_axum::file_and_error_handler(shell))
-        .with_state(leptos_options);
+    let app = build_app(leptos_options, routes, orm_handle);
 
     // run our app with hyper
     // `axum::Server` is a re-export of `hyper::Server`
