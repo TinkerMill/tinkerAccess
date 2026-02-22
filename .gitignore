@@ -21,3 +21,4 @@ server.cfg
 
 tinker-access-server-rs/Cargo.lock
 tinker-access-server-rs/target/*
+tinker-access-server-rs/db.sqlite
