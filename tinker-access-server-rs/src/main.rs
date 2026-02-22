@@ -1,8 +1,4 @@
 use anyhow::Result;
-use leptos::prelude::*;
-
-#[cfg(feature = "ssr")]
-use axum::extract::ws::CloseFrame;
 #[cfg(feature = "ssr")]
 use axum::Router;
 #[cfg(feature = "ssr")]
@@ -17,7 +13,7 @@ use axum::{
 async fn main() -> Result<()> {
     use leptos::logging::log;
     use leptos::prelude::*;
-    use leptos_axum::generate_route_list;
+    use leptos_axum::{generate_route_list, LeptosRoutes};
     use tinker_access_server_rs::app::*;
     use tinker_access_server_rs::setup::*;
     use tinker_access_server_rs::websocket_dispatcher::websocket_handler;
