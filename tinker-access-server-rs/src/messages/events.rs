@@ -226,6 +226,7 @@ pub enum TAEvent {
 }
 
 mod tests {
+    #![allow(warnings)]
     use super::*;
 
     #[test]
