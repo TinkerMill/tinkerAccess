@@ -1,15 +1,13 @@
 use crate::components::*;
 use entities::device;
 use entities::newuser;
-use entities::user;
 use leptos::prelude::*;
 use leptos::IntoView;
 
 #[server]
 pub async fn get_newusers() -> Result<Vec<(newuser::Model, Option<device::Model>)>, ServerFnError> {
     use entities::newuser::Entity as NewUser;
-    use sea_orm::prelude::*;
-    use sea_orm::{DatabaseConnection, EntityTrait, QueryOrder};
+    use sea_orm::{DatabaseConnection, EntityTrait};
     let conn_pool = expect_context::<DatabaseConnection>();
     match NewUser::find()
         .find_also_related(device::Entity)

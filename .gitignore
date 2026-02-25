@@ -18,3 +18,6 @@ server.cfg
 *.b#?
 *.s#?
 *.l#?
+
+tinker-access-server-rs/target/*
+tinker-access-server-rs/db.sqlite

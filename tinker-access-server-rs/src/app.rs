@@ -2,7 +2,7 @@ use crate::devices::*;
 use crate::newusers::*;
 use crate::users::*;
 use leptos::prelude::*;
-use leptos_meta::{provide_meta_context, MetaTags, Stylesheet, Title};
+use leptos_meta::{provide_meta_context, MetaTags, Stylesheet};
 use leptos_router::{
     components::{Route, Router, Routes},
     hooks::use_location,

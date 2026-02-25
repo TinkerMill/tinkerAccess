@@ -13,11 +13,12 @@ crate-type = ["cdylib", "rlib"]
 [dependencies]
 leptos = { version = "0.8.9", features = ["nightly"] }
 leptos_router = { version = "0.8.6", features = ["nightly"] }
-axum = { version = "0.8", optional = true, features = ["ws"] }
+axum = { version = "0.8", optional = true, features = ["macros", "ws"] }
 console_error_panic_hook = { version = "0.1", optional = true }
 leptos_axum = { version = "0.8.6", optional = true }
 leptos_meta = { version = "0.8.5" }
 tokio = { version = "1", features = ["rt-multi-thread"], optional = true }
+tower = { version = "0.5", optional = true }
 wasm-bindgen = { version = "=0.2.100", optional = true }
 sea-orm = { version = "1.1.17", optional = true, features = ["sqlx-sqlite", "runtime-tokio", "proxy"]}
 entities = {path = "./entities"}

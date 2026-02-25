@@ -1,8 +1,5 @@
+#![allow(warnings)]
 use anyhow::Result;
-use leptos::prelude::*;
-
-#[cfg(feature = "ssr")]
-use axum::extract::ws::CloseFrame;
 #[cfg(feature = "ssr")]
 use axum::Router;
 #[cfg(feature = "ssr")]
@@ -15,7 +12,6 @@ use axum::{
 #[cfg(feature = "ssr")]
 #[tokio::main]
 async fn main() -> Result<()> {
-    use axum::Router;
     use leptos::logging::log;
     use leptos::prelude::*;
     use leptos_axum::{generate_route_list, LeptosRoutes};

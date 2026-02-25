@@ -1,5 +1,4 @@
 use crate::components::*;
-use entities::newuser;
 use entities::user;
 use leptos::prelude::*;
 use leptos::IntoView;
@@ -10,7 +9,7 @@ pub async fn get_users(
 ) -> Result<Vec<user::Model>, ServerFnError> {
     use entities::user::Entity as User;
     use sea_orm::prelude::*;
-    use sea_orm::{DatabaseConnection, EntityTrait, QueryOrder};
+    use sea_orm::{DatabaseConnection, EntityTrait};
     let conn_pool = expect_context::<DatabaseConnection>();
     match if status_filter.is_some() {
         User::find()
@@ -32,8 +31,8 @@ pub async fn set_status_user(
     new_status: String,
 ) -> Result<user::Model, ServerFnError> {
     use sea_orm::entity::prelude::*;
-    use sea_orm::ActiveValue::{NotSet, Set, Unchanged};
-    use sea_orm::{DatabaseConnection, EntityTrait, QueryOrder};
+    use sea_orm::ActiveValue::{Set};
+    use sea_orm::{DatabaseConnection, EntityTrait};
     let conn_pool = expect_context::<DatabaseConnection>();
     leptos::logging::log!("Server deactivating user {}", user_id);
     match user::Entity::find_by_id(user_id).one(&conn_pool).await {

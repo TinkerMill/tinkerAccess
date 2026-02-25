@@ -1,13 +1,12 @@
+#![allow(warnings)]
+
 use crate::messages::events::TAEvent;
 #[cfg(feature = "ssr")]
 use axum::extract::ws::CloseFrame;
 #[cfg(feature = "ssr")]
-use axum::Router;
-#[cfg(feature = "ssr")]
 use axum::{
     extract::ws::{Message, WebSocket, WebSocketUpgrade},
-    response::IntoResponse,
-    routing::get,
+    response::IntoResponse
 };
 
 // WebSocketUpgrade: Extractor for establishing WebSocket connections.
@@ -50,13 +49,7 @@ async fn handle_socket(mut socket: WebSocket) {
                             event_trigger,
                         }) => todo!(),
                         Ok(TAEvent::SetStateCmd { header, settings }) => todo!(),
-                        Ok(TAEvent::BadCmd {
-                            header,
-                            cmd_msg_type,
-                            cmd_ulid,
-                            succeeded,
-                            error_message,
-                        }) => todo!(),
+                        Ok(event @ TAEvent::BadCmd { .. }) => handle_bad_cmd(event).await,
                         Ok(TAEvent::GetStateCmd { header }) => todo!(),
                         Ok(TAEvent::StateReport {
                             header,
@@ -104,6 +97,17 @@ async fn handle_socket(mut socket: WebSocket) {
     }
 }
 
+#[cfg(feature = "ssr")]
+async fn handle_bad_cmd(event: TAEvent) {
+    use leptos::logging::log;
+    log!("Received BadCmd: {}", serialize_bad_cmd_log(&event));
+}
+
+#[cfg(any(feature = "ssr", test))]
+fn serialize_bad_cmd_log(event: &TAEvent) -> String {
+    serde_json::to_string(event).unwrap_or_else(|e| format!("Failed to serialize BadCmd: {}", e))
+}
+
 // We MAY “uncleanly” close a WebSocket connection at any time by simply dropping the WebSocket, ie: Break out of the recv loop.
 // However, you may also use the graceful closing protocol, in which
 // peer A sends a close frame, and does not send any further messages;
@@ -120,4 +124,29 @@ async fn send_close_message(mut socket: WebSocket, code: u16, reason: &str) {
             reason: reason.into(),
         })))
         .await;
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_serialize_bad_cmd_log() {
+        let json = r#"{
+            "msgType": "badCmd",
+            "apiVersion": "v1",
+            "context": "toHost",
+            "ulid": "01ARZ3NDEKTSV4RRFFQ69G5FAV",
+            "cmd_msg_type": "setStateCmd",
+            "cmd_ulid": "01ARZ3NDEKTSV4RRFFQ69G5FAV",
+            "succeeded": false,
+            "error_message": "Invalid state transition"
+        }"#;
+        let event: TAEvent = serde_json::from_str(json).expect("Failed to create event from JSON");
+
+        let log_msg = serialize_bad_cmd_log(&event);
+
+        assert!(log_msg.contains("badCmd"));
+        assert!(log_msg.contains("Invalid state transition"));
+    }
 }
