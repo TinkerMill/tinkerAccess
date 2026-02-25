@@ -37,7 +37,6 @@ hydrate = [
 ssr = [
     "dep:axum",
     "dep:tokio",
-    "dep:tower",
     "dep:leptos_axum",
     "dep:sea-orm",
     "dep:ulid",

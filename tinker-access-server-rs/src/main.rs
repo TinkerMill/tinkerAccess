@@ -1,3 +1,4 @@
+#![allow(warnings)]
 use anyhow::Result;
 #[cfg(feature = "ssr")]
 use axum::Router;
