@@ -24,3 +24,6 @@ hosting = "github"
 install-updater = false
 # Custom publish-jobs (reusable workflows under .github/workflows/publish-<name>.yml)
 publish-jobs = ["./publish-mac-app"]
+# The custom-publish-mac-app job needs `contents: write` to call publish-mac-app.yml,
+# which dist doesn't generate by default. Allow manual edits to the CI workflow.
+allow-dirty = ["ci"]
