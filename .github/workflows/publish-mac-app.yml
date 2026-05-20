@@ -1,0 +1,77 @@
+# Builds the macOS .app bundle and .dmg installer for tinker_access_utility
+# and uploads the .dmg as a GitHub Release asset.
+#
+# Triggered by dist's release pipeline as a custom publish-job
+# (referenced from dist-workspace.toml as `./publish-mac-app`).
+
+name: publish-mac-app
+
+on:
+  workflow_call:
+    inputs:
+      plan:
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: macos-latest
+    env:
+      PACKAGE_DIR: tinker_access_utility
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust + Apple targets
+        run: |
+          rustup toolchain install stable --profile minimal
+          rustup target add aarch64-apple-darwin x86_64-apple-darwin
+
+      - name: Build aarch64
+        working-directory: ${{ env.PACKAGE_DIR }}
+        run: cargo build --release --locked --target aarch64-apple-darwin
+
+      - name: Build x86_64
+        working-directory: ${{ env.PACKAGE_DIR }}
+        run: cargo build --release --locked --target x86_64-apple-darwin
+
+      - name: Lipo into universal binaries
+        working-directory: ${{ env.PACKAGE_DIR }}
+        run: |
+          mkdir -p target/universal-apple-darwin/release
+          lipo -create \
+            target/aarch64-apple-darwin/release/tinker_access_utility \
+            target/x86_64-apple-darwin/release/tinker_access_utility \
+            -output target/universal-apple-darwin/release/tinker_access_utility
+          lipo -create \
+            target/aarch64-apple-darwin/release/tinker_access_utility_applet \
+            target/x86_64-apple-darwin/release/tinker_access_utility_applet \
+            -output target/universal-apple-darwin/release/tinker_access_utility_applet
+
+      - name: Resolve release tag and version
+        id: meta
+        run: |
+          TAG=$(echo '${{ inputs.plan }}' | jq -r '.announcement_tag')
+          VERSION="${TAG#v}"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Build .app and .dmg
+        working-directory: ${{ env.PACKAGE_DIR }}
+        env:
+          APPLET_BIN: target/universal-apple-darwin/release/tinker_access_utility_applet
+          CLI_BIN: target/universal-apple-darwin/release/tinker_access_utility
+          ICON_PNG: assets/taicon-app.png
+          VERSION: ${{ steps.meta.outputs.version }}
+          OUT_DIR: target/macos-bundle
+        run: scripts/build-macos-app.sh
+
+      - name: Upload .dmg to GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        working-directory: ${{ env.PACKAGE_DIR }}
+        run: |
+          DMG="target/macos-bundle/TinkerAccessUtility-${{ steps.meta.outputs.version }}-universal.dmg"
+          gh release upload "${{ steps.meta.outputs.tag }}" "$DMG" --clobber

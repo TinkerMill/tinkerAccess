@@ -1,0 +1,39 @@
+[package]
+name = "tinker_access_utility"
+version = "0.1.0"
+edition = "2024"
+authors = ["TinkerMill Contributors"]
+description = "Cross-platform RFID badge reader utility for TinkerAccess (CLI + tray applet)."
+license = "MIT"
+repository = "https://github.com/TinkerMill/tinkerAccess"
+readme = "SPEC.md"
+
+[package.metadata.wix]
+upgrade-guid = "76145529-6B1B-4A7C-9970-32B3F28F8240"
+path-guid = "ED0D21EE-CF5F-4BA7-B16D-04F248EE7D9F"
+license = false
+eula = false
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+serialport = "4"
+clap = { version = "4", features = ["derive"] }
+enigo = "0.6"
+tray-icon = "0.22"
+tao = "0.35"
+auto-launch = "0.6"
+image = { version = "0.25", default-features = false, features = ["png"] }
+
+[dev-dependencies]
+assert_cmd = "2"
+predicates = "3"
+
+[[bin]]
+name = "tinker_access_utility"
+path = "src/bin/cli.rs"
+
+[[bin]]
+name = "tinker_access_utility_applet"
+path = "src/bin/applet.rs"
