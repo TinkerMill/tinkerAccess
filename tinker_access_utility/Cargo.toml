@@ -1,6 +1,6 @@
 [package]
 name = "tinker_access_utility"
-version = "0.1.0"
+version = "0.1.0-testGHBuilder.1"
 edition = "2024"
 authors = ["TinkerMill Contributors"]
 description = "Cross-platform RFID badge reader utility for TinkerAccess (CLI + tray applet)."
